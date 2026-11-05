@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>MAIA & AVIA Org Chart</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: a top-down tree for leadership and departments; each team renders as a roster card so wide teams (CS, editors) stay compact. */
+:root{
+  --bg:#f5f7f8; --panel:#ffffff; --fg:#17232b; --muted:#5e6f7a; --line:#cfd8de;
+  --accent:#0f6e6b; --accent-soft:#dff0ee;
+  --open:#b45f06; --open-soft:#fff1dc; --open-line:#e39a3b;
+  --maia:#2c5aa0; --avia:#7a3fa8; --partner:#6b7a86;
+  --display:"Archivo",system-ui,sans-serif; --body:"Public Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101619; --panel:#182126; --fg:#e8eef1; --muted:#99abb6; --line:#2d3b43;
+  --accent:#4fb8b2; --accent-soft:#163334;
+  --open:#f0b35c; --open-soft:#3a2a12; --open-line:#d8963a;
+  --maia:#7ea6e8; --avia:#c08ff0; --partner:#9aa8b2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101619; --panel:#182126; --fg:#e8eef1; --muted:#99abb6; --line:#2d3b43;
+  --accent:#4fb8b2; --accent-soft:#163334;
+  --open:#f0b35c; --open-soft:#3a2a12; --open-line:#d8963a;
+  --maia:#7ea6e8; --avia:#c08ff0; --partner:#9aa8b2; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.45;margin:0;padding-block:28px 48px;padding-inline:16px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+.wrap{max-width:1500px;margin:0 auto}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px;margin-bottom:22px}
+header h1{font-size:28px;font-weight:700;letter-spacing:-.01em}
+header p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-width:96px}
+.stat b{display:block;font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat.open b{color:var(--open)}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-bottom:18px;color:var(--muted);font-size:12px}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.filters{display:flex;gap:6px;margin-left:auto}
+.filters button{font:inherit;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.filters button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* tree */
+.scroller{overflow-x:auto;padding-bottom:8px}
+.tree{display:flex;flex-direction:column;align-items:center;min-width:min-content;gap:0}
+.tree ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;align-items:flex-start;position:relative;padding-top:24px}
+.tree ul::before{content:"";position:absolute;top:0;left:50%;width:2px;height:24px;background:var(--line);transform:translateX(-50%)}
+.tree li{position:relative;padding:24px 10px 0;display:flex;flex-direction:column;align-items:center}
+.tree li::before,.tree li::after{content:"";position:absolute;top:0;width:50%;height:24px;border-top:2px solid var(--line)}
+.tree li::before{right:50%;border-right:2px solid var(--line)}
+.tree li::after{left:50%}
+.tree li:first-child::before{border-top:0}
+.tree li:last-child::after{border-top:0}
+.tree li:only-child{padding-top:0}
+.tree li:only-child::before,.tree li:only-child::after{display:none}
+.tree > ul{padding-top:0}
+.tree > ul::before{display:none}
+.tree > ul > li{padding-top:0}
+.tree > ul > li::before,.tree > ul > li::after{display:none}
+
+/* nodes */
+.node{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px;min-width:190px;max-width:260px;text-align:center}
+.node .role{font-family:var(--display);font-weight:600;font-size:14px;line-height:1.2}
+.node .name{color:var(--muted);font-size:12.5px;margin-top:3px}
+.node.lead{border-width:2px;border-color:var(--accent)}
+.node.open{border:2px dashed var(--open-line);background:var(--open-soft)}
+.badge{display:inline-block;font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--open);margin-bottom:4px}
+.dept{background:var(--accent-soft);border-color:transparent}
+.dept .role{color:var(--accent);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* roster cards */
+.team{background:var(--panel);border:1px solid var(--line);border-radius:8px;width:230px;text-align:left;overflow:hidden}
+.team.open-head{border-top:3px solid var(--open-line)}
+.team header{display:block;padding:10px 12px 8px;border-bottom:1px solid var(--line);margin:0}
+.team h3{font-size:13.5px;font-weight:600}
+.team .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.team ul{display:block;padding:6px 0}
+.team ul::before{display:none}
+.team li{display:block;padding:4px 12px;text-align:left}
+.team li::before,.team li::after{display:none}
+.person{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.person .n{min-width:0;overflow-wrap:anywhere}
+.person .t{font-size:11px;color:var(--muted);display:block}
+.person.open{border:1.5px dashed var(--open-line);background:var(--open-soft);border-radius:6px;margin:2px 8px;padding:5px 8px}
+.person.open .n{color:var(--open);font-weight:600}
+.hub{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 12px 2px;border-top:1px solid var(--line);margin-top:4px}
+.hub:first-of-type{border-top:0;margin-top:0}
+.brands{display:inline-flex;gap:3px;flex-shrink:0}
+.br{display:inline-block;width:8px;height:8px;border-radius:50%}
+.br.maia{background:var(--maia)}.br.avia{background:var(--avia)}.br.partner{background:var(--partner)}
+.partner-tag{font-size:10px;color:var(--partner);font-style:italic}
+.hidden-brand{display:none !important}
+
+.notes{margin-top:28px;max-width:72ch;color:var(--muted);font-size:12.5px}
+.notes h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);margin-bottom:6px}
+.notes li{margin-bottom:3px}
+
+@media (max-width:700px){
+  .tree ul{flex-direction:column;align-items:stretch;padding-top:0;padding-left:18px;border-left:2px solid var(--line)}
+  .tree ul::before{display:none}
+  .tree li{padding:10px 0 0 12px;align-items:flex-start}
+  .tree li::before,.tree li::after{display:none}
+  .tree > ul{border-left:0;padding-left:0}
+  .node{max-width:none;width:100%;text-align:left}
+  .team{width:100%}
+  .filters{margin-left:0}
+}
+@media (prefers-reduced-motion:no-preference){.filters button{transition:background .15s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>MAIA &amp; AVIA Org Chart</h1>
+    <p>Current team plus the roles still to be hired. Compensation is intentionally left off this view.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="legend">
+  <span><span class="sw" style="background:var(--open-soft);border:2px dashed var(--open-line)"></span>Open position</span>
+  <span><span class="sw" style="background:var(--maia)"></span>MAIA</span>
+  <span><span class="sw" style="background:var(--avia)"></span>AVIA</span>
+  <span><span class="sw" style="background:var(--partner)"></span>Agency / partner</span>
+  <div class="filters" role="group" aria-label="Filter by brand">
+    <button id="f-all" aria-pressed="true" data-brand="all">All</button>
+    <button id="f-maia" aria-pressed="false" data-brand="maia">MAIA</button>
+    <button id="f-avia" aria-pressed="false" data-brand="avia">AVIA</button>
+  </div>
+</div>
+
+<div class="scroller"><div class="tree" id="tree"></div></div>
+
+<div class="notes">
+  <h2>Assumptions to confirm</h2>
+  <ul>
+    <li>Head of Growth is shown as an open role over the growth side; Operations Manager (future COO) sits beside it over Supply Chain and Customer Service.</li>
+    <li>Lucas sits in Creative Strategy; Damian is the only dedicated media buyer. Neil and Mouad were removed from Creative Strategy; their editor hubs keep their names until reassigned.</li>
+    <li>Video editors are grouped by their current hub lead from the sheet. "Jade" runs a hub but is not on the staff list.</li>
+    <li>Copywriting (you) is not placed yet.</li>
+    <li>Creative Flywheel had no Active flag and is shown as inactive.</li>
+  </ul>
+</div>
+</div>
+
+<script>
+/* ===== DATA — edit this block to add or move people ===== */
+const B = {M:["maia"], A:["avia"], MA:["maia","avia"], P:["partner"]};
+
+const ORG = {
+  role:"Founders / CEO", name:"Brandon Longo & Youssef Bouzaiene", lead:true,
+  children:[
+    { role:"Head of Growth", open:true, children:[
+      { team:"Media Buying", sub:"Paid acquisition", members:[
+        {n:"Damian Perez Maldonado Cardenas", t:"Media Buyer", b:B.M},
+      ]},
+      { role:"Creative Strategist Lead", open:true, children:[
+        { team:"Creative Strategy", sub:"Concepts, briefs, static & video direction", members:[
+          {n:"Elissa Jabbour", t:"Creative Strategist — static + video", b:B.M},
+          {n:"Mariam", t:"Creative Strategist — static", b:B.M},
+          {n:"Lucas Rocha Alves", t:"Creative Strategist", b:B.M},
+          {n:"Paul Nguyen", t:"Creative Strategist", b:B.MA},
+          {n:"Logan Lapierre", t:"Creative Strategist", b:B.MA},
+          {n:"Adarsha Shrestha & Sujal Chitrakar", t:"Creative Strategists — weekly briefs", b:B.MA},
+          {n:"Akanya", t:"Brief writer (per brief)", b:B.MA},
+          {n:"Creative Strategist", t:"Open position 1 of 3", open:true, b:B.MA},
+          {n:"Creative Strategist", t:"Open position 2 of 3", open:true, b:B.MA},
+          {n:"Creative Strategist", t:"Open position 3 of 3", open:true, b:B.MA},
+        ]}
+      ]},
+      { role:"Head of Video Editors", name:"Senior", open:true, children:[
+        { team:"Video Editors", sub:"19 editors · grouped by current hub", hubs:[
+          {hub:"Adarsha hub", members:[
+            {n:"Paolo Parducho", b:B.M},{n:"Nicole Henson", b:B.M},{n:"Rolando", b:B.M},
+            {n:"Joshua Santiago", t:"AI UGC / animation", b:B.A},{n:"Mark Ryan", b:B.M},
+            {n:"Jazmin Faith", b:B.MA},{n:"Earl", b:B.M},
+          ]},
+          {hub:"Elissa hub", members:[{n:"Jhonmar Fragata", t:"AI UGC / animation", b:B.MA}]},
+          {hub:"Jade hub", members:[{n:"Nathaniel Sanchez Montaño", b:B.MA},{n:"Rando Jr. Rabel", b:B.A}]},
+          {hub:"Lucas hub", members:[
+            {n:"Prince Rizaldy S. Heti-ayon", t:"AI UGC / animation", b:B.MA},{n:"Christan Kevin Flores", b:B.MA},
+            {n:"Rick Gelven Altarejos", b:B.M},{n:"Christian Quinn Cabangon", b:B.MA},
+          ]},
+          {hub:"Neil hub", members:[
+            {n:"Denver Briones", t:"also Mouad hub (AVIA)", b:B.MA},{n:"Soban Khan Sherwani", b:B.M},{n:"Jennifer Gasper Carias", b:B.M},
+          ]},
+          {hub:"Mouad hub", members:[{n:"Angelo", b:B.A}]},
+        ]}
+      ]},
+      { team:"Landing Pages", members:[{n:"Hakim", t:"Landing pages", b:B.MA}]},
+      { team:"Agencies & Partners", sub:"External", members:[
+        {n:"Sparktly Digital", t:"Creative agency", b:B.MA},
+        {n:"XO Native", t:"Native ads agency", b:B.M},
+        {n:"Uptickk", t:"TikTok agency", b:B.MA},
+        {n:"Jonathan Hodiak", t:"Amazon agency", b:B.MA},
+        {n:"Creative Flywheel", t:"Creative agency — inactive", b:B.M},
+      ]},
+    ]},
+    { role:"Operations Manager", name:"Future COO", open:true, children:[
+      { team:"People / HR", members:[
+        {n:"Saudia Cassandra Barreda", t:"HR", b:B.MA},
+      ]},
+      { team:"Supply Chain / Logistics", members:[
+        {n:"Sarvind Rankawat", t:"Supply Chain", b:B.MA},
+        {n:"Amir", t:"Fulfillment EZ — 3PL partner", b:B.P},
+      ]},
+      { role:"Head of Customer Service", open:true, children:[
+        { team:"Support Agents", sub:"17 agents", members:[
+          {n:"Fajle Rahaman"},{n:"Joannie Sapitula"},{n:"Haya Rivera"},{n:"Ahmad"},
+          {n:"Maricar Fajardo"},{n:"Lady Fatima Bajo"},{n:"Famela Lopez"},{n:"Janna Rondilla"},
+          {n:"Sheen Bolanos"},{n:"Ynah Magdaong"},{n:"Ruth Alicman"},{n:"Ma. Cencilia Sabiona"},{n:"Sharah Rodriguez"},
+          {n:"Dazzaine Louise Costa"},{n:"Dessa Angela Claveria"},{n:"Vinia Medrano"},{n:"Manjul Kamal Miah Hassan"},
+        ].map(p=>({...p,t:"Support agent",b:B.MA}))}
+      ]}
+    ]},
+  ]
+};
+/* ===== END DATA ===== */
+
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const brandDots = b => b ? `<span class="brands">${b.map(x=>`<span class="br ${x}" title="${x}"></span>`).join("")}</span>` : "";
+const brandAttr = b => (b||["maia","avia"]).join(" ");
+
+function person(p){
+  return `<li class="p" data-brands="${brandAttr(p.b)}"><div class="person${p.open?" open":""}"><span class="n">${esc(p.n)}${p.t?`<span class="t">${esc(p.t)}</span>`:""}</span>${brandDots(p.b)}</div></li>`;
+}
+function team(t){
+  const open = t.members ? t.members.some(m=>m.open) : false;
+  let body = "";
+  if(t.hubs){
+    body = t.hubs.map(h=>`<div class="hub">${esc(h.hub)}</div><ul>${h.members.map(person).join("")}</ul>`).join("");
+  } else {
+    body = `<ul>${t.members.map(person).join("")}</ul>`;
+  }
+  return `<div class="team${open?" open-head":""}"><header><h3>${esc(t.team)}</h3>${t.sub?`<div class="sub">${esc(t.sub)}</div>`:""}</header>${body}</div>`;
+}
+function node(n){
+  if(n.team) return team(n);
+  let cls = "node";
+  if(n.dept) cls += " dept";
+  if(n.lead) cls += " lead";
+  if(n.open) cls += " open";
+  const label = n.dept || n.role;
+  return `<div class="${cls}">${n.open?`<div class="badge">Open position</div>`:""}<div class="role">${esc(label)}</div>${n.name?`<div class="name">${esc(n.name)}</div>`:""}</div>`;
+}
+function render(n){
+  const kids = n.children ? `<ul>${n.children.map(c=>`<li>${render(c)}</li>`).join("")}</ul>` : "";
+  return node(n) + kids;
+}
+document.getElementById("tree").innerHTML = `<ul><li>${render(ORG)}</li></ul>`;
+
+/* stats */
+let people=0, openRoles=0, partners=0;
+(function walk(n){
+  if(n.open) openRoles++;
+  if(n.team){
+    const ms = n.hubs ? n.hubs.flatMap(h=>h.members) : n.members;
+    ms.forEach(m=>{ if(m.open) openRoles++; else if(m.b===B.P || (m.t||"").toLowerCase().includes("agency")) partners++; else people++; });
+  }
+  (n.children||[]).forEach(walk);
+})(ORG);
+document.getElementById("stats").innerHTML =
+  `<div class="stat"><b>${people}</b><span>People</span></div>
+   <div class="stat"><b>${partners}</b><span>Partners</span></div>
+   <div class="stat open"><b>${openRoles}</b><span>Open roles</span></div>`;
+
+/* brand filter */
+document.querySelectorAll(".filters button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const brand = btn.dataset.brand;
+    document.querySelectorAll(".filters button").forEach(b=>b.setAttribute("aria-pressed", String(b===btn)));
+    document.querySelectorAll("li.p").forEach(li=>{
+      const show = brand==="all" || li.dataset.brands.split(" ").includes(brand) || li.dataset.brands.includes("partner");
+      li.classList.toggle("hidden-brand", !show);
+    });
+    try{localStorage.setItem("orgBrand",brand)}catch(e){}
+  });
+});
+try{const saved=localStorage.getItem("orgBrand"); if(saved&&saved!=="all"){document.getElementById("f-"+saved)?.click();}}catch(e){}
+</script>
+</body>
+</html>

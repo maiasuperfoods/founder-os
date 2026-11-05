@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>People and access · Founder OS</title>
+<link rel="stylesheet" href="/assets/os.css">
+<style>
+/* Layout: one column. Add a person on top, the list of who can sign in below. */
+form.add{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 130px auto;gap:12px;align-items:end;padding:18px 20px}
+@media (max-width:640px){form.add{grid-template-columns:minmax(0,1fr)}}
+.temp{display:flex;flex-direction:column;gap:8px;padding:16px 20px}
+.temp code{font:600 18px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--sunken);border-radius:7px;padding:8px 12px;user-select:all;overflow-wrap:anywhere}
+.temp .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+td.acts{white-space:nowrap;text-align:right}
+td.acts .btn{padding:4px 10px;font-size:13px}
+td .sub{display:block;font-size:13px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<main class="page">
+  <a class="back" href="/">Back to Founder OS</a>
+  <div>
+    <h1>People and access</h1>
+    <p class="lede">Everyone listed here can sign in and sees every section. A new person gets a temporary password that you pass on to them; they choose their own the first time they sign in.</p>
+  </div>
+  <div class="note bad" id="err" role="alert" hidden></div>
+
+  <section class="stack" id="main" hidden>
+    <div class="panel">
+      <form class="add" id="add" autocomplete="off">
+        <div class="field"><label for="email">Work email</label><input id="email" type="email" required></div>
+        <div class="field"><label for="name">Name</label><input id="name" type="text" required maxlength="80"></div>
+        <div class="field"><label for="role">Can manage people</label><select id="role"><option value="member">No</option><option value="admin">Yes</option></select></div>
+        <button class="btn primary" type="submit" id="addBtn">Add person</button>
+      </form>
+    </div>
+    <div class="panel temp" id="temp" hidden>
+      <div id="tempWho"></div>
+      <div class="row"><code id="tempPw"></code><button class="btn" type="button" id="copy">Copy</button></div>
+      <div class="small muted">This is shown once. If it gets lost, reset the person's password to make a new one.</div>
+    </div>
+    <div class="panel scroll-x"><table class="grid" id="list"><thead><tr><th>Person</th><th>Access</th><th>Last seen</th><th></th></tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+<script>
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  const MSG = {not_admin: 'Only people who can manage access can open this page.', signed_out: 'You are signed out. Reload the page and sign in again.', exists: 'That email already has access.',
+    bad_email: 'That does not look like an email address.', self: 'You cannot do that to your own account.', not_found: 'That person is no longer on the list.', down: 'The sign-in service is not reachable. Try again in a minute.'};
+  const fail = (code) => { $('err').textContent = MSG[code] || 'That did not work. Try again.'; $('err').hidden = false; };
+  const post = async (path, body) => { try { return await (await fetch('/__api/' + path, {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify(body || {})})).json(); } catch (e) { return {ok: false, error: 'down'}; } };
+  const when = (iso) => { if (!iso) return 'Never'; const d = new Date(iso), days = Math.floor((Date.now() - d) / 864e5); return days < 1 ? 'Today' : days === 1 ? 'Yesterday' : d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}); };
+  let confirmId = null;
+
+  function showTemp(r, verb){ $('tempWho').textContent = verb + ' ' + r.email + '. Temporary password:'; $('tempPw').textContent = r.temp_password; $('temp').hidden = false; $('copy').textContent = 'Copy'; }
+  $('copy').addEventListener('click', () => { navigator.clipboard.writeText($('tempPw').textContent).then(() => { $('copy').textContent = 'Copied'; }, () => {}); });
+
+  async function load(){
+    const r = await post('people');
+    if (!r || !r.ok) { $('main').hidden = true; fail(r && r.error); return; }
+    $('main').hidden = false;
+    const tb = document.querySelector('#list tbody'); tb.replaceChildren();
+    r.people.forEach((p) => {
+      const tr = el('tr'), who = el('td'); who.append(el('b', p.name || p.email), el('span', p.email, 'sub'));
+      const acc = el('td'); acc.append(el('span', p.role === 'admin' ? 'Manages people' : 'Member', 'chip plain'));
+      if (p.pending) acc.append(document.createTextNode(' '), el('span', 'Has not chosen a password', 'chip warn'));
+      const acts = el('td', null, 'acts');
+      if (p.id !== r.me) {
+        if (confirmId === p.id) {
+          const yes = el('button', 'Remove ' + (p.name || p.email).split(' ')[0], 'btn danger'), no = el('button', 'Keep', 'btn quiet');
+          yes.addEventListener('click', async () => { $('err').hidden = true; const x = await post('people/remove', {id: p.id}); confirmId = null; if (!x.ok) fail(x.error); load(); });
+          no.addEventListener('click', () => { confirmId = null; load(); });
+          acts.append(yes, no);
+        } else {
+          const reset = el('button', 'Reset password', 'btn quiet'), rm = el('button', 'Remove', 'btn quiet');
+          reset.addEventListener('click', async () => { $('err').hidden = true; const x = await post('people/reset', {id: p.id}); if (x.ok) showTemp(x, 'Password reset for'); else fail(x.error); load(); });
+          rm.addEventListener('click', () => { confirmId = p.id; load(); });
+          acts.append(reset, rm);
+        }
+      } else acts.append(el('span', 'You', 'muted small'));
+      tr.append(who, acc, el('td', when(p.last_seen)), acts); tb.append(tr);
+    });
+  }
+  $('add').addEventListener('submit', async (e) => {
+    e.preventDefault(); $('err').hidden = true; $('addBtn').disabled = true;
+    const r = await post('people/add', {email: $('email').value, name: $('name').value, role: $('role').value});
+    $('addBtn').disabled = false;
+    if (r && r.ok) { showTemp(r, 'Added'); $('add').reset(); load(); } else fail(r && r.error);
+  });
+  load();
+})();
+</script>
+</body>
+</html>

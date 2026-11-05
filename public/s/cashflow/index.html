@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>Cash Flow Forecast</title>
+<link rel="stylesheet" href="/assets/os.css">
+<style>
+/* Layout: one column. Headline figures, the weekly cash curve, then the model's own tables
+   (monthly, supplier payments, scenarios, inputs) in the order a founder reads them. A second
+   view shows the Google Sheet itself. */
+.wrap{max-width:1180px;margin:0 auto;padding:26px 24px 80px;display:flex;flex-direction:column;gap:34px}
+.top{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:flex-end;justify-content:space-between}
+.top p{color:var(--ink-2);max-width:70ch;margin-top:6px}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:7px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.block{display:flex;flex-direction:column;gap:12px}
+.block-h p{font-size:13.5px;color:var(--ink-3);margin-top:2px;max-width:80ch}
+
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.tiles>div{padding:16px 20px;border-left:1px solid var(--line);min-width:0}
+.tiles>div:first-child{border-left:0}
+.tiles .k{font-size:13px;color:var(--ink-3)}
+.tiles .v{font-size:26px;font-weight:700;letter-spacing:-.015em;font-variant-numeric:tabular-nums;margin-top:2px}
+.tiles .v.bad{color:var(--bad)}
+.tiles .s{font-size:12.5px;color:var(--ink-3)}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tiles>div{border-left:0;border-top:1px solid var(--line)}.tiles>div:nth-child(-n+2){border-top:0}.tiles>div:nth-child(even){border-left:1px solid var(--line)}.wrap{padding:20px 16px 64px}}
+
+.chart{padding:16px 16px 10px;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--font);font-size:12px;fill:var(--ink-3);font-variant-numeric:tabular-nums}
+.chart .grid-line{stroke:var(--line);stroke-width:1}
+.chart .zero{stroke:var(--line-2);stroke-width:1}
+.chart .ref{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:4 4}
+.chart .line{fill:none;stroke:var(--series-1);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .dot{fill:var(--series-1);stroke:var(--surface);stroke-width:2}
+.chart .low{fill:var(--bad);stroke:var(--surface);stroke-width:2}
+.chart text.lab{fill:var(--ink);font-weight:600}
+.chart .cross{stroke:var(--ink-3);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:8px;padding:8px 11px;font-size:13px;line-height:1.45;white-space:nowrap;z-index:5}
+.tip b{font-variant-numeric:tabular-nums}
+.tip .h{font-weight:700;margin-bottom:2px}
+.keyline{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-2);padding:0 4px 6px}
+.keyline i{display:inline-block;width:18px;height:0;border-top:2px solid var(--series-1);vertical-align:middle;margin-right:6px}
+.keyline i.ref{border-top:1px dashed var(--ink-3)}
+.keyline i.lo{width:9px;height:9px;border:0;border-radius:50%;background:var(--bad)}
+
+details.fold{border-top:1px solid var(--line)}
+details.fold summary{cursor:pointer;padding:11px 16px;font-weight:600;font-size:14px;color:var(--ink-2)}
+table.m{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
+table.m th,table.m td{padding:7px 12px;border-top:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.m thead th{border-top:0;font-size:12.5px;font-weight:600;color:var(--ink-3)}
+table.m th:first-child,table.m td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);max-width:340px;white-space:normal;min-width:200px}
+table.m tr.g td{background:var(--sunken);font-weight:700;text-align:left;position:static}
+table.m tr.key td{font-weight:700}
+table.m td.neg{color:var(--bad)}
+table.s th,table.s td{white-space:normal;text-align:left}
+table.s td.r{text-align:right;white-space:nowrap}
+.read{padding:12px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2);max-width:95ch}
+.inp td.note{white-space:normal;color:var(--ink-2);min-width:280px;max-width:520px;text-align:left}
+#sheetView iframe{width:100%;height:calc(100vh - 150px);min-height:520px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Cash Flow Forecast</h1>
+      <p id="sub">Loading the model.</p>
+    </div>
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" id="vPlan" aria-pressed="true">Forecast</button>
+      <button type="button" id="vSheet" aria-pressed="false">Google Sheet</button>
+    </div>
+  </div>
+
+  <div id="planView" style="display:flex;flex-direction:column;gap:34px">
+    <div class="panel"><div class="tiles" id="tiles"></div></div>
+
+    <section class="block">
+      <div class="block-h"><h2>Closing cash by week</h2><p>One shared cash pool for MAIA Cacao, MAIA Haskap and AVIA. The dashed line is the minimum buffer the model flags against.</p></div>
+      <div class="panel">
+        <div class="chart" id="chart"></div>
+        <div class="keyline"><span><i></i>Closing cash</span><span><i class="ref"></i><span id="bufKey">Minimum buffer</span></span><span><i class="lo"></i>Weeks under the buffer</span></div>
+        <details class="fold"><summary>Weekly cash flow as a table</summary><div class="scroll-x"><table class="m" id="weekly"></table></div></details>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-h"><h2>Month by month</h2><p>Profit and loss on an accrual basis, then cash. Amounts in brackets are money out.</p></div>
+      <div class="panel scroll-x"><table class="m" id="monthly"></table></div>
+    </section>
+
+    <section class="block">
+      <div class="block-h"><h2>Supplier balances still to pay</h2><p>Commitments for stock already ordered, from the order and payment tracker.</p></div>
+      <div class="panel scroll-x"><table class="m s" id="pos"></table></div>
+    </section>
+
+    <section class="block" id="scen">
+      <div class="block-h"><h2>Ramp scenarios</h2><p id="scenIntro"></p></div>
+    </section>
+
+    <section class="block">
+      <div class="block-h"><h2>Inputs and assumptions</h2><p>What the model was told. Lines marked ASSUMED or ESTIMATE in the notes were never confirmed.</p></div>
+      <div class="panel" id="inputs"></div>
+    </section>
+  </div>
+
+  <div id="sheetView" hidden>
+    <p class="small muted" style="margin-bottom:10px">The sheet opens here if you are signed in to a Google account that can see it. <a id="sheetLink" target="_blank" rel="noopener">Open it in a new tab</a></p>
+    <iframe id="sheet" title="Cash flow model in Google Sheets" loading="lazy"></iframe>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $ = (id) => document.getElementById(id);
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const NS = 'http://www.w3.org/2000/svg';
+const svg = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const money = (v) => v == null ? '' : (v < 0 ? '-$' : '$') + Math.abs(Math.round(v)).toLocaleString('en-US');
+const short = (v) => { const a = Math.abs(v), s = v < 0 ? '-' : ''; return s + '$' + (a >= 1e6 ? (a / 1e6).toFixed(a >= 1e7 ? 0 : 1).replace(/\.0$/, '') + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'K' : Math.round(a)); };
+const dm = (s) => String(s).replace(/, \d{4}$/, '');
+const full = (lab) => lab.includes("'") ? lab.replace("'", ", 20") : lab + ', 2026';
+let D = null;
+
+function tiles(){
+  const w = D.weekly, c = w.rows.closing; let lo = 0; c.forEach((v, i) => { if (v < c[lo]) lo = i; });
+  const under = c.filter((v) => v < D.buffer).length;
+  const t = (k, v, s, bad) => { const d = el('div'); d.append(el('div', k, 'k'), el('div', v, 'v' + (bad ? ' bad' : '')), el('div', s, 's')); return d; };
+  $('tiles').replaceChildren(
+    t('Lowest closing cash', money(c[lo]), 'week of ' + dm(w.starts[lo]) + ' (' + full(w.labels[lo]) + ')', c[lo] < D.buffer),
+    t('Weeks under the ' + short(D.buffer) + ' buffer', String(under), under ? 'of ' + c.length + ' weeks in the plan' : 'cash stays above the buffer', under > 0),
+    t('Peak unpaid card balance', money(w.summary.peakCard), 'limit ' + money(D.cardLimit) + '; uncapped it would reach ' + short(w.summary.uncappedCard), false),
+    t('Cash at the end of the plan', money(c[c.length - 1]), full(w.labels[c.length - 1]) + ', from ' + money(D.openingCash) + ' on Oct 1', false));
+}
+
+function chart(){
+  const box = $('chart'), w = D.weekly, c = w.rows.closing, n = c.length;
+  const W = Math.max(320, box.clientWidth - 32), H = Math.round(Math.min(380, Math.max(240, W * 0.36)));
+  const m = {l: 54, r: 18, t: 22, b: 30}, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const max = Math.max.apply(null, c), min = Math.min(0, Math.min.apply(null, c));
+  const step = [5e5, 1e6, 2e6, 2.5e6, 5e6].find((s) => (max - min) / s <= 6) || 5e6;
+  const q = step / 4, top = Math.ceil(max / step) * step, bot = min < 0 ? -Math.ceil(-min / q) * q : 0;   // a little room under zero, not a whole empty band
+  const x = (i) => m.l + (n === 1 ? iw / 2 : i * iw / (n - 1)), y = (v) => m.t + ih - (v - bot) / (top - bot) * ih;
+  const s = svg('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Closing cash by week, from ' + money(c[0]) + ' in ' + w.labels[0] + ' to ' + money(c[n - 1]) + ' in ' + w.labels[n - 1]});
+  for (let v = 0; v <= top + 1; v += step) { s.append(svg('line', {class: v === 0 ? 'zero' : 'grid-line', x1: m.l, x2: W - m.r, y1: y(v), y2: y(v)}), svg('text', {x: m.l - 8, y: y(v) + 4, 'text-anchor': 'end'}, short(v))); }
+  // month ticks on the x axis: label the first week that starts in each month
+  let lastMonth = '', lastX = -1e9;
+  w.starts.forEach((d, i) => { const mo = d.slice(0, 3); if (mo === lastMonth) return; lastMonth = mo;
+    const next = w.starts.findIndex((e, j) => j > i && e.slice(0, 3) !== mo);
+    if (i === 0 && next > 0 && x(next) - x(0) < 56) return;                       // a part month at the start has no room for a label
+    if (x(i) - lastX < 44 || x(i) > W - m.r - 16) return; lastX = x(i);
+    s.append(svg('text', {x: x(i), y: H - 8, 'text-anchor': i === 0 ? 'start' : 'middle'}, mo + (mo === 'Jan' || lastX === x(0) ? " '" + d.slice(-2) : ''))); });
+  s.append(svg('line', {class: 'ref', x1: m.l, x2: W - m.r, y1: y(D.buffer), y2: y(D.buffer)}));
+  s.append(svg('path', {class: 'line', d: c.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ')}));
+  c.forEach((v, i) => { if (v < D.buffer) s.append(svg('circle', {class: 'low', cx: x(i), cy: y(v), r: 4.5})); });
+  let lo = 0; c.forEach((v, i) => { if (v < c[lo]) lo = i; });
+  s.append(svg('text', {class: 'lab', x: x(lo), y: y(c[lo]) + 20, 'text-anchor': 'middle'}, short(c[lo]) + ', ' + w.labels[lo]));
+  s.append(svg('circle', {class: 'dot', cx: x(n - 1), cy: y(c[n - 1]), r: 4.5}));
+  s.append(svg('text', {class: 'lab', x: x(n - 1) - 8, y: y(c[n - 1]) - 10, 'text-anchor': 'end'}, short(c[n - 1])));
+  const cross = svg('line', {class: 'cross', y1: m.t, y2: m.t + ih, visibility: 'hidden'}), hot = svg('circle', {class: 'dot', r: 5, visibility: 'hidden'});
+  const hit = svg('rect', {x: m.l - 10, y: m.t, width: iw + 20, height: ih, fill: 'transparent', tabindex: 0, 'aria-label': 'Weekly values. Use the left and right arrow keys.'});
+  s.append(cross, hot, hit);
+  box.replaceChildren(s);
+  const tip = el('div', null, 'tip'); tip.hidden = true; box.append(tip);
+  let cur = -1;
+  const show = (i) => {
+    cur = i; const px = x(i) * (s.getBoundingClientRect().width / W), py = y(c[i]) * (s.getBoundingClientRect().height / H);
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+    hot.setAttribute('cx', x(i)); hot.setAttribute('cy', y(c[i])); hot.setAttribute('visibility', 'visible');
+    tip.replaceChildren(el('div', full(w.labels[i]) + ', week of ' + dm(w.starts[i]), 'h'));
+    [['Closing cash', c[i]], ['Net cash flow', w.rows.net[i]], ['Unpaid on the card', w.rows.cardBalance[i]]].forEach(([k, v]) => { const r = el('div'); r.append(document.createTextNode(k + ' '), el('b', money(v))); tip.append(r); });
+    tip.hidden = false;
+    const tw = tip.offsetWidth, left = Math.min(Math.max(8, 16 + px + 14), box.clientWidth - tw - 8);
+    tip.style.left = (16 + px + 14 + tw > box.clientWidth - 8 ? Math.max(8, 16 + px - tw - 14) : left) + 'px';
+    tip.style.top = Math.max(8, 16 + py - tip.offsetHeight - 12) + 'px';
+  };
+  const hide = () => { cur = -1; tip.hidden = true; cross.setAttribute('visibility', 'hidden'); hot.setAttribute('visibility', 'hidden'); };
+  const at = (ev) => { const r = s.getBoundingClientRect(), px = (ev.clientX - r.left) * (W / r.width); return Math.max(0, Math.min(n - 1, Math.round((px - m.l) / (iw / (n - 1))))); };
+  hit.addEventListener('pointermove', (ev) => show(at(ev)));
+  hit.addEventListener('pointerdown', (ev) => show(at(ev)));
+  hit.addEventListener('pointerleave', hide);
+  hit.addEventListener('blur', hide);
+  hit.addEventListener('keydown', (ev) => { if (ev.key === 'ArrowRight') { show(Math.min(n - 1, cur + 1)); ev.preventDefault(); } else if (ev.key === 'ArrowLeft') { show(Math.max(0, cur < 0 ? n - 1 : cur - 1)); ev.preventDefault(); } else if (ev.key === 'Escape') hide(); });
+}
+
+function weeklyTable(){
+  const w = D.weekly, t = $('weekly');
+  const ROWS = [['revenue', 'Revenue, all lines'], ['payouts', 'Payouts received'], ['adCharged', 'Ad spend charged to the card'], ['adPaid', 'Ad spend paid in cash'], ['cardBalance', 'Unpaid ad spend on the card'],
+    ['inventory', 'Inventory purchases'], ['committed', 'Committed supplier balances and freight'], ['fulfillment', 'Fulfillment'], ['fixedOpex', 'Fixed opex'], ['varOpex', 'Variable opex'], ['net', 'Net cash flow'], ['closing', 'Closing cash'], ['reserve', 'PayPal reserve outstanding']];
+  const h = el('tr'); h.append(el('th', 'Line')); w.labels.forEach((l, i) => { const th = el('th', l); th.title = 'Week of ' + w.starts[i]; h.append(th); });
+  const thead = el('thead'); thead.append(h); const tb = el('tbody');
+  ROWS.forEach(([k, lab]) => { const tr = el('tr', null, k === 'closing' || k === 'net' ? 'key' : ''); tr.append(el('td', lab));
+    w.rows[k].forEach((v) => tr.append(el('td', v == null ? '' : v === 0 ? '-' : money(v), v < 0 ? 'neg' : ''))); tb.append(tr); });
+  t.replaceChildren(thead, tb);
+}
+
+function monthlyTable(){
+  const M = D.monthly, t = $('monthly'), KEY = /^(Revenue - total|Contribution margin|Operating profit|Net cash flow|Cash at month end|Lowest weekly cash)/;
+  const h = el('tr'); h.append(el('th', 'Line')); M.months.concat(M.extra).forEach((m) => h.append(el('th', m)));
+  const thead = el('thead'); thead.append(h); const tb = el('tbody');
+  M.groups.forEach((g) => {
+    if (g.title) { const tr = el('tr', null, 'g'), td = el('td', g.title); td.colSpan = 1 + M.months.length + M.extra.length; tr.append(td); tb.append(tr); }
+    g.rows.forEach((r) => { const tr = el('tr', null, KEY.test(r.label) ? 'key' : ''); tr.append(el('td', r.label));
+      r.cells.concat(r.total.length ? r.total : M.extra.map(() => '')).forEach((c) => tr.append(el('td', c, /^\(/.test(c) ? 'neg' : ''))); tb.append(tr); });
+  });
+  t.replaceChildren(thead, tb);
+}
+
+function payments(){
+  const t = $('pos'), h = el('tr'); ['Pay date', 'What', 'Amount'].forEach((x, i) => h.append(el('th', x, i === 2 ? 'r' : '')));
+  const thead = el('thead'); thead.append(h); const tb = el('tbody');
+  D.payments.rows.forEach((r) => { const tr = el('tr'); tr.append(el('td', r.date), el('td', r.what), el('td', r.amount, 'r')); tb.append(tr); });
+  const tot = el('tr', null, 'key'); tot.append(el('td', 'Total'), el('td', ''), el('td', D.payments.total, 'r')); tb.append(tot);
+  t.replaceChildren(thead, tb);
+}
+
+function scenarios(){
+  const S = D.scenarios, box = $('scen');
+  $('scenIntro').textContent = S.intro[1] || '';
+  S.tables.forEach((T) => {
+    const p = el('div', null, 'panel'), hd = el('div'); hd.style.padding = '14px 16px 10px'; hd.append(el('h3', T.title)); p.append(hd);
+    const sc = el('div', null, 'scroll-x'), t = el('table', null, 'm'), h = el('tr'); T.head.forEach((c) => h.append(el('th', c)));
+    const thead = el('thead'); thead.append(h); const tb = el('tbody');
+    T.rows.forEach((r) => { const tr = el('tr', null, /^BASE|base\)?$| - base$/.test(r[0]) ? 'key' : ''); T.head.forEach((_, i) => { const c = r[i] || ''; tr.append(el('td', c, /^\(\$/.test(c) ? 'neg' : '')); }); tb.append(tr); });
+    t.append(thead, tb); sc.append(t); p.append(sc);
+    if (T.read) p.append(el('div', T.read.replace(/^./, (c) => c.toUpperCase()), 'read'));
+    box.append(p);
+  });
+}
+
+function inputs(){
+  const box = $('inputs'); box.replaceChildren();
+  D.inputs.forEach((sec, i) => {
+    const d = el('details', null, 'fold'); if (i === 0) d.style.borderTop = '0';
+    d.append(el('summary', sec.title));
+    const wide = sec.cols && sec.cols.length > 2, sc = el('div', null, 'scroll-x'), t = el('table', null, 'm inp');
+    const h = el('tr'); h.append(el('th', 'Input')); (wide ? sec.cols.slice(0, 3) : ['Value']).forEach((c) => h.append(el('th', c))); h.append(el('th', 'Note'));
+    const thead = el('thead'); thead.append(h); const tb = el('tbody');
+    sec.rows.forEach((r) => { const tr = el('tr'); tr.append(el('td', r.label)); (wide ? r.vals : [r.vals[0] || '']).forEach((v) => tr.append(el('td', v))); tr.append(el('td', r.note, 'note')); tb.append(tr); });
+    t.append(thead, tb); sc.append(t); d.append(sc); box.append(d);
+  });
+}
+
+function setView(sheet){
+  $('vPlan').setAttribute('aria-pressed', String(!sheet)); $('vSheet').setAttribute('aria-pressed', String(sheet));
+  $('planView').style.display = sheet ? 'none' : 'flex'; $('sheetView').hidden = !sheet;
+  if (sheet && !$('sheet').src && D) $('sheet').src = D.source.sheetUrl.replace(/\/edit.*$/, '') + '/edit?rm=minimal';
+  if (!sheet && D) chart();
+}
+$('vPlan').addEventListener('click', () => setView(false));
+$('vSheet').addEventListener('click', () => setView(true));
+
+fetch('data.json', {credentials: 'same-origin', cache: 'no-store'}).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then((d) => {
+  D = d;
+  const fmt = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'});
+  $('sub').textContent = 'Holdco model for MAIA Cacao, MAIA Haskap and AVIA, Oct 1, 2026 to Jun 30, 2027. These figures are a copy of the Google Sheet taken ' + fmt(d.source.exportTaken) + '; the sheet was last edited ' + fmt(d.source.sheetLastEdited) + '. Plan figures, not bank balances.';
+  $('bufKey').textContent = 'Minimum buffer, ' + short(d.buffer);
+  $('sheetLink').href = d.source.sheetUrl;
+  tiles(); chart(); weeklyTable(); monthlyTable(); payments(); scenarios(); inputs();
+  let t = null; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if ($('planView').style.display !== 'none') chart(); }, 120); });
+}).catch((e) => { $('sub').textContent = 'The cash flow model did not load (' + e.message + '). Reload the page.'; });
+})();
+</script>
+</body>
+</html>

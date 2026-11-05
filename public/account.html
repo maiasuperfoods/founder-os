@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>Change password · Founder OS</title>
+<link rel="stylesheet" href="/assets/os.css">
+<style>
+/* Layout: one narrow column, one form. */
+.page{max-width:460px}
+form{display:flex;flex-direction:column;gap:16px}
+</style>
+</head>
+<body>
+<main class="page">
+  <a class="back" href="/" id="back">Back to Founder OS</a>
+  <div>
+    <h1 id="title">Change password</h1>
+    <p class="lede" id="lede">Pick a password of at least 10 characters. Changing it signs you out on your other devices.</p>
+  </div>
+  <div class="note warn" id="firstNote" hidden>You signed in with a temporary password. Choose your own to open Founder OS.</div>
+  <form id="f" class="panel pad" autocomplete="on">
+    <div class="field"><label for="old" id="oldLabel">Current password</label><input id="old" type="password" autocomplete="current-password" required></div>
+    <div class="field"><label for="n1">New password</label><input id="n1" type="password" autocomplete="new-password" minlength="10" required></div>
+    <div class="field"><label for="n2">New password again</label><input id="n2" type="password" autocomplete="new-password" minlength="10" required></div>
+    <div class="note bad" id="err" role="alert" hidden></div>
+    <button class="btn primary" type="submit" id="go">Change password</button>
+  </form>
+  <div class="note good" id="done" role="status" hidden>Password changed. <a href="/">Open Founder OS</a></div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const first = new URLSearchParams(location.search).get('first') === '1';
+  if (first) { $('firstNote').hidden = false; $('back').hidden = true; $('title').textContent = 'Choose your password'; $('oldLabel').textContent = 'Temporary password'; }
+  const MSG = {wrong_password: first ? 'That is not the temporary password you were given.' : 'The current password is not right.', too_short: 'Use at least 10 characters.',
+    same: 'The new password is the same as the old one.', signed_out: 'You are signed out. Reload the page and sign in again.', down: 'The sign-in service is not reachable. Try again in a minute.'};
+  $('f').addEventListener('submit', async (e) => {
+    e.preventDefault(); $('err').hidden = true;
+    if ($('n1').value !== $('n2').value) { $('err').textContent = 'The two new passwords are different.'; $('err').hidden = false; return; }
+    $('go').disabled = true;
+    let r = null;
+    try { r = await (await fetch('/__api/password', {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify({old: $('old').value, next: $('n1').value})})).json(); } catch (x) { r = {ok: false, error: 'down'}; }
+    $('go').disabled = false;
+    if (r && r.ok) { $('f').hidden = true; $('firstNote').hidden = true; $('done').hidden = false; if (first) setTimeout(() => { location.href = '/'; }, 900); return; }
+    $('err').textContent = MSG[r && r.error] || 'The password was not changed. Try again.'; $('err').hidden = false;
+  });
+})();
+</script>
+</body>
+</html>

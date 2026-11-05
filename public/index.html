@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f2233'/%3E%3Crect x='7' y='8' width='4' height='16' rx='1' fill='%23e9a80c'/%3E%3Crect x='14' y='8' width='11' height='4' rx='1' fill='%23e3eaf2'/%3E%3Crect x='14' y='15' width='8' height='4' rx='1' fill='%23e3eaf2'/%3E%3C/svg%3E">
+<title>Founder OS</title>
+<link rel="stylesheet" href="/assets/os.css">
+<style>
+/* Layout: a fixed navy rail (brand, sections, account) beside one working area.
+   Home is drawn here; every other section is a mirrored page shown in a frame under a slim header
+   that says what it is, how fresh it is and where the editable original lives. */
+html,body{height:100%}
+body{display:grid;grid-template-columns:232px minmax(0,1fr);height:100vh;height:100dvh;overflow:hidden}
+
+.rail{background:var(--rail);color:var(--rail-ink);display:flex;flex-direction:column;min-height:0;overflow-y:auto;padding:18px 12px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 8px 16px;color:inherit;text-decoration:none}
+.brand svg{flex:none}
+.brand b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.brand span{display:block;font-size:12px;color:var(--rail-mute)}
+.rail nav{display:flex;flex-direction:column;gap:1px}
+.rail .grp{font-size:12px;color:var(--rail-mute);padding:16px 10px 5px}
+.rail a.item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;color:var(--rail-ink);text-decoration:none;font-weight:500;font-size:14.5px;border-left:3px solid transparent}
+.rail a.item:hover{background:var(--rail-hover)}
+.rail a.item[aria-current=page]{background:var(--rail-hover);border-left-color:var(--mark);font-weight:700}
+.rail a.item:focus-visible{outline-color:var(--mark)}
+.rail .who{margin-top:auto;border-top:1px solid var(--rail-line);padding:12px 8px 0;display:flex;flex-direction:column;gap:2px}
+.rail .who .name{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rail .who .mail{font-size:12px;color:var(--rail-mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:6px}
+.rail .who a{color:var(--rail-ink);font-size:13.5px;text-decoration:none;padding:4px 0}
+.rail .who a:hover{text-decoration:underline}
+
+.work{display:flex;flex-direction:column;min-width:0;min-height:0}
+.topbar{display:none}
+.sechead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:9px 18px;background:var(--surface);border-bottom:1px solid var(--line);min-height:50px}
+.sechead h1{font-size:16px;font-weight:700;letter-spacing:-.01em;margin-right:4px}
+.sechead .fresh{font-size:13px;color:var(--ink-3)}
+.sechead .fresh.stale{color:var(--warn);font-weight:600}
+.sechead .spacer{flex:1}
+.sechead a.out{font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
+.sechead a.out:hover{text-decoration:underline}
+.views{display:inline-flex;border:1px solid var(--line-2);border-radius:7px;overflow:hidden}
+.views button{border:0;background:transparent;padding:5px 12px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;border-right:1px solid var(--line)}
+.views button:last-child{border-right:0}
+.views button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+#frame{flex:1;min-height:0;width:100%;border:0;background:var(--bg)}
+
+#home{flex:1;min-height:0;overflow-y:auto}
+.home{max-width:1080px;margin:0 auto;padding:36px 28px 80px;display:flex;flex-direction:column;gap:40px}
+.home .hello p{color:var(--ink-2);margin-top:6px;max-width:64ch}
+.block{display:flex;flex-direction:column;gap:12px}
+.block-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.block-h p{font-size:13.5px;color:var(--ink-3)}
+
+/* brands: one row per brand, numbers in aligned columns */
+.brands{display:flex;flex-direction:column}
+.brow{display:grid;grid-template-columns:minmax(170px,1.15fr) repeat(5,minmax(0,1fr));gap:6px 18px;align-items:center;padding:16px 20px;border-top:1px solid var(--line)}
+.brow:first-child{border-top:0}
+.brow.head{padding-block:10px;font-size:12.5px;font-weight:600;color:var(--ink-3)}
+.brow.head div:not(:first-child),.brow .m{text-align:right}
+.bname b{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.bname span{display:block;font-size:13px;color:var(--ink-3)}
+.bname .links{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:6px;font-size:13px;font-weight:600}
+.bname .links a{text-decoration:none}
+.bname .links a:hover{text-decoration:underline}
+.m .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.m .d{font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-3)}
+.m .d.up{color:var(--good)} .m .d.down{color:var(--bad)}
+.m .lab{display:none;font-size:12px;color:var(--ink-3)}
+
+.cash{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.cash>div{padding:16px 20px;border-left:1px solid var(--line);min-width:0}
+.cash>div:first-child{border-left:0}
+.cash .k{font-size:13px;color:var(--ink-3)}
+.cash .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;margin-top:2px}
+.cash .v.bad{color:var(--bad)}
+.cash .s{font-size:12.5px;color:var(--ink-3)}
+
+table.sys td:first-child{font-weight:600;white-space:nowrap}
+table.sys td:first-child a{text-decoration:none;color:var(--ink)}
+table.sys td:first-child a:hover{text-decoration:underline}
+table.sys td.what{color:var(--ink-2)}
+table.sys td.when{white-space:nowrap}
+
+@media (max-width:860px){
+  body{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .topbar{display:flex;align-items:center;gap:10px;background:var(--rail);color:var(--rail-ink);padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .topbar b{font-weight:800;letter-spacing:-.02em;margin-right:auto}
+  .topbar button{border:1px solid var(--rail-line);background:transparent;color:var(--rail-ink);border-radius:7px;padding:6px 12px;font-weight:600;cursor:pointer}
+  .rail{position:fixed;inset:0 auto 0 0;width:min(280px,86vw);z-index:30;transform:translateX(-100%);padding-top:calc(18px + env(safe-area-inset-top,0px))}
+  body.menu .rail{transform:none;box-shadow:0 0 0 100vmax rgba(5,10,16,.5)}
+  .work{grid-row:2}
+  .home{padding:24px 16px 64px;gap:32px}
+  h1{font-size:25px}
+  .brow.head{display:none}
+  .brow{grid-template-columns:repeat(2,minmax(0,1fr));padding:16px}
+  .bname{grid-column:1/-1}
+  .m{text-align:left!important}
+  .m .lab{display:block}
+  .cash{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cash>div{border-left:0;border-top:1px solid var(--line);padding:14px 16px}
+  .cash>div:nth-child(-n+2){border-top:0}
+  .cash>div:nth-child(even){border-left:1px solid var(--line)}
+  table.sys td.what{display:none}
+}
+@media (prefers-reduced-motion:no-preference){ .rail{transition:transform .18s ease} }
+</style>
+</head>
+<body>
+<header class="topbar"><b>Founder OS</b><button type="button" id="menuBtn" aria-controls="rail" aria-expanded="false">Menu</button></header>
+
+<aside class="rail" id="rail">
+  <a class="brand" href="#/">
+    <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#18304a"/><rect x="7" y="8" width="4" height="16" rx="1" fill="#e9a80c"/><rect x="14" y="8" width="11" height="4" rx="1" fill="#e3eaf2"/><rect x="14" y="15" width="8" height="4" rx="1" fill="#e3eaf2"/></svg>
+    <div><b>Founder OS</b><span>Renaissance Commerce</span></div>
+  </a>
+  <nav id="nav" aria-label="Sections"></nav>
+  <div class="who">
+    <div class="name" id="whoName">&nbsp;</div>
+    <div class="mail" id="whoMail">&nbsp;</div>
+    <a href="/people" id="peopleLink" hidden>People and access</a>
+    <a href="/account">Change password</a>
+    <a href="/__logout">Sign out</a>
+  </div>
+</aside>
+
+<main class="work">
+  <div class="sechead" id="sechead" hidden>
+    <h1 id="secTitle"></h1>
+    <div class="views" id="views" role="group" aria-label="View" hidden></div>
+    <span class="fresh" id="secFresh"></span>
+    <span class="spacer"></span>
+    <a class="out" id="secLive" target="_blank" rel="noopener" hidden></a>
+  </div>
+  <iframe id="frame" title="Section" hidden></iframe>
+
+  <div id="home">
+    <div class="home">
+      <div class="hello">
+        <h1 id="hello">Founder OS</h1>
+        <p id="helloSub">Everything that tracks the business, in one place. Each section is a read-only copy of its working page; the header of a section says how fresh it is and links to the original.</p>
+      </div>
+
+      <section class="block" aria-labelledby="hBrands">
+        <div class="block-h"><h2 id="hBrands">Brands, last full week</h2><p id="weekLabel"></p></div>
+        <div class="panel"><div class="brands" id="brands"><div class="brow"><div class="muted">Loading last week's numbers.</div></div></div></div>
+      </section>
+
+      <section class="block" aria-labelledby="hCash">
+        <div class="block-h"><h2 id="hCash">Cash, per the plan</h2><p id="cashLabel"></p></div>
+        <div class="panel"><div class="cash" id="cash"><div><div class="k">Loading the cash flow model.</div></div></div></div>
+      </section>
+
+      <section class="block" aria-labelledby="hSys">
+        <div class="block-h"><h2 id="hSys">The operating system</h2><p>What each section holds and how current its copy is.</p></div>
+        <div class="panel scroll-x"><table class="grid sys" id="sys"><thead><tr><th>Section</th><th>What it holds</th><th>Data as of</th></tr></thead><tbody></tbody></table></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+'use strict';
+const $ = (s) => document.querySelector(s);
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const getJSON = (u) => fetch(u, {credentials: 'same-origin', cache: 'no-store'}).then((r) => { if (r.status === 401) { location.reload(); throw new Error('signed out'); } if (!r.ok) throw new Error(u + ' ' + r.status); return r.json(); });
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const day = (iso) => { const p = String(iso || '').slice(0, 10).split('-'); return p.length === 3 ? MONTHS[+p[1] - 1] + ' ' + (+p[2]) : ''; };
+const daysOld = (iso) => { const t = Date.parse(String(iso).slice(0, 10) + 'T12:00:00Z'); return isFinite(t) ? Math.floor((Date.now() - t) / 864e5) : null; };
+const usd = (v) => { if (v == null || !isFinite(v)) return 'n/a'; const a = Math.abs(v), s = v < 0 ? '-' : ''; return s + '$' + (a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e4 ? Math.round(a / 1e3) + 'K' : a >= 1e3 ? (a / 1e3).toFixed(1) + 'K' : Math.round(a)); };
+const int = (v) => v == null || !isFinite(v) ? 'n/a' : Math.round(v).toLocaleString('en-US');
+
+let SECTIONS = [], current = null;
+
+/* ---------- navigation ---------- */
+function buildNav(meta){
+  const nav = $('#nav'); nav.replaceChildren();
+  const home = el('a', 'Home', 'item'); home.href = '#/'; home.dataset.id = ''; nav.append(home);
+  meta.groups.forEach((g) => {
+    nav.append(el('div', g.label, 'grp'));
+    g.items.forEach((s) => { SECTIONS.push(s); const a = el('a', s.title, 'item'); a.href = '#/' + s.id; a.dataset.id = s.id; nav.append(a); });
+  });
+}
+function freshText(s, v){
+  const asOf = (v && v.asOf) || s.asOf, through = s.through;
+  if (!asOf) return {text: '', stale: false};
+  const age = daysOld(through || asOf);
+  const base = through ? 'Numbers through ' + day(through) + ', copied ' + day(asOf) : (s.kind || 'Copy') + ' from ' + day(asOf);
+  const limit = s.kind === 'Daily build' ? 2 : s.kind === 'Snapshot' && s.id !== 'org' ? 8 : null;
+  const stale = limit != null && age != null && age > limit;
+  return {text: base + (stale ? ' (' + age + ' days old)' : ''), stale};
+}
+function route(){
+  const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  const s = SECTIONS.find((x) => x.id === parts[0]);
+  document.body.classList.remove('menu'); $('#menuBtn').setAttribute('aria-expanded', 'false');
+  document.querySelectorAll('.rail a.item').forEach((a) => a.dataset.id === (s ? s.id : '') ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  if (!s) { current = null; $('#home').hidden = false; $('#frame').hidden = true; $('#sechead').hidden = true; document.title = 'Founder OS'; return; }
+  const views = s.views || [];
+  let v = views.find((x) => x.id === parts[1]) || null;
+  if (!v && views.length) { let saved = null; try { saved = localStorage.getItem('os.view.' + s.id); } catch (e) {} v = views.find((x) => x.id === saved) || views[0]; }
+  const src = v ? v.src : s.src, key = s.id + '|' + (v ? v.id : '');
+  $('#home').hidden = true; $('#frame').hidden = false; $('#sechead').hidden = false;
+  $('#secTitle').textContent = s.title; document.title = s.title + ' · Founder OS';
+  const f = freshText(s, v); const fr = $('#secFresh'); fr.textContent = f.text; fr.classList.toggle('stale', f.stale);
+  const live = (v && v.live) || s.live, out = $('#secLive');
+  out.hidden = !live; if (live) { out.href = live; out.textContent = s.liveLabel || 'Open the original'; }
+  const box = $('#views'); box.hidden = !views.length; box.replaceChildren();
+  views.forEach((x) => { const b = el('button', x.label); b.type = 'button'; b.setAttribute('aria-pressed', String(v && x.id === v.id));
+    b.addEventListener('click', () => { try { localStorage.setItem('os.view.' + s.id, x.id); } catch (e) {} location.hash = '#/' + s.id + '/' + x.id; }); box.append(b); });
+  if (current !== key) { current = key; const fr2 = $('#frame'); fr2.title = s.title; fr2.src = src; }
+}
+window.addEventListener('hashchange', route);
+$('#menuBtn').addEventListener('click', () => { const on = document.body.classList.toggle('menu'); $('#menuBtn').setAttribute('aria-expanded', String(on)); });
+document.addEventListener('click', (e) => { if (document.body.classList.contains('menu') && !e.target.closest('.rail') && !e.target.closest('#menuBtn')) { document.body.classList.remove('menu'); $('#menuBtn').setAttribute('aria-expanded', 'false'); } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.body.classList.remove('menu'); });
+/* a mirrored page that gets a 401 (session ended) shows the sign-in form inside the frame; send the whole window there instead */
+$('#frame').addEventListener('load', () => { try { const d = $('#frame').contentDocument; if (d && d.querySelector('form[action="/__login"]')) location.reload(); } catch (e) {} });
+
+/* ---------- home ---------- */
+const BRANDS = [
+  {id: 'maia', name: 'MAIA', products: 'Super Cacao, Nattokinase, Haskap', links: [['Scorecard', '#/wbr'], ['Creative', '#/creative/maia'], ['Haskap competitors', '#/competitors/haskap']]},
+  {id: 'avia', name: 'AVIA', products: 'Cortisol Detox', links: [['Scorecard', '#/wbr'], ['Creative', '#/creative/avia'], ['Cortisol Detox competitors', '#/competitors/avia-cortisol-detox']]}
+];
+const METRICS = [
+  {k: 'revenue', label: 'Revenue', fmt: usd, good: 'up'},
+  {k: 'adSpend', label: 'Ad spend', fmt: usd, good: 'none'},
+  {k: 'ncOrders', label: 'New customers', fmt: int, good: 'up'},
+  {k: 'cpa', label: 'Cost per new customer', fmt: (v) => v == null || !isFinite(v) ? 'n/a' : '$' + Math.round(v), good: 'down'},
+  {k: 'contribution', label: 'Contribution after ads', fmt: usd, good: 'up'}
+];
+function derive(b){
+  if (!b || typeof b.revenue !== 'number') return null;
+  const n = (x) => typeof x === 'number' ? x : 0;
+  return {revenue: b.revenue, adSpend: b.adSpend, ncOrders: b.ncOrders,
+    cpa: b.ncOrders > 0 && typeof b.adSpend === 'number' ? b.adSpend / b.ncOrders : null,
+    contribution: b.revenue - n(b.taxes) - n(b.refunds) - n(b.cogs) - n(b.shipping) - n(b.gateway) - n(b.adSpend)};
+}
+function drawBrands(db){
+  const weeks = db.collections.weeks || {}, keys = Object.keys(weeks).sort();
+  const box = $('#brands'); box.replaceChildren();
+  if (!keys.length) { box.append(el('div', 'The weekly snapshot holds no weeks yet.', 'brow muted')); return; }
+  const lastK = keys[keys.length - 1], last = weeks[lastK], prev = weeks[keys[keys.length - 2]] || {};
+  $('#weekLabel').textContent = 'W' + last.iso + ', ' + day(last.start) + ' to ' + day(last.end) + ', against the week before. From the Weekly Business Review copy.';
+  const head = el('div', null, 'brow head'); head.append(el('div', 'Brand')); METRICS.forEach((m) => head.append(el('div', m.label))); box.append(head);
+  BRANDS.forEach((B) => {
+    const cur = derive((last.brands || {})[B.id]), old = derive((prev.brands || {})[B.id]);
+    const row = el('div', null, 'brow');
+    const name = el('div', null, 'bname'); name.append(el('b', B.name), el('span', B.products));
+    const links = el('div', null, 'links'); B.links.forEach(([t, h]) => { const a = el('a', t); a.href = h; links.append(a); }); name.append(links); row.append(name);
+    METRICS.forEach((m) => {
+      const c = el('div', null, 'm'); c.append(el('div', m.label, 'lab'));
+      const v = cur ? cur[m.k] : null; c.append(el('div', m.fmt(v), 'v'));
+      const o = old ? old[m.k] : null;
+      if (v != null && o != null && isFinite(v) && isFinite(o) && o !== 0) {
+        const ch = (v - o) / Math.abs(o), up = ch > 0.0005, dn = ch < -0.0005;
+        const cls = m.good === 'none' || (!up && !dn) ? '' : ((m.good === 'up') === up ? ' up' : ' down');
+        c.append(el('div', (up ? 'up ' : dn ? 'down ' : 'flat ') + Math.abs(ch * 100).toFixed(ch > -0.1 && ch < 0.1 ? 1 : 0) + '%', 'd' + cls));
+      } else c.append(el('div', cur ? 'no prior week' : 'not in the snapshot', 'd'));
+      row.append(c);
+    });
+    box.append(row);
+  });
+}
+function drawCash(cf){
+  const w = cf.weekly, closing = w.rows.closing, box = $('#cash'); box.replaceChildren();
+  let lo = 0; closing.forEach((v, i) => { if (v != null && v < closing[lo]) lo = i; });
+  const below = closing.findIndex((v) => v != null && v < cf.buffer);
+  const tile = (k, v, s, bad) => { const d = el('div'); d.append(el('div', k, 'k'), el('div', v, 'v' + (bad ? ' bad' : '')), el('div', s, 's')); return d; };
+  box.append(
+    tile('Lowest cash in the plan', usd(closing[lo]), 'week of ' + w.starts[lo].replace(/, \d{4}$/, '') + ' (' + w.labels[lo] + ')', closing[lo] < cf.buffer),
+    tile('First week under the ' + usd(cf.buffer) + ' buffer', below < 0 ? 'Never' : w.labels[below], below < 0 ? 'cash stays above the buffer' : 'week of ' + w.starts[below].replace(/, \d{4}$/, ''), below >= 0),
+    tile('Peak unpaid card balance', usd(w.summary.peakCard), 'against a ' + usd(cf.cardLimit) + ' limit', false),
+    tile('Cash at the end of the plan', usd(closing[closing.length - 1]), w.labels[closing.length - 1].replace("'", ', 20'), false));
+  $('#cashLabel').textContent = 'From the model export of ' + day(cf.source.exportTaken) + ' (sheet last edited ' + day(cf.source.sheetLastEdited) + '). These are plan figures, not bank balances.';
+}
+function drawSystem(){
+  const tb = $('#sys tbody'); tb.replaceChildren();
+  SECTIONS.forEach((s) => {
+    const tr = el('tr'), td = el('td'), a = el('a', s.title); a.href = '#/' + s.id; td.append(a);
+    const f = freshText(s, null), when = el('td', null, 'when');
+    if (s.views && s.views.some((v) => v.asOf)) when.textContent = s.views.filter((v) => v.asOf).map((v) => v.label + ': ' + day(v.asOf)).join(', ');
+    else if (f.text) { when.append(el('span', f.text.replace(/^(Snapshot|Daily build|Model export|Study) from /, ''), f.stale ? 'chip warn' : '')); }
+    tr.append(td, el('td', s.blurb || '', 'what'), when); tb.append(tr);
+  });
+}
+
+getJSON('/assets/sections.json').then((meta) => { buildNav(meta); drawSystem(); route(); }).catch((e) => { $('#nav').append(el('div', 'The section list did not load.', 'grp')); });
+getJSON('/__api/me').then((me) => {
+  $('#whoName').textContent = me.name || me.email; $('#whoMail').textContent = me.email; $('#peopleLink').hidden = me.role !== 'admin';
+  const first = (me.name || '').trim().split(/\s+/)[0]; if (first) $('#hello').textContent = 'Founder OS, ' + first;
+}).catch(() => {});
+getJSON('/s/wbr/data/db.json').then(drawBrands).catch(() => { $('#brands').replaceChildren(el('div', 'Last week’s numbers did not load. Open the Weekly Business Review section.', 'brow muted')); });
+getJSON('/s/cashflow/data.json').then(drawCash).catch(() => { $('#cash').replaceChildren(el('div', 'The cash flow model did not load.', 'muted')); });
+})();
+</script>
+</body>
+</html>

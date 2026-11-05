@@ -1,0 +1,22 @@
+{
+ "cashflow": {
+  "asOf": "2026-11-04"
+ },
+ "ci-avia": {
+  "asOf": "2026-10-26",
+  "datasets": 53
+ },
+ "ci-haskap": {
+  "asOf": "2026-10-12"
+ },
+ "creative": {
+  "asOf": "2026-11-04",
+  "files": 21,
+  "relinked": 19
+ },
+ "wbr": {
+  "asOf": "2026-10-30",
+  "lastWeek": "2026-10-19",
+  "through": "2026-10-29"
+ }
+}

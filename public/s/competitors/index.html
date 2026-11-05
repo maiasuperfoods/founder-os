@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>Competitor Intelligence</title>
+<style>
+/* Host page for a competitor study that was built as a Claude dashboard.
+   The study's own page (studies/<id>/page.html) is loaded into #dash-root unchanged; this file supplies
+   the theme tokens that page expects and a small `dash` object that serves its data files. */
+:root{
+  --font-anthropic-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-anthropic-serif:ui-serif,"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --color-bg:#f6f4ee;--color-panel:#fffdf8;--color-fg:#1b1a17;--color-fg-muted:#625d52;--color-border-line:#dcd6c8;
+  --color-ok:#1d7a4f;--color-warn:#9a6200;--color-bad:#b3362a;
+  --cds-gap-xs:4px;--cds-gap-sm:8px;--cds-gap-md:16px;--cds-gap-lg:24px;
+  --cds-pad-xs:4px;--cds-pad-sm:8px;--cds-pad-md:12px;--cds-pad-lg:16px;
+  --cds-font-size-caption:12.5px;--cds-font-size-body:14px;--cds-font-size-heading:16px;--cds-font-size-title:28px;
+  --cds-font-weight-medium:600;--cds-radius:8px;--cds-dur-slow:.3s;--cds-chart-muted:#b9b2a2;
+  --dash-gutter:20px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --color-bg:#141311;--color-panel:#1d1b18;--color-fg:#efeae0;--color-fg-muted:#a8a295;--color-border-line:#37332c;
+  --color-ok:#5cc391;--color-warn:#e0aa48;--color-bad:#f08a7e;--cds-chart-muted:#5b564c;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--color-bg);color:var(--color-fg);font:14px/1.5 var(--font-anthropic-sans)}
+[hidden]{display:none!important}
+#dash-root{padding:var(--dash-gutter)}
+.host-msg{padding:40px 20px;color:var(--color-fg-muted);text-align:center}
+.blob-missing{display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:12px;line-height:1.35;color:#6b7280;background:rgba(127,127,127,.08);border-radius:8px;min-height:80px;height:100%}
+</style>
+</head>
+<body>
+<div id="dash-root"><div class="host-msg" id="hostMsg">Loading the study.</div></div>
+<script src="/assets/d3.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var id = (new URLSearchParams(location.search).get('study') || '').replace(/[^a-z0-9-]/g, '');
+  var base = 'studies/' + id + '/';
+  var msg = function (t) { var m = document.getElementById('hostMsg'); if (m) m.textContent = t; };
+  if (!id) { msg('No study selected.'); return; }
+
+  var study = null, state = {}, calcs = {}, listeners = [], params = {}, queued = false;
+  function notify() {
+    if (queued) return; queued = true;
+    requestAnimationFrame(function () { queued = false; listeners.slice().forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } }); });
+  }
+  function rowsOf(j) { return Array.isArray(j) ? j : (j && (j.rows || j.data || j.results)) || j; }
+  function load(name) {
+    var s = state[name] = { status: 'loading', data: [] };
+    fetch(base + study.datasets[name], { credentials: 'same-origin' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { s.data = rowsOf(j); s.status = 'ok'; notify(); })
+      .catch(function (e) { s.status = 'error'; s.message = String(e && e.message || e); notify(); });
+  }
+  function shape(s) {
+    var d = s.data, first = Array.isArray(d) && d.length && d[0] && typeof d[0] === 'object' ? Object.keys(d[0]) : [];
+    return { status: s.status, data: d, rows: d, value: d, columns: first, message: s.message, refreshing: false, meta: [] };
+  }
+  function data(name) {
+    if (calcs[name]) {
+      var c = calcs[name];
+      if (c.done) return shape({ status: 'ok', data: c.value });
+      var ins = c.inputs.map(data), bad = ins.find(function (x) { return x.status !== 'ok'; });
+      if (bad) return shape({ status: bad.status === 'loading' ? 'loading' : 'error', data: [], message: bad.message });
+      try { c.value = c.fn.apply(null, ins.map(function (x) { return x.data; })); c.done = true; }
+      catch (e) { return shape({ status: 'error', data: [], message: String(e) }); }
+      return shape({ status: 'ok', data: c.value });
+    }
+    if (!study || !Object.prototype.hasOwnProperty.call(study.datasets, name)) return shape({ status: 'missing', data: [] });
+    if (!state[name]) load(name);
+    return shape(state[name]);
+  }
+  window.dash = {
+    data: data,
+    onData: function (fn) { listeners.push(fn); try { fn(); } catch (e) { console.error(e); } },
+    calc: function (name, def) { calcs[name] = { inputs: def.inputs || [], fn: def.fn, done: false }; },
+    loader: function () {},
+    refresh: function () {},
+    colors: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'],
+    params: function () { return Object.assign({}, params); },
+    setParams: function (p) { Object.assign(params, p || {}); notify(); },
+    resetParams: function () { params = Object.assign({}, (study && study.params) || {}); notify(); },
+    setLink: function (name) { try { history.replaceState(null, '', '#' + name); } catch (e) {} }
+  };
+  window.addEventListener('resize', notify);
+
+  // Screenshots that were uploaded to the Claude dashboard are not part of this mirror.
+  document.addEventListener('error', function (ev) {
+    var t = ev.target;
+    if (t && t.tagName === 'IMG' && /\/_blob\//.test(t.getAttribute('src') || '')) {
+      var n = document.createElement('div'); n.className = 'blob-missing';
+      n.textContent = 'Screenshot is on the Claude page (use "Open the live page").';
+      t.replaceWith(n);
+    }
+  }, true);
+
+  fetch(base + 'study.json', { credentials: 'same-origin' })
+    .then(function (r) { if (!r.ok) throw new Error('study not found'); return r.json(); })
+    .then(function (s) {
+      study = s; params = Object.assign({}, s.params || {}); document.title = s.title || document.title;
+      return fetch(base + 'page.html', { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error('page not found'); return r.text(); });
+    })
+    .then(function (text) {
+      var tpl = document.createElement('template'); tpl.innerHTML = text;
+      var scripts = Array.prototype.slice.call(tpl.content.querySelectorAll('script'));
+      scripts.forEach(function (sc) { sc.remove(); });
+      var root = document.getElementById('dash-root'); root.replaceChildren(tpl.content);
+      // each script runs once the page is in place, in its own scope, in order
+      scripts.forEach(function (sc) { if (!sc.src) (new Function(sc.textContent))(); });
+    })
+    .catch(function (e) { msg('This study could not be loaded: ' + (e && e.message || e)); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+ "title": "Haskap competitor ad intelligence",
+ "asOf": "2026-10-12",
+ "live": "https://claude.ai/artifact/7rd7XGoHUG71n3VMDMEpWV",
+ "params": {
+  "brand": "all"
+ },
+ "datasets": {
+  "cross": "data/cross.json",
+  "dead_hooks": "data/dead_hooks.json",
+  "dims": "data/dims.json",
+  "hook_families": "data/hook_families.json",
+  "kpis": "data/kpis.json",
+  "library": "data/library.json",
+  "notworking": "data/notworking.json",
+  "pages": "data/pages.json",
+  "patterns": "data/patterns.json",
+  "plays": "data/plays.json",
+  "teardowns": "data/teardowns.json",
+  "tr1": "data/tr1.json",
+  "tr2": "data/tr2.json",
+  "tr3": "data/tr3.json"
+ }
+}

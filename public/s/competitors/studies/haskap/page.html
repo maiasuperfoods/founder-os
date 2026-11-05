@@ -1,0 +1,410 @@
+<style>
+.hz{font-family:var(--font-anthropic-sans);color:var(--color-fg)}
+.hz h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0 0 var(--cds-gap-xs)}
+.hz .lede{color:var(--color-fg-muted);margin:0 0 var(--cds-gap-md);max-width:62rem;line-height:1.5}
+.hz .bar{display:flex;flex-wrap:wrap;gap:var(--cds-gap-sm);align-items:flex-end;margin-bottom:var(--cds-gap-md)}
+.hz label.f{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);display:flex;flex-direction:column;gap:2px}
+.hz select,.hz input[type=search]{font:inherit;font-size:var(--cds-font-size-body);padding:var(--cds-pad-xs) var(--cds-pad-sm);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);background:var(--color-panel);color:var(--color-fg)}
+.hz .seg{display:inline-flex;border:1px solid var(--color-border-line);border-radius:var(--cds-radius);overflow:hidden}
+.hz .seg button{font:inherit;border:0;background:transparent;color:var(--color-fg-muted);padding:var(--cds-pad-xs) var(--cds-pad-md);cursor:pointer}
+.hz .seg button[aria-pressed=true]{background:var(--color-fg);color:var(--color-bg)}
+.hz .tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--color-border-line);margin-bottom:var(--cds-gap-lg)}
+.hz .tabs button{font:inherit;background:none;border:0;border-bottom:2px solid transparent;padding:var(--cds-pad-sm) var(--cds-pad-md);color:var(--color-fg-muted);cursor:pointer}
+.hz .tabs button[aria-selected=true]{color:var(--color-fg);border-bottom-color:var(--color-fg)}
+.hz .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));gap:var(--cds-gap-md);margin-bottom:var(--cds-gap-lg)}
+.hz .tile,.hz .card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);min-width:0}
+.hz .tile .v{font-family:var(--font-anthropic-serif);font-size:var(--cds-font-size-title);font-variant-numeric:tabular-nums}
+.hz .tile .k{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:var(--cds-gap-xs);line-height:1.4}
+.hz .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,30rem),1fr));gap:var(--cds-gap-md);margin-bottom:var(--cds-gap-md)}
+.hz .card{margin-bottom:var(--cds-gap-md)}
+.hz .card h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0 0 var(--cds-gap-xs)}
+.hz .note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin:0 0 var(--cds-gap-md);line-height:1.45}
+.hz .scroll{max-height:36rem;overflow:auto}
+.hz table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.hz th{text-align:left;font-weight:var(--cds-font-weight-medium);color:var(--color-fg-muted);padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);position:sticky;top:0;background:var(--color-panel);white-space:nowrap}
+.hz th.s{cursor:pointer}
+.hz td{padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.hz td.n,.hz th.n{text-align:right}
+.hz .good{color:var(--color-ok);font-weight:var(--cds-font-weight-medium)}
+.hz .bad{color:var(--color-bad);font-weight:var(--cds-font-weight-medium)}
+.hz .mut{color:var(--color-fg-muted)}
+.hz .ib{display:flex;align-items:center;gap:6px;min-width:7rem}
+.hz .ib i{display:block;height:8px;border-radius:4px;background:var(--cds-chart-muted)}
+.hz .heat td{text-align:center;min-width:4.2rem;font-size:11px}
+.hz .heat td.lab,.hz .heat th{text-align:left;white-space:nowrap}
+.hz .tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));gap:var(--cds-gap-md)}
+.hz .tcard h3{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0 0 4px}
+.hz .tcard .meta{font-size:11px;color:var(--color-fg-muted);margin-bottom:8px}
+.hz .tcard p{font-size:var(--cds-font-size-caption);line-height:1.45;margin:6px 0}
+.hz .tcard b{font-weight:var(--cds-font-weight-medium)}
+.hz .quote{font-family:var(--font-anthropic-serif);font-size:var(--cds-font-size-body);line-height:1.4;margin:4px 0 8px}
+.hz .risk{color:var(--color-warn)}
+.hz tr.exp td{background:var(--color-bg)}
+.hz .tx{white-space:pre-wrap;line-height:1.55;font-size:var(--cds-font-size-caption);max-width:70rem}
+.hz button.lk{font:inherit;font-size:11px;border:1px solid var(--color-border-line);background:transparent;color:var(--color-fg);border-radius:var(--cds-radius);padding:2px 6px;cursor:pointer}
+.hz a{color:inherit}
+.hz .err{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);min-height:3rem}
+.hz .err::before{content:'';width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)}
+.hz [data-dash-source-state=refreshing]{opacity:.5;transition:opacity var(--cds-dur-slow)}
+.hz [data-dash-source-state=empty]{color:transparent}
+.hz [hidden]{display:none!important}
+.hz .method p,.hz .method li{line-height:1.55;font-size:var(--cds-font-size-body)}
+</style>
+
+<div class="hz">
+  <h1>Haskap competitor ad intelligence</h1>
+  <p class="lede">Every video Clarity MD and Rovina ran in the last 180 days, across all their Facebook pages, read from its full transcript and scored by how long it kept running. A video that ran 30+ days is counted as a winner: brands kill losers within days. Because Rovina keeps videos running far longer than Clarity, every score is shown as an <b>index</b> against that brand's own norm (1.00 = average for the brand; 1.25 = 25% more likely than usual to become a winner).</p>
+
+  <div class="bar">
+    <label class="f">Brand<span class="seg" role="group" aria-label="Brand">
+      <button data-b="all">Both</button><button data-b="Clarity MD">Clarity MD</button><button data-b="Rovina">Rovina</button></span></label>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button data-tab="overview" id="tab-overview">What's working</button>
+    <button data-tab="hooks" id="tab-hooks">Hooks</button>
+    <button data-tab="formats" id="tab-formats">Formats &amp; flows</button>
+    <button data-tab="angles" id="tab-angles">Angles &amp; awareness</button>
+    <button data-tab="teardowns" id="tab-teardowns">Reverse-engineer</button>
+    <button data-tab="notworking" id="tab-notworking">What didn't work</button>
+    <button data-tab="library" id="tab-library">Script library</button>
+    <button data-tab="method" id="tab-method">Method</button>
+  </div>
+
+  <section class="page" id="overview">
+    <div class="tiles">
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="videos">—</div><div class="k">distinct videos, last 180 days</div></div>
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="transcripts">—</div><div class="k">full transcripts read and labelled</div></div>
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="ads">—</div><div class="k">ads using those videos</div></div>
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="win" data-fmt="pct">—</div><div class="k">of videos ran 30+ days (winners)</div></div>
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="med_dur" data-fmt="sec">—</div><div class="k">median video length</div></div>
+      <div class="tile"><div class="v k-v" data-source="kpis" data-field="med_product_sec" data-fmt="sec">—</div><div class="k">median time before the product is named</div></div>
+    </div>
+    <div class="card" id="card-plays">
+      <h2>Priority plays for Haskap, backed by the data</h2>
+      <p class="note">Each play names where it works (brand), the format to brief and the numbers behind it. Index = likelihood of a 30+ day run versus that brand's norm.</p>
+      <div class="scroll"><table class="t-plays" data-source="plays" data-row-key="rank">
+        <thead><tr><th data-field="rank">#</th><th data-field="play">Play</th><th data-field="verdict">Verdict</th><th data-field="source">Proven at</th><th data-field="format">Format</th><th data-field="awareness">Awareness</th><th data-field="evidence">Evidence</th><th data-field="how">How to run it</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" id="card-brands">
+      <h2>Two different playbooks</h2>
+      <p class="note">Clarity tests a huge volume of long, doctor-led organ videos and keeps few. Rovina runs fewer, shorter videos and keeps most of them.</p>
+      <table class="t-kpis" data-source="kpis" data-row-key="scope">
+        <thead><tr><th data-field="scope">Brand</th><th class="n" data-field="pages">Pages</th><th class="n" data-field="videos">Videos</th><th class="n" data-field="ads">Ads</th><th class="n" data-field="win">Ran 30+ days</th><th class="n" data-field="med_days">Median days live</th><th class="n" data-field="med_dur">Median length</th><th class="n" data-field="med_product_sec">Product named at</th><th class="n" data-field="reused_hooks">Hooks re-shot 3+ times</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <section class="page" id="hooks" hidden>
+    <div class="card" id="card-hooktypes">
+      <h2>Hook types: how often used vs how often they win</h2>
+      <p class="note">The opening move of each script. Signal marks differences big enough not to be chance (2+ standard deviations). Videos whose first line was music or a single word are left out.</p>
+      <div class="scroll"><table class="t-dim" data-dim="hook_type" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" id="card-fams">
+      <h2>Proven hooks: lines the brands re-shot again and again</h2>
+      <p class="note">A brand re-shooting the same opening line in many videos is paying to scale it. Ranked by how many of those videos ran 30+ days. Click a header to sort; open the best-running example.</p>
+      <div class="bar"><input type="search" class="q-fam" placeholder="Search hooks" aria-label="Search hooks"><span class="note c-fam"></span></div>
+      <div class="scroll"><table class="t-fam" data-source="hook_families" data-row-key="id">
+        <thead><tr><th class="s" data-field="hook">Hook (best-running version)</th><th class="s n" data-field="videos">Videos</th><th class="s n" data-field="winners">Ran 30+ days</th><th class="s n" data-field="win">Rate</th><th class="s n" data-field="max_days">Longest run</th><th class="s n" data-field="pages">Pages</th><th class="s" data-field="hook_type">Hook type</th><th class="s" data-field="angle">Angle</th><th class="s" data-field="format">Format</th><th data-field="ad_url">Example</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" id="card-hookxangle">
+      <h2>Which hook works for which angle</h2>
+      <p class="note">Index vs brand norm for each hook type × angle pair with at least 10 videos. Green = above norm, red = below; the small number is the video count.</p>
+      <div class="scroll heat-wrap" data-pair="hook_typexangle" data-source="cross"></div>
+    </div>
+  </section>
+
+  <section class="page" id="formats" hidden>
+    <div class="grid">
+      <div class="card" id="card-format"><h2>Formats</h2><p class="note">Inferred from the script (who speaks, how); visuals were not seen.</p>
+        <div class="scroll"><table class="t-dim" data-dim="format" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div></div>
+      <div class="card" id="card-flow"><h2>Script flows</h2><p class="note">The structure of the whole script, start to finish.</p>
+        <div class="scroll"><table class="t-dim" data-dim="flow" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="grid">
+      <div class="card" id="card-len"><h2>Video length</h2><p class="note">Measured from transcript timings.</p>
+        <table class="t-dim" data-dim="dur_b" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+      <div class="card" id="card-prod"><h2>When the product is first named</h2><p class="note">First mention of the brand or ingredient in the audio.</p>
+        <table class="t-dim" data-dim="prod_b" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="grid">
+      <div class="card" id="card-msg"><h2>Messenger</h2><p class="note">Who delivers the script.</p>
+        <table class="t-dim" data-dim="messenger" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+      <div class="card" id="card-lead"><h2>What carries the ad</h2><p class="note">Angle-led vs offer-led vs founder story into a deal vs testimonial.</p>
+        <table class="t-dim" data-dim="lead" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="grid">
+      <div class="card" id="card-offer"><h2>Offer elements</h2><p class="note">A script can use several; shares add up to more than 100%.</p>
+        <table class="t-dim" data-dim="offer" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+      <div class="card" id="card-proof"><h2>Proof elements</h2><p class="note">A script can use several.</p>
+        <table class="t-dim" data-dim="proof" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" id="card-fxf"><h2>Format × flow</h2><p class="note">Index vs brand norm, pairs with at least 10 videos.</p>
+      <div class="scroll heat-wrap" data-pair="formatxflow" data-source="cross"></div></div>
+  </section>
+
+  <section class="page" id="angles" hidden>
+    <div class="grid">
+      <div class="card" id="card-angle"><h2>Angles</h2><p class="note">The main theme each script sells.</p>
+        <div class="scroll"><table class="t-dim" data-dim="angle" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div></div>
+      <div class="card" id="card-organ"><h2>Organs (organ-protection scripts)</h2><p class="note">Share is of organ-angle scripts only.</p>
+        <div class="scroll"><table class="t-dim" data-dim="organ" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="grid">
+      <div class="card" id="card-aw"><h2>Awareness level (Schwartz)</h2><p class="note">Judged from how the script opens and what it assumes the viewer knows.</p>
+        <table class="t-dim" data-dim="awareness" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div>
+      <div class="card" id="card-av"><h2>Avatars</h2><p class="note">Who the script is written for.</p>
+        <div class="scroll"><table class="t-dim" data-dim="avatar" data-source="dims" data-row-key="id"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="card" id="card-axa"><h2>Angle × awareness</h2><p class="note">Index vs brand norm, pairs with at least 10 videos.</p>
+      <div class="scroll heat-wrap" data-pair="anglexawareness" data-source="cross"></div></div>
+  </section>
+
+  <section class="page" id="teardowns" hidden>
+    <div class="card" id="card-patterns"><h2>Patterns across the winners</h2><p class="note">Cross-cutting moves found in the longest-running and most re-shot scripts, with how to use each for Haskap.</p>
+      <table class="t-pat" data-source="patterns" data-row-key="id"><thead><tr><th data-field="pattern">Pattern</th><th data-field="evidence">Evidence</th><th data-field="use_it">Use it for Haskap</th></tr></thead><tbody></tbody></table></div>
+    <div class="card" id="card-td"><h2>24 winners, taken apart</h2><p class="note">The longest-running and most re-shot script per flow and angle (12 per brand). Copy the structure, never the claims: several rely on invented doctors and disease promises.</p>
+      <div class="tcards" data-source="teardowns"></div></div>
+  </section>
+
+  <section class="page" id="notworking" hidden>
+    <div class="card" id="card-nw"><h2>Tested a lot, rarely kept</h2><p class="note">Categories that won significantly less often than the brand norm, with at least 25 videos. Lowest index first.</p>
+      <div class="scroll"><table class="t-nw" data-source="notworking" data-row-key="id">
+        <thead><tr><th data-field="kind">Dimension</th><th data-field="value">Value</th><th class="n" data-field="videos">Videos</th><th class="n" data-field="winners">Ran 30+ days</th><th class="n" data-field="win">Rate</th><th class="n" data-field="index">Index</th><th class="n" data-field="med_days">Median days</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="card" id="card-dead"><h2>Hooks re-shot 5+ times that never won</h2><p class="note">The brands kept trying these openings; none of the videos reached 30 days.</p>
+      <div class="scroll"><table class="t-dead" data-source="dead_hooks" data-row-key="id">
+        <thead><tr><th data-field="hook">Hook</th><th class="n" data-field="videos">Videos</th><th class="n" data-field="max_days">Longest run</th><th data-field="hook_type">Hook type</th><th data-field="angle">Angle</th><th data-field="format">Format</th><th data-field="ad_url">Example</th></tr></thead><tbody></tbody></table></div></div>
+  </section>
+
+  <section class="page" id="library" hidden></section>
+  <template id="tpl-library">
+    <div class="card" id="card-lib"><h2>Script library</h2><p class="note">Every video with its labels and full transcript. Filters stack; click a row to read the whole script. "Winner" = ran 30+ days.</p>
+      <div class="bar">
+        <input type="search" class="q-lib" placeholder="Search hook, summary, mechanism…" aria-label="Search scripts">
+        <label class="f">Angle<select class="f-angle"></select></label>
+        <label class="f">Awareness<select class="f-aw"></select></label>
+        <label class="f">Hook type<select class="f-ht"></select></label>
+        <label class="f">Format<select class="f-fm"></select></label>
+        <label class="f">Flow<select class="f-fl"></select></label>
+        <label class="f">Show<select class="f-win"><option value="">All videos</option><option value="1">Winners only</option><option value="0">Non-winners</option></select></label>
+        <label class="f">Period<select class="f-per"><option value="last 180d">Last 180 days</option><option value="">Include Rovina's old page</option></select></label>
+        <span class="note c-lib"></span>
+      </div>
+      <div class="scroll" style="max-height:48rem"><table class="t-lib" data-source="library" data-row-key="vid">
+        <thead><tr><th class="s" data-field="brand">Brand</th><th class="s" data-field="page">Page</th><th class="s n" data-field="days">Days live</th><th class="s n" data-field="ads">Ads</th><th class="s" data-field="hook">Hook</th><th class="s" data-field="angle">Angle</th><th class="s" data-field="organ">Organ</th><th class="s" data-field="awareness">Awareness</th><th class="s" data-field="hook_type">Hook type</th><th class="s" data-field="format">Format</th><th class="s" data-field="flow">Flow</th><th class="s n" data-field="duration">Length (s)</th><th class="s n" data-field="product_sec">Product at (s)</th><th data-field="summary">Summary</th><th data-field="ad_url">Ad</th></tr></thead><tbody></tbody></table></div>
+      <div class="bar"><button class="lk more" hidden>Show 200 more</button></div>
+    </div>
+  </template>
+
+  <section class="page method" id="method" hidden></section>
+  <template id="tpl-method">
+    <div class="card"><h2>How this was built</h2>
+      <ul>
+        <li><b>Scope:</b> every Facebook page Atria links to Clarity MD (29 with ads in the window) and Rovina (7), last 180 days (Apr 15 – Oct 12, 2026). Rovina's old main page (Dec 2025 – Apr 2026) is in the library but not in the statistics.</li>
+        <li><b>Unit:</b> one distinct video file. Its "ads" is how many ads used it; "days live" is the longest any of those ads ran.</li>
+        <li><b>Content only:</b> each script was labelled from its full transcript (hook, angle, awareness, format, flow, proof, offer, timing). Captions and Atria's auto-tags were ignored. Format is inferred from the script; visuals were not seen.</li>
+        <li><b>Winner = ran 30+ days.</b> Atria shows no spend; brands stop losing ads within days, so long runs are the best public signal. Index compares each category with its brand's own winner rate, because Rovina keeps videos live much longer than Clarity. "Signal" flags differences of 2+ standard deviations.</li>
+        <li><b>Limits:</b> videos launched in the last few weeks haven't had time to reach 30 days, which pulls Clarity's rate down (it launches heavily). 352 videos had no transcript in Atria and weren't transcribed (that costs credits). For one Rovina page (Cellular Daily) Atria's list cap left about 95 of its smallest videos out. Statics are not in this pass.</li>
+        <li><b>Compliance:</b> many winning scripts use invented doctor personas, one page uses a real former official's name, and many promise to reverse kidney disease. Copy the structures only.</li>
+          <li><b>Robustness checks:</b> (1) Durability also varies a lot by page (Clarity's Dialysis Support Group keeps 77% of videos 30+ days; Clean Arteries Club 1%). Re-scoring every label against each video's own page instead of the brand keeps the conclusions but shrinks some indexes: kidney 1.67 → 1.21, authority hooks 1.84 → 1.11, doctor-style explainers 1.51 → 1.24, GLP-1 2.61 → 1.61, brain 1.91 → 1.40. Testimonials (1.90), quality exposé (1.17), oxidative stress at Rovina (1.30), 30–60s length (1.19) and the weakness of joints (0.52) and comparison tests (0.50) hold. (2) An independent re-read of 40 random scripts agreed with 95% of labels (305 of 320); format and flow were the softest fields (90%).</li>
+      </ul></div>
+    <div class="card"><h2>Pages covered</h2>
+      <div class="scroll"><table class="t-pages" data-source="pages" data-row-key="id">
+        <thead><tr><th data-field="brand">Brand</th><th data-field="page">Page</th><th data-field="period">Period</th><th class="n" data-field="videos">Videos</th><th class="n" data-field="transcripts">Transcripts</th><th class="n" data-field="ads">Ads</th><th class="n" data-field="win">Ran 30+ days</th><th data-field="top_angle">Top angle</th><th data-field="top_format">Top format</th><th data-field="persona">Doctor-style name</th></tr></thead><tbody></tbody></table></div></div>
+  </template>
+</div>
+
+<script>
+(() => {
+  const root = document.querySelector('.hz');
+  const $ = (s, el = root) => el.querySelector(s);
+  const $$ = (s, el = root) => [...el.querySelectorAll(s)];
+  const pct = d3.format('.0%'), num = d3.format(','), idxf = d3.format('.2f');
+  const secf = (s) => s == null ? '—' : s < 90 ? `${Math.round(s)}s` : `${(s / 60).toFixed(1)} min`;
+  const SC = () => dash.params().brand || 'all';
+  const nice = (v) => v == null ? '—' : String(v).replaceAll('_', ' ').toLowerCase().replace(/^./, (c) => c.toUpperCase());
+  const el = (tag, txt, cls) => { const e = document.createElement(tag); if (txt != null) e.textContent = txt; if (cls) e.className = cls; return e; };
+  const idxCell = (v) => { const t = el('td', v == null ? '—' : idxf(v), 'n'); if (v >= 1.2) t.classList.add('good'); else if (v != null && v <= 0.8) t.classList.add('bad'); return t; };
+  const link = (u) => { const td = el('td'); if (u && /^https:\/\/www\.facebook\.com\/ads\/library\//.test(u)) { const a = el('a', 'Open'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; td.append(a); } else td.textContent = '—'; return td; };
+  const failed = (box, st) => { if (st === 'error' || st === 'connect') { box.replaceChildren(el('div', 'Failed to load', 'err')); return true; } return false; };
+
+  // brand control
+  $$('.seg button').forEach((b) => b.addEventListener('click', () => dash.setParams({ brand: b.dataset.b })));
+  // tabs
+  let tab = 'overview';
+  const show = (t) => {
+    tab = t;
+    if (t === 'library' && !$('#library').children.length) { $('#library').append($('#tpl-library').content.cloneNode(true)); initLib(); }
+    if (t === 'method' && !$('#method').children.length) $('#method').append($('#tpl-method').content.cloneNode(true));
+    $$('.page').forEach((p) => (p.hidden = p.id !== t));
+    $$('.tabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === t));
+    dash.setLink(t); draw();
+  };
+  $$('.tabs button').forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+
+  // generic dim table
+  const DIMHEAD = [['label', 'Value'], ['n', 'Videos', 1], ['share', 'Share', 1], ['win', 'Ran 30+ days', 1], ['index', 'Index vs norm', 1], ['sig', 'Signal'], ['med_days', 'Median days', 1], ['ads', 'Ads', 1]];
+  function dimTable(t, rows) {
+    const th = t.querySelector('thead');
+    if (!th.children.length) { const tr = el('tr'); DIMHEAD.forEach(([f, l, n]) => { const h = el('th', l, n ? 'n' : ''); h.dataset.field = f; tr.append(h); }); th.append(tr); }
+    const mx = d3.max(rows, (r) => r.share) || 1;
+    t.querySelector('tbody').replaceChildren(...rows.map((r) => {
+      const tr = el('tr'); tr.dataset.key = r.id;
+      tr.append(el('td', r.label === r.value ? nice(r.value) : r.label));
+      tr.append(el('td', num(r.n), 'n'));
+      const sh = el('td', null, 'n'); const box = el('div', null, 'ib'); const bar = el('i'); bar.style.width = (60 * r.share / mx) + 'px'; box.append(bar, el('span', pct(r.share))); sh.append(box); tr.append(sh);
+      tr.append(el('td', pct(r.win), 'n'));
+      tr.append(idxCell(r.index));
+      const s = el('td', r.sig === 'not significant' ? '—' : r.sig === 'above' ? 'Above norm' : 'Below norm', r.sig === 'above' ? 'good' : r.sig === 'below' ? 'bad' : 'mut'); tr.append(s);
+      tr.append(el('td', r.med_days == null ? '—' : num(r.med_days), 'n'));
+      tr.append(el('td', num(r.ads), 'n'));
+      return tr;
+    }));
+  }
+  // heat table from cross
+  function heat(box, rows) {
+    const pair = box.dataset.pair;
+    const rs = rows.filter((r) => r.pair === pair && r.scope === SC() && r.n >= 10);
+    if (!rs.length) { box.replaceChildren(el('p', 'Not enough videos for this brand.', 'note')); return; }
+    const A = d3.groupSort(rs, (g) => -d3.sum(g, (r) => r.n), (r) => r.a), B = d3.groupSort(rs, (g) => -d3.sum(g, (r) => r.n), (r) => r.b);
+    const t = el('table', null, 'heat'), hd = el('tr'); hd.append(el('th', ''));
+    B.forEach((b) => hd.append(el('th', nice(b))));
+    const thead = el('thead'); thead.append(hd); t.append(thead);
+    const tb = el('tbody');
+    A.forEach((a) => {
+      const tr = el('tr'); tr.append(el('td', nice(a), 'lab'));
+      B.forEach((b) => {
+        const r = rs.find((x) => x.a === a && x.b === b); const td = el('td');
+        if (r) {
+          const v = r.index; const col = v >= 1 ? 'var(--color-ok)' : 'var(--color-bad)';
+          td.style.background = `color-mix(in srgb, ${col} ${Math.round(Math.min(1, Math.abs(v - 1)) * 45)}%, transparent)`;
+          td.append(el('div', idxf(v)), el('div', `${r.n} videos`, 'mut'));
+        } else td.textContent = '·';
+        tr.append(td);
+      });
+      tb.append(tr);
+    });
+    t.append(tb); box.replaceChildren(t);
+  }
+  // sortable helper
+  function sortable(t, state, redraw) {
+    t.querySelectorAll('th.s').forEach((h) => h.addEventListener('click', () => {
+      const f = h.dataset.field; state.dir = state.key === f ? -state.dir : (h.classList.contains('n') ? -1 : 1); state.key = f; redraw();
+    }));
+  }
+  const sorter = (st) => (a, b) => { const x = a[st.key], y = b[st.key]; if (typeof x === 'number' || typeof y === 'number') return st.dir * ((x ?? -1) - (y ?? -1)); return st.dir * String(x ?? '').localeCompare(String(y ?? '')); };
+
+  // families
+  const famSt = { key: 'winners', dir: -1 };
+  sortable($('.t-fam'), famSt, () => draw());
+  $('.q-fam').addEventListener('input', () => draw());
+
+  // library
+  let libSt = { key: 'days', dir: -1 }, libN = 200, open = new Set();
+  function initLib() {
+    sortable($('.t-lib'), libSt, () => draw());
+    ['.q-lib', '.f-angle', '.f-aw', '.f-ht', '.f-fm', '.f-fl', '.f-win', '.f-per'].forEach((s) => $(s).addEventListener(s === '.q-lib' ? 'input' : 'change', () => { libN = 200; draw(); }));
+    $('.more').addEventListener('click', () => { libN += 200; draw(); });
+    $('.t-lib tbody').addEventListener('click', (ev) => {
+      if (ev.target.closest('a')) return;
+      const tr = ev.target.closest('tr[data-key]'); if (!tr) return;
+      const k = tr.dataset.key; open.has(k) ? open.delete(k) : open.add(k); draw();
+    });
+  }
+  const opts = (sel, vals, all) => { if (sel.options.length) return; sel.replaceChildren(new Option(all, ''), ...vals.map((v) => new Option(nice(v), v))); };
+  function transcriptOf(vid) {
+    for (const id of ['tr1', 'tr2', 'tr3']) { const d = dash.data(id); if (d.status !== 'ok') continue; const r = d.data.find((x) => x.vid === vid); if (r) return { text: r.transcript, id }; }
+    return null;
+  }
+
+  function draw() {
+    const sc = SC();
+    $$('.seg button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.b === sc));
+    // KPIs
+    const k = dash.data('kpis');
+    $$('.k-v').forEach((e) => {
+      e.dataset.where = 'scope=' + encodeURIComponent(sc);
+      if (k.status !== 'ok') { e.textContent = '—'; return; }
+      const r = k.data.find((x) => x.scope === sc); const v = r ? r[e.dataset.field] : null;
+      e.textContent = v == null ? '—' : e.dataset.fmt === 'pct' ? pct(v) : e.dataset.fmt === 'sec' ? secf(v) : num(v);
+    });
+    if (tab === 'overview') {
+      const p = dash.data('plays');
+      if (!failed($('.t-plays').parentElement, p.status) && p.status === 'ok')
+        $('.t-plays tbody').replaceChildren(...p.data.map((r) => { const tr = el('tr'); tr.dataset.key = r.rank; ['rank', 'play', 'verdict', 'source', 'format', 'awareness', 'evidence', 'how'].forEach((f) => tr.append(el('td', r[f], f === 'verdict' ? (/SCALE|ALWAYS/.test(r[f]) ? 'good' : /DON/.test(r[f]) ? 'bad' : '') : ''))); return tr; }));
+      if (k.status === 'ok') $('.t-kpis tbody').replaceChildren(...k.data.map((r) => { const tr = el('tr'); tr.dataset.key = r.scope;
+        tr.append(el('td', r.scope === 'all' ? 'Both' : r.scope), el('td', num(r.pages), 'n'), el('td', num(r.videos), 'n'), el('td', num(r.ads), 'n'), el('td', pct(r.win), 'n'), el('td', num(r.med_days), 'n'), el('td', secf(r.med_dur), 'n'), el('td', secf(r.med_product_sec), 'n'), el('td', num(r.reused_hooks), 'n')); return tr; }));
+    }
+    const dims = dash.data('dims');
+    $$('#' + tab + ' .t-dim').forEach((t) => {
+      if (dims.status !== 'ok') { failed(t.parentElement, dims.status); return; }
+      const ORD = { dur_b: ['<30s', '30–60s', '1–2 min', '2–4 min', '4 min+'], prod_b: ['0–10s', '10–30s', '30–60s', '1–2 min', '2 min+', 'never named'], awareness: ['UNAWARE', 'PROBLEM', 'SOLUTION', 'PRODUCT', 'MOST'] }[t.dataset.dim];
+      dimTable(t, dims.data.filter((r) => r.scope === sc && r.dim === t.dataset.dim).sort(ORD ? (a, b) => ORD.indexOf(a.value) - ORD.indexOf(b.value) : (a, b) => b.n - a.n));
+    });
+    const cr = dash.data('cross');
+    $$('#' + tab + ' .heat-wrap').forEach((b) => { if (cr.status === 'ok') heat(b, cr.data); else failed(b, cr.status); });
+    if (tab === 'hooks') {
+      const f = dash.data('hook_families');
+      if (f.status === 'ok') {
+        const q = $('.q-fam').value.trim().toLowerCase();
+        const rows = f.data.filter((r) => r.scope === sc && (!q || r.hook.toLowerCase().includes(q))).sort(sorter(famSt));
+        $('.c-fam').textContent = `${num(rows.length)} hooks re-shot 2+ times`;
+        $('.t-fam tbody').replaceChildren(...rows.map((r) => { const tr = el('tr'); tr.dataset.key = r.id;
+          tr.append(el('td', r.hook), el('td', num(r.videos), 'n'), el('td', num(r.winners), 'n'), el('td', pct(r.win), 'n'), el('td', num(r.max_days), 'n'), el('td', num(r.pages), 'n'), el('td', nice(r.hook_type)), el('td', nice(r.angle) + (r.organ ? ` · ${r.organ}` : '')), el('td', nice(r.format)), link(r.ad_url)); return tr; }));
+      } else failed($('.t-fam').parentElement, f.status);
+    }
+    if (tab === 'teardowns') {
+      const pt = dash.data('patterns');
+      if (pt.status === 'ok') $('.t-pat tbody').replaceChildren(...pt.data.map((r) => { const tr = el('tr'); tr.dataset.key = r.id; tr.append(el('td', r.pattern), el('td', r.evidence), el('td', r.use_it)); return tr; }));
+      const td = dash.data('teardowns'); const box = $('.tcards');
+      if (td.status === 'ok') box.replaceChildren(...td.data.filter((r) => sc === 'all' || r.brand === sc).map((r) => {
+        const c = el('div', null, 'card tcard'); c.dataset.key = r.vid;
+        c.append(el('h3', r.title), el('div', `${r.brand} · ${r.page} · ran ${r.days} days · ${r.ads} ads · ${nice(r.flow)} · ${nice(r.angle)}${r.organ ? ' / ' + r.organ : ''} · ${nice(r.awareness)} aware`, 'meta'), el('div', '“' + r.hook + '”', 'quote'));
+        [['Beats', r.beats], ['Hook mechanic', r.hook_mechanic], ['Persuasion engine', r.persuasion_engine], ['Why it lasts', r.why_it_lasts], ['Adapt for Haskap', r.adapt_for_haskap]].forEach(([h, v]) => { const p = el('p'); p.append(el('b', h + ': '), document.createTextNode(v || '—')); c.append(p); });
+        if (r.risk_note) c.append(el('p', 'Risk: ' + r.risk_note, 'risk'));
+        const a = link(r.ad_url).firstChild; if (a && a.tagName === 'A') { a.textContent = 'Open the ad'; c.append(a); }
+        return c;
+      })); else failed(box, td.status);
+    }
+    if (tab === 'notworking') {
+      const nw = dash.data('notworking');
+      if (nw.status === 'ok') $('.t-nw tbody').replaceChildren(...nw.data.filter((r) => r.scope === sc).map((r) => { const tr = el('tr'); tr.dataset.key = r.id; tr.append(el('td', r.kind), el('td', nice(r.value)), el('td', num(r.videos), 'n'), el('td', num(r.winners), 'n'), el('td', pct(r.win), 'n'), idxCell(r.index), el('td', num(r.med_days), 'n')); return tr; }));
+      const dh = dash.data('dead_hooks');
+      if (dh.status === 'ok') $('.t-dead tbody').replaceChildren(...dh.data.filter((r) => r.scope === sc).sort((a, b) => b.videos - a.videos).map((r) => { const tr = el('tr'); tr.dataset.key = r.id; tr.append(el('td', r.hook), el('td', num(r.videos), 'n'), el('td', num(r.max_days), 'n'), el('td', nice(r.hook_type)), el('td', nice(r.angle)), el('td', nice(r.format)), link(r.ad_url)); return tr; }));
+    }
+    if (tab === 'library' && $('.t-lib')) {
+      const L = dash.data('library');
+      if (L.status !== 'ok') { failed($('.t-lib').parentElement, L.status); return; }
+      const uniq = (f) => [...new Set(L.data.map((r) => r[f]).filter(Boolean))].sort();
+      opts($('.f-angle'), uniq('angle'), 'All'); opts($('.f-aw'), ['UNAWARE', 'PROBLEM', 'SOLUTION', 'PRODUCT', 'MOST'], 'All'); opts($('.f-ht'), uniq('hook_type'), 'All'); opts($('.f-fm'), uniq('format'), 'All'); opts($('.f-fl'), uniq('flow'), 'All');
+      const q = $('.q-lib').value.trim().toLowerCase(), fa = $('.f-angle').value, fw = $('.f-aw').value, fh = $('.f-ht').value, ff = $('.f-fm').value, fl = $('.f-fl').value, fwin = $('.f-win').value, fp = $('.f-per').value;
+      const rows = L.data.filter((r) => r.status === 'ok' && (sc === 'all' || r.brand === sc) && (!fp || r.period === fp) && (!fa || r.angle === fa) && (!fw || r.awareness === fw) && (!fh || r.hook_type === fh) && (!ff || r.format === ff) && (!fl || r.flow === fl) && (!fwin || String(+r.winner) === fwin)
+        && (!q || [r.hook, r.summary, r.sub_angle, r.mechanism, r.enemy, r.page].join(' ').toLowerCase().includes(q))).sort(sorter(libSt));
+      $('.c-lib').textContent = `${num(rows.length)} scripts · ${num(rows.filter((r) => r.winner).length)} winners`;
+      const out = [];
+      rows.slice(0, libN).forEach((r) => {
+        const tr = el('tr'); tr.dataset.key = r.vid; tr.style.cursor = 'pointer';
+        tr.append(el('td', r.brand), el('td', r.page), el('td', num(r.days), 'n' + (r.winner ? ' good' : '')), el('td', num(r.ads), 'n'), el('td', r.hook), el('td', nice(r.angle)), el('td', r.organ || ''), el('td', nice(r.awareness)), el('td', nice(r.hook_type)), el('td', nice(r.format)), el('td', nice(r.flow)), el('td', r.duration == null ? '—' : num(Math.round(r.duration)), 'n'), el('td', r.product_sec == null ? '—' : num(Math.round(r.product_sec)), 'n'), el('td', r.summary), link(r.ad_url));
+        out.push(tr);
+        if (open.has(r.vid)) {
+          const ex = el('tr', null, 'exp'); const td = el('td'); td.colSpan = 15;
+          const meta = el('div', `Sub-angle: ${r.sub_angle || '—'} · Avatar: ${nice(r.avatar)} · Messenger: ${nice(r.messenger)} · Lead: ${nice(r.lead)} · Enemy: ${r.enemy || '—'} · Mechanism: ${r.mechanism || '—'} · Proof: ${r.proof || '—'} · Offer: ${r.offer || '—'}${r.pivot ? ' · Pivot: ' + r.pivot : ''}${r.compliance_flag ? ' · Compliance risk' : ''}`, 'note');
+          const t = transcriptOf(r.vid);
+          const tx = el('div', t ? t.text : 'Loading transcript…', 'tx');
+          if (t) { tx.dataset.source = t.id; tx.dataset.where = 'vid=' + encodeURIComponent(r.vid); tx.dataset.field = 'transcript'; }
+          td.append(meta, tx); ex.append(td); out.push(ex);
+        }
+      });
+      $('.t-lib tbody').replaceChildren(...out);
+      $('.more').hidden = rows.length <= libN;
+    }
+    if (tab === 'method' && $('.t-pages')) {
+      const pg = dash.data('pages');
+      if (pg.status === 'ok') $('.t-pages tbody').replaceChildren(...pg.data.filter((r) => sc === 'all' || r.brand === sc).map((r) => { const tr = el('tr'); tr.dataset.key = r.id; tr.append(el('td', r.brand), el('td', r.page), el('td', r.period), el('td', num(r.videos), 'n'), el('td', num(r.transcripts), 'n'), el('td', num(r.ads), 'n'), el('td', r.win == null ? '—' : pct(r.win), 'n'), el('td', nice(r.top_angle)), el('td', nice(r.top_format)), el('td', r.persona ? 'Yes' : '')); return tr; }));
+    }
+  }
+  dash.onData(draw);
+  const named = document.getElementById(location.hash.slice(1));
+  show(named && named.classList.contains('page') ? named.id : 'overview');
+})();
+</script>

@@ -1,0 +1,1737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:,">
+<title>Weekly Business Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<style>
+/* Layout: one sticky control bar (week, brand, tabs) over a single working column.
+   Tables carry the numbers; color is reserved for status and for the pipeline stage ramp. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --sunken:#e9edf2; --ink:#10151d; --ink-2:#414b5a; --muted:#5f6a7a;
+  --line:#dde2e9; --line-strong:#c3cad4;
+  --accent:#1c5cab; --accent-ink:#ffffff; --accent-wash:#e6effa;
+  --good:#0ca30c; --good-text:#0a6b0a; --warn:#fab219; --warn-text:#7a5200; --crit:#d03b3b; --crit-text:#b02a2a;
+  --good-wash:#e7f5e7; --warn-wash:#fdf2d6; --crit-wash:#fae6e6;
+  --st1:#86b6ef; --st2:#5598e7; --st3:#2a78d6; --st4:#1c5cab; --st5:#0d366b;
+  --st1-ink:#10151d; --st2-ink:#10151d; --st3-ink:#ffffff; --st4-ink:#ffffff; --st5-ink:#ffffff;
+  --font-display:'Archivo','Arial Narrow',Arial,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-data:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1217; --surface:#161b22; --sunken:#1d232c; --ink:#f1f4f8; --ink-2:#bcc4cf; --muted:#8f99a7;
+    --line:#272e38; --line-strong:#3a4350;
+    --accent:#6da7ec; --accent-ink:#0b1420; --accent-wash:#172538;
+    --good:#0ca30c; --good-text:#4cc94c; --warn:#fab219; --warn-text:#fab219; --crit:#d03b3b; --crit-text:#f08080;
+    --good-wash:#12281a; --warn-wash:#2c2410; --crit-wash:#2e1719;
+    --st1:#184f95; --st2:#256abf; --st3:#5598e7; --st4:#9ec5f4; --st5:#cde2fb;
+    --st1-ink:#ffffff; --st2-ink:#ffffff; --st3-ink:#0b1420; --st4-ink:#0b1420; --st5-ink:#0b1420;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1217; --surface:#161b22; --sunken:#1d232c; --ink:#f1f4f8; --ink-2:#bcc4cf; --muted:#8f99a7;
+  --line:#272e38; --line-strong:#3a4350;
+  --accent:#6da7ec; --accent-ink:#0b1420; --accent-wash:#172538;
+  --good:#0ca30c; --good-text:#4cc94c; --warn:#fab219; --warn-text:#fab219; --crit:#d03b3b; --crit-text:#f08080;
+  --good-wash:#12281a; --warn-wash:#2c2410; --crit-wash:#2e1719;
+  --st1:#184f95; --st2:#256abf; --st3:#5598e7; --st4:#9ec5f4; --st5:#cde2fb;
+  --st1-ink:#ffffff; --st2-ink:#ffffff; --st3-ink:#0b1420; --st4-ink:#0b1420; --st5-ink:#0b1420;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:22px;font-weight:800}
+h2{font-size:19px;font-weight:700}
+h3{font-size:15px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)} .small{font-size:13px}
+.num{font-family:var(--font-data);font-variant-numeric:tabular-nums}
+td.num{white-space:nowrap}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* control bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-block:14px 10px}
+.bar-top h1{margin-right:auto}
+.ctl{display:flex;align-items:center;gap:8px}
+.ctl label{font-size:12px;color:var(--muted)}
+select,input[type=text],input[type=date],textarea{background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:6px 12px;cursor:pointer;font-weight:500}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs a{flex:none;padding:9px 12px;text-decoration:none;color:var(--ink-2);font-weight:500;border-bottom:3px solid transparent}
+.tabs a[aria-current=page]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.tabs a .count{font-family:var(--font-data);font-size:12px;color:var(--muted);margin-left:4px}
+
+main{padding-block:22px 64px;display:flex;flex-direction:column;gap:28px}
+section.tab{display:flex;flex-direction:column;gap:28px}
+.block{display:flex;flex-direction:column;gap:12px}
+.block-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.block-head p{color:var(--muted);font-size:13px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.notice{border:1px dashed var(--line-strong);border-radius:8px;padding:14px 16px;color:var(--ink-2);background:transparent}
+.notice strong{color:var(--ink)}
+
+/* headline tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tile{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tile .v{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.1}
+.tile .row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:24px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* deltas and status */
+.delta{font-family:var(--font-data);font-size:13px;white-space:nowrap}
+.delta.good{color:var(--good-text)} .delta.bad{color:var(--crit-text)} .delta.flat{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.chip i{font-style:normal;font-size:11px}
+.chip.ok{background:var(--good-wash);color:var(--good-text)}
+.chip.near,.chip.watch{background:var(--warn-wash);color:var(--warn-text)}
+.chip.miss{background:var(--crit-wash);color:var(--crit-text)}
+.chip.none{color:var(--muted);border-color:var(--line-strong);border-style:dashed;font-weight:500}
+.chip.tag{background:var(--sunken);color:var(--ink-2);font-weight:500}
+
+/* discuss list */
+.discuss{display:flex;flex-direction:column}
+.disc{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1.6fr);gap:6px 16px;align-items:center;padding:10px 16px;border-top:1px solid var(--line)}
+.disc:first-child{border-top:0}
+.disc .k{font-weight:600}
+.disc .k span{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.disc .vals{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.disc input{width:100%}
+@media (max-width:760px){.disc{grid-template-columns:minmax(0,1fr)}}
+
+/* scorecard */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 12px;border-top:1px solid var(--line);vertical-align:middle}
+thead th{border-top:0;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+td.r,th.r{text-align:right}
+table.score{min-width:820px}
+#blind{min-width:640px}
+table.score td.name{font-weight:500}
+table.score td.name sup{color:var(--accent);font-family:var(--font-data);font-size:10px;margin-left:2px}
+tr.group th{background:var(--sunken);border-top:1px solid var(--line-strong);padding-block:7px}
+.hours{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px;align-items:end;height:150px;padding:16px 16px 0}
+.hours .col{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;height:100%;min-width:0;max-width:24px;width:100%;justify-self:center;cursor:default}
+.hours .col i{display:block;width:100%;min-height:0}
+.hours .col .miss{background:var(--st1);border-radius:4px 4px 0 0}
+.hours .col .ans{background:var(--st4)}
+.hours .col.solo .ans{border-radius:4px 4px 0 0}
+.hourlab{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px;padding:4px 16px 12px;font-family:var(--font-data);font-size:11px;color:var(--muted);text-align:center;border-top:1px solid var(--line-strong);margin-top:0}
+.hourlab span:nth-child(odd){visibility:hidden}
+@media (min-width:760px){.hourlab span:nth-child(odd){visibility:visible}}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.two{grid-template-columns:minmax(0,1fr)}}
+.tagx{font-size:11px;color:var(--muted);border:1px solid var(--line-strong);border-radius:10px;padding:0 6px;margin-left:6px;white-space:nowrap}
+tr.total td{background:var(--sunken);border-top:1px solid var(--line-strong);font-weight:600}
+tr.group .gh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px}
+tr.group .gh b{font-family:var(--font-display);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
+tr.group label{font-size:12px;font-weight:400;color:var(--muted);display:flex;align-items:center;gap:6px}
+tr.group input{width:150px;padding:3px 7px;font-size:13px}
+input.target{width:76px;text-align:right;padding:3px 6px;font-family:var(--font-data);font-size:13px}
+tr.nodata td{color:var(--muted)}
+.spark{display:block}
+.footnotes{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-2);margin:0;padding-left:22px}
+.footnotes li::marker{font-family:var(--font-data);color:var(--accent)}
+
+/* board */
+.subtabs{display:flex;flex-wrap:wrap;gap:6px}
+.subtabs button{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:5px 12px;cursor:pointer;font-weight:500}
+.subtabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.subtabs .count{font-family:var(--font-data);font-size:12px;opacity:.75;margin-left:4px}
+form.add{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1fr) minmax(0,.8fr) minmax(0,1fr) auto;gap:8px;padding:12px 16px;align-items:end}
+form.add .f{display:flex;flex-direction:column;gap:3px;min-width:0}
+form.add .f.wide{grid-column:1/-2}
+form.add label{font-size:12px;color:var(--muted)}
+form.add input,form.add select{width:100%}
+@media (max-width:760px){form.add{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} form.add .f.t,form.add .f.wide{grid-column:1/-1}}
+.btn{border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:500;white-space:nowrap}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--ink-2);padding:4px 8px}
+.btn.danger{color:var(--crit-text);border-color:var(--crit)}
+.btn:disabled{opacity:.5;cursor:default}
+.items{display:flex;flex-direction:column}
+.item{padding:12px 16px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start}
+.item .t{font-weight:600;overflow-wrap:anywhere}
+.item.closed .t{font-weight:400;color:var(--muted);text-decoration:line-through}
+.item .meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:13px;color:var(--muted);align-items:center}
+.item .note{font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.item .acts{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;align-items:center}
+.item .acts select{padding:4px 6px;font-size:13px}
+.item .edit{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto;gap:8px}
+.item .edit .full{grid-column:1/-1}
+@media (max-width:760px){.item{grid-template-columns:minmax(0,1fr)} .item .acts{justify-content:flex-start} .item .edit{grid-template-columns:minmax(0,1fr)}}
+.empty{padding:22px 16px;color:var(--muted)}
+.item .main{display:flex;gap:12px;min-width:0;align-items:flex-start}
+.item .body{min-width:0;display:flex;flex-direction:column;gap:3px}
+.check{flex:none;width:22px;height:22px;margin-top:1px;border-radius:6px;border:1.5px solid var(--line-strong);background:var(--surface);cursor:pointer;font-size:13px;line-height:1;color:var(--accent-ink);padding:0}
+.check[aria-pressed=true]{background:var(--accent);border-color:var(--accent)}
+.ghead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 16px;background:var(--sunken);border-top:1px solid var(--line-strong);font-family:var(--font-display);font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700}
+.ghead span{font-family:var(--font-data);letter-spacing:0;font-weight:400;color:var(--muted)}
+.taskbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+details.closedlist summary{cursor:pointer;padding:10px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+
+/* pipeline chart */
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.pipe{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr) auto;gap:10px 12px;align-items:center;padding:16px}
+.pipe .lab{font-weight:500}
+.pipe .tot{font-family:var(--font-data);font-size:13px;color:var(--ink-2);text-align:right}
+.stack{display:flex;gap:2px;height:22px}
+.stack .s{height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-data);font-size:12px;min-width:3px;cursor:default}
+.stack .s:first-child{border-radius:4px 0 0 4px}.stack .s:last-child{border-radius:0 4px 4px 0}
+@media (max-width:560px){.stack .s{font-size:0}}
+.tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 9px;border-radius:6px;font-size:12px;max-width:260px}
+
+/* agenda */
+.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.timer .clock{font-family:var(--font-data);font-size:30px;font-weight:500;min-width:5ch}
+.timer .clock.over{color:var(--crit-text)}
+.timer .now{flex:1 1 180px;min-width:0}
+.segs{list-style:none;margin:0;padding:0}
+.segs li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 14px;padding:12px 16px;border-top:1px solid var(--line)}
+.segs li:first-child{border-top:0}
+.segs li.on{background:var(--accent-wash)}
+.segs .min{font-family:var(--font-data);font-size:13px;color:var(--muted)}
+.segs b{font-weight:600}
+.segs p{font-size:13px;color:var(--ink-2)}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;color:var(--ink-2)}
+ul.plain b{color:var(--ink);font-weight:600}
+.prose{max-width:68ch;color:var(--ink-2)}
+.seats{display:flex;flex-direction:column}
+.seat{display:flex;justify-content:space-between;gap:12px;padding:8px 16px;border-top:1px solid var(--line);font-size:14px}
+.seat:first-child{border-top:0}
+table.plan td{font-size:14px;vertical-align:top}
+table.plan td:first-child{font-weight:600;white-space:nowrap}
+table.plan{min-width:860px}
+a{color:var(--accent)}
+.mini{display:none;font-size:11px;color:var(--muted)}
+.trow,.hrow{display:grid;gap:6px 12px;align-items:start;padding:10px 16px;border-top:1px solid var(--line)}
+.trow{grid-template-columns:22px minmax(0,1fr) 150px 142px 112px auto}
+.hrow{grid-template-columns:minmax(0,1fr) 142px 104px 128px 150px auto}
+.trow.thead,.hrow.thead{font-size:12px;font-weight:600;color:var(--muted);padding-block:8px;align-items:center}
+.trow input,.trow select,.hrow input,.hrow select{width:100%;padding:4px 6px;font-size:13px}
+.trow .t,.hrow .t{font-weight:600;overflow-wrap:anywhere}
+.trow.closed .t,.hrow.closed .t{font-weight:400;color:var(--muted);text-decoration:line-through}
+.trow .note,.hrow .note{font-size:13px;color:var(--ink-2);overflow-wrap:anywhere}
+.trow .meta,.hrow .meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--muted);align-items:center;margin-top:3px}
+.trow .c-acts,.hrow .c-acts{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.trow .edit,.hrow .edit{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) auto;gap:8px}
+.trow .edit.e6,.hrow .edit.e6{grid-template-columns:minmax(0,1.6fr) minmax(0,1.6fr) minmax(0,1fr) 84px 84px auto}
+input.late{border-color:var(--crit);color:var(--crit-text)}
+form.add.hire{grid-template-columns:minmax(0,2fr) repeat(4,minmax(0,1fr)) auto}
+form.add.hire .f.why{grid-column:1/5}
+form.add.inb{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) auto}
+@media (max-width:860px){
+  .mini{display:block}
+  .trow.thead,.hrow.thead{display:none}
+  .trow{grid-template-columns:22px minmax(0,1fr) minmax(0,1fr)}
+  .trow .c-task{grid-column:2/-1}.trow .c-holder{grid-column:2}.trow .c-due{grid-column:3}.trow .c-status{grid-column:2}.trow .c-acts{grid-column:3;justify-content:flex-start;align-self:end}
+  .hrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hrow .c-role{grid-column:1/-1}.hrow .c-acts{justify-content:flex-start;align-self:end}
+  .trow .edit,.hrow .edit,.trow .edit.e6,.hrow .edit.e6{grid-template-columns:minmax(0,1fr)}
+  form.add.hire,form.add.inb{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  form.add.hire .f.why{grid-column:1/-1}
+}
+.meter{position:relative;width:104px;height:8px;border-radius:4px;background:var(--sunken);display:inline-block;vertical-align:middle;margin-right:8px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--good)}
+.meter.near i,.meter.watch i{background:var(--warn)}.meter.miss i{background:var(--crit)}.meter.none i{background:var(--muted)}
+.meter::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--ink-2)}
+table.pace{min-width:880px}
+table.pace td.name{font-weight:500}
+.cashrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cashrow>div{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.cashrow .v{font-family:var(--font-display);font-size:22px;font-weight:700;line-height:1.15}
+.cashrow input{width:100%;font-family:var(--font-data)}
+@media (max-width:760px){.cashrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.alerts .al{display:grid;grid-template-columns:132px minmax(0,1fr);gap:6px 14px;padding:11px 16px;border-top:1px solid var(--line);align-items:start}
+.alerts .al:first-child{border-top:0}
+.alerts .al b{font-weight:600}
+.alerts .al p{font-size:13px;color:var(--ink-2)}
+@media (max-width:560px){.alerts .al{grid-template-columns:minmax(0,1fr)}}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.rcard{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rcard .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px}
+.rcard .qty{font-family:var(--font-display);font-size:30px;font-weight:700;line-height:1.1}
+.rcard .qty small{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--ink-2);margin-left:8px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;font-size:13px}
+.kv div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.kv span:first-child{color:var(--ink-2)}
+@media (max-width:480px){.kv{grid-template-columns:minmax(0,1fr)}}
+pre.po{margin:0;font:12px/1.5 var(--font-data);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px;max-height:300px;overflow:auto}
+details.fold summary{cursor:pointer;color:var(--ink-2);font-size:13px;padding-block:4px}
+details.fold[open] summary{margin-bottom:8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:60;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion: no-preference){.segs li{transition:background .2s}}
+</style>
+
+<style>
+html.only-service .tabs, html.only-service #themeSeg, html.only-service .seg[aria-label="Brand"], html.only-service .ctl{display:none!important}
+html.only-service .bar-top{padding-block:14px}
+html.embedded [role=status][style*="warn-wash"]{display:none}
+</style>
+<script>
+/* Founder OS: ?only=service shows the customer service tab on its own. */
+(function(){
+  var q = new URLSearchParams(location.search);
+  if (window.parent !== window) document.documentElement.classList.add('embedded');
+  if (q.get('only') !== 'service') return;
+  document.documentElement.classList.add('only-service');
+  var keep = function(){ if (location.hash !== '#service') location.replace('#service'); };
+  keep(); window.addEventListener('hashchange', keep);
+  document.addEventListener('DOMContentLoaded', function(){
+    var h = document.querySelector('.bar-top h1'); if (h) h.textContent = 'Customer Service Report';
+    document.title = 'Customer Service Report';
+  });
+})();
+</script>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-top">
+      <h1>Weekly Business Review</h1>
+      <div class="ctl"><label for="weekSel">Week</label><select id="weekSel" aria-label="Week"><option>Loading</option></select></div>
+      <div class="seg" role="group" aria-label="Brand">
+        <button type="button" id="brand-maia" data-brand="maia" aria-pressed="true">MAIA</button>
+        <button type="button" id="brand-avia" data-brand="avia" aria-pressed="false">AVIA</button>
+      </div>
+      <div class="seg" role="group" aria-label="Theme" id="themeSeg">
+        <button type="button" id="theme-light" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" id="theme-dark" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#week" data-tab="week">This week</a>
+      <a href="#pacing" data-tab="pacing">Pacing</a>
+      <a href="#tasks" data-tab="tasks">Tasks<span class="count" id="taskCount"></span></a>
+      <a href="#board" data-tab="board">Board<span class="count" id="boardCount"></span></a>
+      <a href="#hires" data-tab="hires">Hires<span class="count" id="hireCount"></span></a>
+      <a href="#inventory" data-tab="inventory">Inventory</a>
+      <a href="#service" data-tab="service">Service</a>
+      <a href="#creative" data-tab="creative">Creative</a>
+      <a href="#agenda" data-tab="agenda">Run of show</a>
+      <a href="#plan" data-tab="plan">Definitions</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="tab" id="tab-week">
+    <div id="weekStatus" class="notice">Loading the weekly snapshot. Revenue, acquisition, retention, support and creative numbers for the selected week will appear here.</div>
+    <div id="weekBody" hidden>
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div id="aviaBanner" class="notice" hidden></div>
+        <div class="tiles" id="tiles"></div>
+        <div class="block">
+          <div class="block-head"><h2>Discuss on the call</h2><p>Only rows that missed a target or moved the wrong way. Owners add one line on cause and next step before the call.</p></div>
+          <div class="panel"><div class="discuss" id="discuss"></div></div>
+        </div>
+        <div class="block">
+          <div class="block-head"><h2>Scorecard</h2><p id="freshness"></p></div>
+          <div class="panel scroll"><table class="score" id="score"></table></div>
+          <ol class="footnotes" id="footnotes"></ol>
+        </div>
+        <div class="block" id="blindBlock">
+          <div class="block-head"><h2>Not measured yet</h2><p>These belong on the scorecard but nothing connected can supply them.</p></div>
+          <div class="panel scroll"><table id="blind"></table></div>
+        </div>
+        <div class="block" id="reasonsBlock">
+          <div class="block-head"><h2>Why customers wrote in</h2><p>Largest contact reasons from Commslayer for the week.</p></div>
+          <div class="panel scroll"><table id="reasons"></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-tasks" hidden>
+    <div class="block">
+      <div class="block-head"><h2>Tasks</h2><p id="taskSummary"></p></div>
+      <p class="small muted">The initiative list for both brands, by week or by month. Anything not done by the end of a week carries into the following week, and the same at month end, marked with where it came from. Task holder, date and status are set in the row.</p>
+      <div class="taskbar">
+        <div class="seg" role="group" aria-label="Period" id="taskPeriod"><button type="button" data-tp="week" aria-pressed="true">Week</button><button type="button" data-tp="month" aria-pressed="false">Month</button></div>
+        <div class="ctl"><label for="taskMonth" id="taskPerLabel">Week</label><select id="taskMonth" aria-label="Period"></select></div>
+        <div class="seg" role="group" aria-label="Show" id="taskFilter">
+          <button type="button" data-tf="open" aria-pressed="true">Open</button><button type="button" data-tf="done" aria-pressed="false">Done</button><button type="button" data-tf="all" aria-pressed="false">All</button>
+        </div>
+        <div class="seg" role="group" aria-label="Group by" id="taskGroup">
+          <button type="button" data-tg="focus" aria-pressed="true">By focus</button><button type="button" data-tg="owner" aria-pressed="false">By task holder</button><button type="button" data-tg="ws" aria-pressed="false">By workstream</button><button type="button" data-tg="due" aria-pressed="false">By date</button>
+        </div>
+      </div>
+      <div class="panel">
+        <form class="add hire" id="taskForm" autocomplete="off"></form><datalist id="wsList"></datalist>
+        <div class="items" id="tasks"><div class="empty">Loading tasks.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-board" hidden>
+    <div class="block">
+      <div class="block-head"><h2>Board</h2><p>Issues, needs and the decision log. Add items any time during the week so the call starts with the list already built.</p></div>
+      <div class="subtabs" id="subtabs" role="group" aria-label="Item type"></div>
+      <p class="small muted" id="boardHint"></p>
+      <div class="panel">
+        <form class="add" id="addForm" autocomplete="off"></form>
+        <div class="items" id="items"><div class="empty">Loading the board.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-pacing" hidden>
+    <div id="pacingBody"><div class="notice">Loading the plan and the actuals to date. Spend, new customers, rebills and revenue will appear here against the cash flow model, by week, month, quarter and plan year.</div></div>
+  </section>
+
+  <section class="tab" id="tab-hires" hidden>
+    <div class="block">
+      <div class="block-head"><h2>Hires</h2><p id="hireSummary"></p></div>
+      <p class="small muted">Every task in the Hires workstream, for both brands, in the order the roles are needed. A role added here also appears on the Tasks tab.</p>
+      <div class="panel">
+        <form class="add hire" id="hireForm" autocomplete="off"></form>
+        <div class="items" id="hires"><div class="empty">Loading hires.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-inventory" hidden>
+    <div id="invStatus" class="notice">Loading stock levels, inbound shipments and the reorder run.</div>
+    <div id="invMain" hidden>
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div class="block">
+          <div class="block-head"><h2>Inventory</h2><p id="invFresh"></p></div>
+          <h3>Most urgent</h3>
+          <div class="panel"><div class="alerts" id="invUrgent"></div></div>
+        </div>
+        <div class="block">
+          <div class="block-head"><h3>Stock on hand</h3><p>On hand is the last count, plus anything received since, less units sold since. Type a new count to reset it to today.</p></div>
+          <div class="panel scroll"><table id="invStock" style="min-width:980px"></table></div>
+          <ul class="plain small" id="invNotes"></ul>
+        </div>
+        <div class="block" id="deskBlock">
+          <div class="block-head"><h2>Cacao Reorder Desk</h2><p id="deskFresh"></p></div>
+          <div class="cards2" id="invDesk"></div>
+          <details class="fold"><summary>Weekly units sold, the history the forecast reads</summary><div class="panel scroll"><table id="invHist"></table></div></details>
+          <div class="panel" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center"><h3 style="margin-right:auto">Purchase order text</h3><button type="button" class="btn" id="poCopy">Copy</button></div>
+            <pre id="poText" class="po"></pre>
+          </div>
+        </div>
+        <div class="block">
+          <div class="block-head"><h3>Inbound shipments</h3><p>Stock already ordered. Marking one received adds it to on hand.</p></div>
+          <div class="panel">
+            <form class="add inb" id="invForm" autocomplete="off"></form>
+            <div class="scroll"><table id="invInbound" style="min-width:760px"></table></div>
+          </div>
+        </div>
+        <div class="block">
+          <div class="block-head"><h3>Supplier payments due</h3><p id="payHead"></p></div>
+          <div class="panel scroll"><table id="invPay" style="min-width:620px"></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-service" hidden>
+    <div id="csBody"><div class="notice">Loading the customer service numbers from Commslayer and Quo.</div></div>
+  </section>
+
+  <section class="tab" id="tab-creative" hidden>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div id="stratBody"></div>
+      <div id="creativeBody"><div class="notice">Loading the creative pipeline snapshot from ClickUp and Meta.</div></div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-agenda" hidden>
+    <div class="block">
+      <div class="block-head"><h2>Run of show</h2><p>45 minutes, once a week, covering the calendar week that ended Sunday.</p></div>
+      <p class="prose">The call exists to make decisions. Numbers are read before it, updates are written before it, and anything on target is skipped. If the scorecard is clean and the issues list is short, end early.</p>
+    </div>
+    <div class="two">
+      <div class="block">
+        <div class="panel">
+          <div class="timer">
+            <div class="clock" id="clock">0:00</div>
+            <div class="now"><div class="eyebrow" id="clockLabel">Not started</div><div id="clockSeg" class="small muted">Start the timer when everyone has joined.</div></div>
+            <button type="button" class="btn primary" id="tStart">Start</button>
+            <button type="button" class="btn" id="tNext">Next</button>
+            <button type="button" class="btn quiet" id="tReset">Reset</button>
+          </div>
+          <ol class="segs" id="segs"></ol>
+        </div>
+        <div class="block">
+          <h3>Rules of the call</h3>
+          <ul class="plain">
+            <li><b>No status updates.</b> If it can be written, it is written before the call.</li>
+            <li><b>On target means skipped.</b> Only missed or wrong-way rows get airtime, 60 seconds each: cause, next step.</li>
+            <li><b>Every issue ends in one of three things.</b> A task with an owner and a date, a logged decision, or a deliberate park.</li>
+            <li><b>One owner per number and per task.</b> Two names means nobody.</li>
+            <li><b>Ad-by-ad review stays out.</b> That belongs in the Friday creative post-mortem. Only its conclusions come here.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <h3>Before the call</h3>
+        <ul class="plain">
+          <li><b>Day before.</b> The week's snapshot lands on this page.</li>
+          <li><b>Function owners.</b> Write one line on every row of yours in Discuss on the call.</li>
+          <li><b>Everyone.</b> Add issues and needs to the Board and roles to Hires. Mark your tasks done or not done.</li>
+          <li><b>Chair.</b> Pin the three issues that matter most.</li>
+        </ul>
+        <h3>After the call</h3>
+        <ul class="plain">
+          <li>Tasks with a ClickUp home get pushed there the same day.</li>
+          <li>Decisions stay in the log here so they are not re-argued.</li>
+          <li>Targets that changed are updated on the scorecard.</li>
+        </ul>
+        <h3>Seats</h3>
+        <div class="panel"><div class="seats" id="seats"></div></div>
+        <p class="small muted">Set each owner on the scorecard. A seat with no owner is the first hiring or delegation question.</p>
+      </div>
+    </div>
+    <div class="block">
+      <h3>What the call covers</h3>
+      <div class="panel scroll"><table class="plan" id="coverage"></table></div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-plan" hidden>
+    <div class="block">
+      <div class="block-head"><h2>Definitions</h2><p>What each number means, where it comes from and when it becomes an issue.</p></div>
+      <p class="prose">Three layers keep the call short. The weekly scorecard is the only thing read every week. Diagnostics, such as hook rate or cost per click, are opened only when a scorecard row is off. Slow numbers, such as 90-day value and payback, are reviewed in the first call of each month.</p>
+    </div>
+    <div class="block">
+      <div class="block-head"><h3>How fresh the numbers are</h3><p>The page is updated automatically: pacing actuals every morning, everything else once a week on Monday. Anything an update could not pull is listed here.</p></div>
+      <div id="fresh"></div>
+    </div>
+    <div class="block">
+      <h3>One source of truth per question</h3>
+      <div class="panel scroll"><table class="plan" id="sources"></table></div>
+    </div>
+    <div class="block">
+      <h3>Scorecard definitions</h3>
+      <div class="panel scroll"><table class="plan" id="defs"></table></div>
+    </div>
+    <div class="block">
+      <h3>How a row gets its status</h3>
+      <ul class="plain">
+        <li><b>With a target.</b> On target, within 10% of target, or missed. Set targets in the Target column of the scorecard.</li>
+        <li><b>Without a target.</b> A row is listed for discussion when it moves against us by 10% or more on last week, or sits 20% or more on the losing side of its median over the previous eight weeks.</li>
+        <li><b>Two misses in a row.</b> The row becomes an issue on the Board with its owner's name on it.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<datalist id="holderList"></datalist>
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+/* Standalone data layer.
+   Inside Claude the page talks to the artifact database through window.claude.
+   Anywhere else (Vercel, a local server) this shim stands in for it: it reads one
+   JSON snapshot, data/db.json, and serves it read-only. Shape of the file:
+   { "exportedAt": "YYYY-MM-DD", "collections": { "<collection>": { "<docId>": { ...document } } } } */
+(function(){
+  if(window.claude && window.claude.use) return;
+  var store = null, exportedAt = null;
+  var load = fetch('data/db.json', {cache: 'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('no data file'); return r.json(); })
+    .then(function(j){ store = j.collections || j; exportedAt = j.exportedAt || null; return true; })
+    .catch(function(){ store = null; return false; });
+  function snap(c){ var col = (store && store[c]) || {}; return {docs: Object.keys(col).sort().map(function(id){ return {id: id, exists: true, data: function(){ return col[id]; }}; })}; }
+  function deny(){ var e = new Error('This copy is read-only'); e.code = 'invalid_argument'; return Promise.reject(e); }
+  function docRef(c, id){ return {id: id, path: c + '/' + id, set: deny, update: deny, delete: deny}; }
+  var db = {
+    doc: function(p){ var i = p.indexOf('/'); return docRef(p.slice(0, i), p.slice(i + 1)); },
+    collection: function(c){ return {
+      doc: function(id){ return docRef(c, id || 'new'); },
+      onSnapshot: function(cb){ load.then(function(){ cb(snap(c)); }); return function(){}; }
+    }; }
+  };
+  window.claude = {use: function(name){ return load.then(function(ok){ return !ok ? null : name === 'db' ? db : name === 'user' ? {can: function(){ return Promise.resolve(false); }} : null; }); }};
+  function banner(ok){
+    var n = document.createElement('div');
+    n.setAttribute('role', 'status');
+    n.style.cssText = 'padding:8px 16px;font-size:13px;line-height:1.4;background:var(--warn-wash);color:var(--warn-text);border-bottom:1px solid var(--line)';
+    n.textContent = ok
+      ? 'Read-only copy' + (exportedAt ? ', data exported ' + exportedAt : '') + '. Tasks, targets and counts are edited on the Claude page.'
+      : 'No data file found. This build reads public/data/db.json. See the README.';
+    document.body.insertBefore(n, document.body.firstChild);
+  }
+  load.then(function(ok){ if(document.body) banner(ok); else document.addEventListener('DOMContentLoaded', function(){ banner(ok); }); });
+})();
+</script>
+<script>
+(function(){
+'use strict';
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isNum = v => typeof v === 'number' && isFinite(v);
+
+/* ---------- static structure ---------- */
+const GROUPS = [
+  {id:'business', name:'Business', seat:'Money and margin'},
+  {id:'acquisition', name:'Acquisition', seat:'Paid media'},
+  {id:'funnel', name:'Site and offer', seat:'Funnel and landing pages'},
+  {id:'retention', name:'Retention and subscription', seat:'Subscription and lifetime value'},
+  {id:'cx', name:'Customer experience', seat:'Support'},
+  {id:'creative', name:'Creative engine', seat:'Creative production'},
+  {id:'ops', name:'Operations and risk', seat:'Supply, fulfillment, compliance'}
+];
+const KPIS = [
+  {id:'revenue', g:'business', name:'Revenue', fmt:'usdK', good:'up', def:'Shopify order revenue for the calendar week, Monday to Sunday.', src:'Triple Whale', rule:'Below target two weeks running.'},
+  {id:'contribution', g:'business', name:'Contribution after ads', fmt:'usdK', good:'up', def:'Revenue minus taxes, refunds, product cost, shipping, payment fees and ad spend.', src:'Triple Whale', rule:'Below target, or falling while spend rises.'},
+  {id:'contribPct', g:'business', name:'Contribution margin', fmt:'pct', good:'up', def:'Contribution after ads divided by revenue.', src:'Triple Whale', rule:'Below the floor you set for the brand.'},
+  {id:'mer', g:'business', name:'Ad spend share of revenue', fmt:'pct', good:'down', def:'Total ad spend divided by Shopify revenue. The inverse view of blended ROAS.', src:'Triple Whale', rule:'Above the ceiling you set for the brand.'},
+  {id:'refundRate', g:'business', name:'Refund rate', fmt:'pct', good:'down', def:'Refunds divided by revenue.', src:'Triple Whale', rule:'Above target, or a jump tied to one product or offer.'},
+  {id:'aov', g:'business', name:'Average order value', fmt:'usd2', good:'up', def:'Triple Whale Shopify AOV.', src:'Triple Whale', rule:'Drop of 10% or more after an offer or page change.'},
+  {id:'amazonSales', g:'business', name:'Amazon sales', fmt:'usdK', good:'up', def:'Amazon sales for the week.', src:'Triple Whale', rule:'Drop of 10% or more.'},
+
+  {id:'adSpend', g:'acquisition', name:'Ad spend', fmt:'usdK', good:'none', def:'All paid channels combined.', src:'Triple Whale', rule:'Off the weekly budget by 15% either way.'},
+  {id:'ncOrders', g:'acquisition', name:'New customers', fmt:'int', good:'up', def:'First-time Shopify orders.', src:'Triple Whale', rule:'Below the weekly number the plan needs.'},
+  {id:'ncCpa', g:'acquisition', name:'Cost per new customer', fmt:'usd0', good:'down', def:'Ad spend divided by new-customer orders.', src:'Triple Whale', rule:'Above target two weeks running: cut the worst ad sets, then raise it as an issue.'},
+  {id:'ncAov', g:'acquisition', name:'First-order value', fmt:'usd0', good:'up', def:'New-customer revenue divided by new-customer orders.', src:'Triple Whale', rule:'Falls while cost per new customer holds or rises.'},
+  {id:'ncRoas', g:'acquisition', name:'First-order ROAS', fmt:'x', good:'up', def:'New-customer revenue divided by ad spend.', src:'Triple Whale', rule:'Below the floor that 90-day value can pay back.'},
+  {id:'metaCpa', g:'acquisition', name:'Meta cost per purchase', fmt:'usd0', good:'down', def:'Meta-reported spend divided by Meta-reported purchases.', src:'Meta via Triple Whale', rule:'Diagnostic. Open when cost per new customer is off.'},
+  {id:'metaRoas', g:'acquisition', name:'Meta ROAS', fmt:'x', good:'up', def:'Meta-reported conversion value divided by spend.', src:'Meta via Triple Whale', rule:'Diagnostic.'},
+  {id:'metaCpm', g:'acquisition', name:'Meta CPM', fmt:'usd0', good:'down', def:'Meta cost per thousand impressions.', src:'Meta via Triple Whale', rule:'Diagnostic. A rise with flat click rate points at auction or account health.'},
+  {id:'googleRoas', g:'acquisition', name:'Google ROAS', fmt:'x', good:'up', def:'Google-reported conversion value divided by spend.', src:'Google via Triple Whale', rule:'Diagnostic.'},
+
+  {id:'sessions', g:'funnel', name:'Sessions', fmt:'int', good:'up', def:'Triple Whale pixel sessions.', src:'Triple Whale', rule:'Moves out of line with spend.'},
+  {id:'cvr', g:'funnel', name:'Conversion rate', fmt:'pct2', good:'up', def:'Pixel purchases divided by sessions.', src:'Triple Whale', rule:'Drop of 10% or more: check page, offer and checkout before blaming creative.'},
+  {id:'atcRate', g:'funnel', name:'Add-to-cart rate', fmt:'pct2', good:'up', def:'Sessions with an add to cart divided by sessions.', src:'Triple Whale', rule:'Diagnostic for conversion rate.'},
+
+  {id:'retRevenue', g:'retention', name:'Returning-customer revenue', fmt:'usdK', good:'up', def:'Revenue minus new-customer revenue.', src:'Triple Whale', rule:'Falls two weeks running.'},
+  {id:'retShare', g:'retention', name:'Returning share of orders', fmt:'pct', good:'none', def:'Returning-customer orders divided by all orders.', src:'Triple Whale', rule:'Context for the mix between acquisition and rebills.'},
+  {id:'ltv90', g:'retention', name:'90-day sales per customer', fmt:'usd0', good:'up', def:'Average sales per customer in the first three months.', src:'Lifetimely', rule:'Monthly. Must stay above cost per new customer plus product and shipping cost.'},
+  {id:'subContacts', g:'retention', name:'Subscription cancel and change contacts', fmt:'int', good:'down', def:'Support conversations in the Subscription reason group.', src:'Commslayer', rule:'Rise of 10% or more: read the reasons, review save offers.'},
+  {id:'activeSubs', g:'retention', name:'Active subscribers', fmt:'int', good:'up', def:'Subscribers with a live subscription at week end.', src:'Subscription platform', rule:'Falls week over week.', connect:'Connect the subscription platform to Triple Whale. Its subscription tables are empty.'},
+  {id:'subChurn', g:'retention', name:'Subscriber churn', fmt:'pct', good:'down', def:'Subscribers who cancelled in the week divided by active subscribers at the start.', src:'Subscription platform', rule:'Above target.', connect:'Same connection as active subscribers.'},
+
+  {id:'tickets', g:'cx', name:'Support conversations', fmt:'int', good:'down', def:'Conversations created in the week.', src:'Commslayer', rule:'Rise not explained by order volume.'},
+  {id:'ticketsPer100', g:'cx', name:'Conversations per 100 orders', fmt:'num0', good:'down', def:'Conversations created divided by orders, times 100.', src:'Commslayer and Triple Whale', rule:'Above target.'},
+  {id:'firstResponseH', g:'cx', name:'Median first response', fmt:'hrs', good:'down', def:'Median time to the first agent reply.', src:'Commslayer', rule:'Above the promise you make customers.'},
+  {id:'avgResponseH', g:'cx', name:'Average response time', fmt:'hrs', good:'down', def:'Mean time from a customer message to the next agent reply.', src:'Commslayer', rule:'Above target: staffing or automation question.'},
+  {id:'unauthorized', g:'cx', name:'Unauthorized-order contacts', fmt:'int', good:'down', def:'Conversations tagged Unauthorized order.', src:'Commslayer', rule:'Any rise. This is the early signal for chargebacks and processor risk.'},
+  {id:'csat', g:'cx', name:'Customer satisfaction', fmt:'pct', good:'up', def:'Share of survey ratings that are 4 or 5.', src:'Commslayer', rule:'Below target.', connect:'Surveys returned no responses for the week. Turn on the satisfaction survey in Commslayer.'},
+
+  {id:'briefsCreated', g:'creative', name:'Video briefs in', fmt:'int', good:'up', def:'Video brief tasks created in the week.', src:'ClickUp', rule:'Below the weekly quota for the strategists.'},
+  {id:'videosCompleted', g:'creative', name:'Videos completed', fmt:'int', good:'up', def:'Video tasks closed in the week.', src:'ClickUp', rule:'Below briefs in for two weeks: the queue is growing.'},
+  {id:'staticsDelivered', g:'creative', name:'Statics delivered', fmt:'int', good:'up', def:'Static ad tasks moved to the delivered status in the week.', src:'ClickUp', rule:'Below the weekly quota.'},
+  {id:'wipOpen', g:'creative', name:'Open video tasks', fmt:'int', good:'none', def:'Video tasks not yet closed.', src:'ClickUp', rule:'Context for capacity.'},
+  {id:'waitingLaunch', g:'creative', name:'Finished, waiting to launch', fmt:'int', good:'down', def:'Video tasks in Ready for launch.', src:'ClickUp', rule:'More than one week of output waiting: media buying is the constraint.'},
+  {id:'aged14', g:'creative', name:'Open more than 14 days', fmt:'int', good:'down', def:'Open video tasks created more than 14 days ago.', src:'ClickUp', rule:'Rising: clear or kill stale briefs.'},
+  {id:'winRate', g:'creative', name:'Win rate', fmt:'pct', good:'up', def:'Launched ads that reach the scale threshold divided by ads launched.', src:'ClickUp and Meta', rule:'Below target over a rolling four weeks.', connect:'Move launched ads through Testing, Performed and Not working in ClickUp. Those statuses hold no tasks today.'},
+
+  {id:'inventoryWeeks', g:'ops', name:'Weeks of inventory cover', fmt:'num1', good:'up', def:'Units on hand divided by average weekly units sold, per product.', src:'Inventory system', rule:'Below lead time plus a safety margin.', connect:'No inventory source is connected. Triple Whale holds two inventory items.'},
+  {id:'fulfillDays', g:'ops', name:'Order to ship time', fmt:'num1', good:'down', def:'Average days from order to shipment.', src:'Fulfillment partner', rule:'Above the shipping promise.', connect:'No shipping platform is connected to Triple Whale.'},
+  {id:'chargebackRate', g:'ops', name:'Chargeback rate', fmt:'pct2', good:'down', def:'Chargebacks divided by transactions, per processor.', src:'Payment processor', rule:'Approaching the processor threshold.', connect:'Pull weekly from the payment processor. Nothing connected reports it.'}
+];
+const KPI = Object.fromEntries(KPIS.map(k => [k.id, k]));
+const TILES = ['revenue','contribution','ncOrders','ncCpa'];
+const SOURCES = [
+  ['Did the business make money this week?','Triple Whale','Revenue, contribution, ad spend, new and returning customers.'],
+  ['Why did an ad win or lose?','Meta','Hook rate, hold rate, click rate, cost per purchase. Diagnostics only.'],
+  ['Does a customer pay back?','Lifetimely','Cohort value at 30, 60 and 90 days. It needs every ad account connected to be right.'],
+  ['What are customers telling us?','Commslayer','Volume, response time, contact reasons, satisfaction.'],
+  ['Can customers reach us by phone?','Quo','Inbound, answered and missed calls, call backs, talk time, texts.'],
+  ['Is the creative engine keeping up?','ClickUp','Briefs in, ads out, time in stage, who is loaded.'],
+  ['Whose ads are working?','Maia Creative Strategy Dashboard','Spend, NC ROAS, NCPA and hit rate per strategist, from Triple Whale pixel attribution and the strategist code in the ad name.']
+];
+const COVERAGE = [
+  ['Plan','Spend, new customers, rebills, revenue and cash against the cash flow model, by week, month, quarter and plan year.','Pacing tab'],
+  ['Money','Revenue, contribution, refunds, cash commitments such as inventory orders and ad bills.','Business rows'],
+  ['Acquisition','Spend against budget, cost per new customer, first-order return, channel and ad account health.','Acquisition rows'],
+  ['Creative engine','Briefs in, ads out, what is stuck, the one or two learnings from the Friday post-mortem, next week\'s tests.','Creative tab'],
+  ['Site and offer','Sessions, conversion, order value, live landing page and offer tests.','Site rows'],
+  ['Retention','Subscribers, churn, rebill revenue, payback, cancellation reasons, save offers.','Retention rows'],
+  ['Customers','Support load, response time, top contact reasons, unauthorized-order complaints, reviews.','Customer rows'],
+  ['Supply and risk','Stock on hand, reorders, supplier payments, fulfillment time, chargebacks, claims compliance.','Inventory tab'],
+  ['People','Open roles, contractor load, who is blocked, who is carrying two seats.','Hires tab'],
+  ['Needs','Tools, access, budget or decisions someone is waiting on.','Board: Needs'],
+  ['Commitments','Last week\'s tasks, done or not done.','Tasks tab']
+];
+const SEGS = [
+  {min:3, name:'Headlines', desc:'One win and one worry per person, one sentence each. No discussion.'},
+  {min:7, name:'Pacing and scorecard by exception', desc:'Pacing first: where the week stands against the plan. Then only the rows in Discuss on the call. Owner gives cause and next step in 60 seconds. Anything bigger becomes an issue.'},
+  {min:5, name:'Last week\'s tasks', desc:'Open the Tasks tab. Done or not done. Not done twice becomes an issue.'},
+  {min:20, name:'Issues', desc:'Take the three pinned issues in order. Name the real problem, discuss, decide. Log the outcome as a task or a decision.'},
+  {min:5, name:'People, stock and needs', desc:'Hires tab for open roles, Inventory tab for anything marked urgent, then whatever on the Needs list takes money or a decision.'},
+  {min:5, name:'Recap', desc:'Read back new tasks and decisions with owners and dates. Agree what gets communicated to the wider team.'}
+];
+const TYPES = {
+  issue:{label:'Issues', statuses:['open','solved','parked'], closed:['solved','parked'], ph:'What needs a decision or a fix?', due:null,
+    hint:'Anything that needs the group. Pin the three that matter most. On the call, solve them in order and log the outcome.'},
+  action:{label:'Tasks', statuses:['backlog','in progress','blocked','done'], closed:['done'], ph:'Who does what?', due:'Due', hint:''},
+  need:{label:'Needs', statuses:['open','in progress','resolved'], closed:['resolved'], ph:'Tool, access, budget or decision someone is waiting on', due:'Needed by',
+    hint:'Blockers that take money, access or a decision from someone on the call.'},
+  hire:{label:'Hires', statuses:['proposed','approved','sourcing','interviewing','trial','hired','on hold'], closed:['hired','on hold'], ph:'Role', due:'Target start',
+    hint:'Open and proposed roles. Use the note to say what the role unblocks and what it costs to leave it empty.'},
+  decision:{label:'Decisions', statuses:['logged'], closed:[], ph:'What was decided?', due:null,
+    hint:'A running log, newest first, so nothing gets argued twice.'}
+};
+const BRAND_NAME = {maia:'MAIA', avia:'AVIA', both:'Both brands'};
+
+/* ---------- state ---------- */
+const S = {weeks:{}, order:[], weekId:null, brand:'maia', tab:'week', board:'issue', targets:{}, owners:{}, comments:{}, items:[],
+  loaded:{weeks:false, items:false, plan:false, actuals:false, inv:false, strat:false, cs:false}, tf:'open', tg:'focus', tp:'week', tm:{}, strat:null, swk:null, sm:'ncRoas', refresh:null, refreshCs:null, refreshDaily:null, cs:null, cwk:null, plan:null, actuals:null, cashIn:{}, inv:null, desk:null, pwk:null, pv:'week', pper:null, db:null, canWrite:null, mode:'connecting', editing:null, solving:null, confirmDel:null};
+try{ const b = localStorage.getItem('wbr.brand'); if(b === 'maia' || b === 'avia') S.brand = b; const t = localStorage.getItem('wbr.board'); if(TYPES[t] && t !== 'action' && t !== 'hire') S.board = t; const tp = localStorage.getItem('wbr.tp'); if(tp === 'week' || tp === 'month') S.tp = tp; const pv = localStorage.getItem('wbr.pv'); if(['week','month','quarter','year'].includes(pv)) S.pv = pv; }catch(e){}
+
+/* ---------- theme ---------- */
+const rootEl = document.documentElement; let themePref = null;
+try{ const t = localStorage.getItem('wbr.theme'); if(t === 'light' || t === 'dark') themePref = t; }catch(e){}
+function effTheme(){ const a = rootEl.getAttribute('data-theme'); if(a === 'light' || a === 'dark') return a; return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+function paintTheme(){ const t = effTheme(); document.querySelectorAll('#themeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === t))); }
+if(themePref) rootEl.setAttribute('data-theme', themePref);
+$('#themeSeg').addEventListener('click', e => { const b = e.target.closest('[data-theme-set]'); if(!b) return; themePref = b.dataset.themeSet; rootEl.setAttribute('data-theme', themePref); try{ localStorage.setItem('wbr.theme', themePref); }catch(err){} paintTheme(); });
+try{ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paintTheme); }catch(e){}
+try{ new MutationObserver(() => { if(themePref && rootEl.getAttribute('data-theme') !== themePref){ rootEl.setAttribute('data-theme', themePref); return; } paintTheme(); }).observe(rootEl, {attributes:true, attributeFilter:['data-theme']}); }catch(e){}
+paintTheme();
+
+/* ---------- formatting ---------- */
+const nf0 = new Intl.NumberFormat('en-US', {maximumFractionDigits:0});
+function fmt(v, f){
+  if(!isNum(v)) return '—';
+  switch(f){
+    case 'usdK': { const a = Math.abs(v); if(a >= 1e6) return '$' + (v/1e6).toFixed(2) + 'M'; if(a >= 1e4) return '$' + (v/1e3).toFixed(a >= 1e5 ? 0 : 1) + 'K'; return '$' + nf0.format(v); }
+    case 'usd0': return '$' + nf0.format(v);
+    case 'usd2': return '$' + v.toFixed(2);
+    case 'int': return nf0.format(v);
+    case 'num0': return nf0.format(v);
+    case 'num1': return v.toFixed(1);
+    case 'pct': return v.toFixed(1) + '%';
+    case 'pct2': return v.toFixed(2) + '%';
+    case 'x': return v.toFixed(2) + 'x';
+    case 'hrs': return v.toFixed(1) + ' h';
+  }
+  return String(v);
+}
+const isPct = f => f === 'pct' || f === 'pct2';
+function d8(s){ return new Date(s + 'T00:00:00Z'); }
+function md(s){ return d8(s).toLocaleDateString('en-US', {month:'short', day:'numeric', timeZone:'UTC'}); }
+function isoWeek(s){ const d = d8(s); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7) + 3); const j4 = new Date(Date.UTC(d.getUTCFullYear(), 0, 4)); return 1 + Math.round(((d - j4) / 864e5 - 3 + ((j4.getUTCDay() + 6) % 7)) / 7); }
+function weekLabel(w){ return w ? 'W' + (w.iso || isoWeek(w.start)) + ' · ' + md(w.start) + ' to ' + md(w.end) + ', ' + w.end.slice(0,4) : ''; }
+
+/* ---------- metrics ---------- */
+function metrics(weekId, brand){
+  const w = S.weeks[weekId]; const m = (w && w.brands && w.brands[brand]) || {}; const d = Object.assign({}, m);
+  if([m.revenue,m.taxes,m.refunds,m.cogs,m.shipping,m.gateway,m.adSpend].every(isNum)){
+    d.contribution = m.revenue - m.taxes - m.refunds - m.cogs - m.shipping - m.gateway - m.adSpend;
+    if(m.revenue > 0) d.contribPct = d.contribution / m.revenue * 100;
+  }
+  if(isNum(m.revenue) && m.revenue > 0){
+    if(isNum(m.adSpend)) d.mer = m.adSpend / m.revenue * 100;
+    if(isNum(m.refunds)) d.refundRate = m.refunds / m.revenue * 100;
+    if(isNum(m.ncRevenue)) d.retRevenue = m.revenue - m.ncRevenue;
+  }
+  if(isNum(m.ncOrders) && m.ncOrders > 0){
+    if(isNum(m.adSpend)) d.ncCpa = m.adSpend / m.ncOrders;
+    if(isNum(m.ncRevenue)) d.ncAov = m.ncRevenue / m.ncOrders;
+  }
+  if(isNum(m.adSpend) && m.adSpend > 0 && isNum(m.ncRevenue)) d.ncRoas = m.ncRevenue / m.adSpend;
+  if(isNum(m.orders) && m.orders > 0){
+    if(isNum(m.ncOrders)) d.retShare = (m.orders - m.ncOrders) / m.orders * 100;
+    if(isNum(m.tickets)) d.ticketsPer100 = m.tickets / m.orders * 100;
+  }
+  return d;
+}
+function median(a){ const s = a.slice().sort((x,y) => x - y); const n = s.length; return n % 2 ? s[(n-1)/2] : (s[n/2-1] + s[n/2]) / 2; }
+function rowFor(k, brand){
+  const i = S.order.indexOf(S.weekId);
+  const cur = metrics(S.weekId, brand)[k.id];
+  const prev = i > 0 ? metrics(S.order[i-1], brand)[k.id] : undefined;
+  const series = S.order.slice(Math.max(0, i - 11), i + 1).map(id => { const v = metrics(id, brand)[k.id]; return isNum(v) ? v : null; });
+  const r = {k, cur, prev, series, status:'none', reason:''};
+  if(isNum(cur) && isNum(prev) && prev !== 0) r.rel = (cur - prev) / Math.abs(prev);
+  if(isNum(cur) && isNum(prev)) r.diff = cur - prev;
+  const t = ((S.targets[brand] || {})[k.id]); r.target = isNum(t) ? t : null;
+  if(!isNum(cur)){ r.status = 'nodata'; return r; }
+  if(k.good === 'none') return r;
+  const sign = k.good === 'up' ? 1 : -1;
+  if(r.target != null){
+    const gap = sign * (cur - r.target);
+    if(gap >= 0) r.status = 'ok';
+    else if(Math.abs(gap) <= Math.abs(r.target) * 0.1){ r.status = 'near'; r.reason = 'Within 10% of target ' + fmt(r.target, k.fmt); }
+    else { r.status = 'miss'; r.reason = 'Missed target ' + fmt(r.target, k.fmt); }
+    return r;
+  }
+  if(isNum(r.rel) && sign * r.rel <= -0.10){ r.status = 'watch'; r.reason = (r.rel > 0 ? 'Up ' : 'Down ') + Math.abs(r.rel * 100).toFixed(0) + '% on last week'; return r; }
+  const hist = series.slice(0, -1).filter(isNum).slice(-8);
+  if(hist.length >= 4){ const med = median(hist); if(med !== 0){ const off = (cur - med) / Math.abs(med); if(sign * off <= -0.20){ r.status = 'watch'; r.reason = (off > 0 ? 'Up ' : 'Down ') + Math.abs(off * 100).toFixed(0) + '% against the 8-week median of ' + fmt(med, k.fmt); } } }
+  return r;
+}
+function deltaHtml(r){
+  const k = r.k;
+  if(!isNum(r.cur) || !isNum(r.prev)) return '<span class="delta flat">—</span>';
+  let txt, dir;
+  if(isPct(k.fmt)){ dir = r.diff; txt = (r.diff >= 0 ? '+' : '−') + Math.abs(r.diff).toFixed(k.fmt === 'pct2' ? 2 : 1) + ' pts'; }
+  else if(isNum(r.rel)){ dir = r.rel; txt = (r.rel >= 0 ? '+' : '−') + Math.abs(r.rel * 100).toFixed(Math.abs(r.rel) >= 1 ? 0 : 1) + '%'; }
+  else return '<span class="delta flat">—</span>';
+  let cls = 'flat';
+  if(k.good !== 'none' && Math.abs(dir) > 1e-9) cls = ((k.good === 'up') === (dir > 0)) ? 'good' : 'bad';
+  const arrow = Math.abs(dir) < 1e-9 ? '' : (dir > 0 ? '▲ ' : '▼ ');
+  return '<span class="delta ' + cls + '">' + arrow + txt + '</span>';
+}
+const CHIP = {ok:['ok','✓','On target'], near:['near','!','Near target'], miss:['miss','✕','Missed'], watch:['','',''], nodata:['none','','No data'], none:['','','']};
+function chipHtml(st){ const c = CHIP[st]; if(!c || !c[0]) return ''; return '<span class="chip ' + c[0] + '">' + (c[1] ? '<i aria-hidden="true">' + c[1] + '</i>' : '') + c[2] + '</span>'; }
+function spark(series, k){
+  const pts = series.map((v,i) => [i,v]).filter(p => p[1] != null);
+  if(pts.length < 3) return '';
+  const W = 104, H = 26, p = 4, n = series.length;
+  const vs = pts.map(p => p[1]); const lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
+  const x = i => p + (n === 1 ? 0 : i * (W - 2*p) / (n - 1)); const y = v => hi === lo ? H/2 : H - p - (v - lo) * (H - 2*p) / (hi - lo);
+  const line = pts.map(q => x(q[0]).toFixed(1) + ',' + y(q[1]).toFixed(1)).join(' ');
+  const last = pts[pts.length - 1];
+  const title = pts.length + ' weeks: low ' + fmt(lo, k.fmt) + ', high ' + fmt(hi, k.fmt) + ', now ' + fmt(last[1], k.fmt);
+  return '<svg class="spark" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(title) + '"><title>' + esc(title) + '</title>'
+    + '<polyline points="' + line + '" fill="none" stroke="var(--muted)" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round"/>'
+    + '<circle cx="' + x(last[0]).toFixed(1) + '" cy="' + y(last[1]).toFixed(1) + '" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/></svg>';
+}
+
+/* ---------- rendering helpers ---------- */
+const dirty = new Set();
+function guarded(id, fn){
+  const node = document.getElementById(id); if(!node) return;
+  const a = document.activeElement;
+  if(a && node.contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)){ dirty.add(id); return; }
+  dirty.delete(id); fn(node);
+}
+document.addEventListener('focusout', () => setTimeout(() => { if(dirty.size) renderAll(); }, 0));
+let toastT; function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 4200); }
+const ro = () => S.canWrite === false || !S.db;
+
+/* ---------- This week ---------- */
+function renderWeek(){
+  const st = $('#weekStatus'), body = $('#weekBody');
+  if(S.mode === 'offline'){ st.hidden = false; body.hidden = true; st.innerHTML = '<strong>The shared data is not reachable in this view.</strong> Open the page inside Claude while signed in to see the scorecard and the board.'; return; }
+  if(!S.loaded.weeks){ st.hidden = false; body.hidden = true; return; }
+  if(!S.order.length){ st.hidden = false; body.hidden = true; st.innerHTML = '<strong>No weekly snapshot yet.</strong> Ask Claude to pull last week from Triple Whale, Lifetimely, Commslayer and ClickUp into this page.'; return; }
+  st.hidden = true; body.hidden = false;
+  const w = S.weeks[S.weekId]; const brand = S.brand; const rows = KPIS.map(k => rowFor(k, brand));
+  const connected = rows.filter(r => isNum(r.cur)).length;
+
+  guarded('aviaBanner', n => {
+    const thin = connected <= 8;
+    n.hidden = !thin;
+    if(thin) n.innerHTML = '<strong>' + esc(BRAND_NAME[brand]) + ' has almost nothing connected.</strong> The store, ad accounts and support inbox connected to this workspace all belong to MAIA, so only creative throughput from ClickUp is shown. Connect this brand\'s store to Triple Whale to fill the rest.';
+  });
+  guarded('tiles', n => {
+    n.innerHTML = TILES.map(id => { const r = rows.find(x => x.k.id === id);
+      return '<div class="tile"><div class="eyebrow">' + esc(r.k.name) + '</div><div class="v">' + (isNum(r.cur) ? fmt(r.cur, r.k.fmt) : '<span class="muted">—</span>') + '</div><div class="row">' + (isNum(r.cur) ? deltaHtml(r) + spark(r.series, r.k) : '<span class="small muted">Not connected</span>') + '</div></div>'; }).join('');
+  });
+  guarded('discuss', n => {
+    const ex = rows.filter(r => ['miss','near','watch'].includes(r.status));
+    if(!ex.length){ n.innerHTML = '<div class="empty">' + (connected > 8 ? 'Nothing missed a target or moved the wrong way this week. Go straight to issues.' : 'Nothing to flag from the numbers that are connected.') + '</div>'; return; }
+    const cm = (S.comments[S.weekId + '__' + brand] || {});
+    n.innerHTML = ex.map(r => '<div class="disc"><div class="k">' + esc(r.k.name) + '<span>' + esc(GROUPS.find(g => g.id === r.k.g).name) + ownerSuffix(r.k.g) + '</span></div>'
+      + '<div class="vals"><span class="num">' + fmt(r.cur, r.k.fmt) + '</span>' + chipHtml(r.status) + '<span class="small muted">' + esc(r.reason) + '</span></div>'
+      + '<div><input type="text" id="note-' + r.k.id + '" data-note="' + r.k.id + '" maxlength="240" placeholder="Owner: cause and next step, one line" aria-label="Owner note for ' + esc(r.k.name) + '" value="' + esc(cm[r.k.id] || '') + '"' + (ro() ? ' disabled' : '') + '></div></div>').join('');
+  });
+  guarded('score', n => {
+    const notes = (latestNotes()); const noteIds = Object.keys(notes); let html = '<thead><tr><th>Measure</th><th class="r">This week</th><th class="r">Last week</th><th class="r">Change</th><th>12 weeks</th><th class="r">Target</th><th>Status</th></tr></thead><tbody>';
+    GROUPS.forEach(g => {
+      const gr = rows.filter(r => r.k.g === g.id && !(r.status === 'nodata' && r.k.connect));
+      if(!gr.length) return;
+      html += '<tr class="group"><th colspan="7"><div class="gh"><b>' + esc(g.name) + '</b><label>Owner <input type="text" id="owner-' + g.id + '" data-owner="' + g.id + '" maxlength="60" placeholder="Unassigned" value="' + esc(S.owners[g.id] || '') + '"' + (ro() ? ' disabled' : '') + '></label></div></th></tr>';
+      gr.forEach(r => { const fn = noteIds.indexOf(r.k.id);
+        html += '<tr' + (r.status === 'nodata' ? ' class="nodata"' : '') + '><td class="name">' + esc(r.k.name) + (fn >= 0 && isNum(r.cur) ? '<sup>' + (fn + 1) + '</sup>' : '') + '</td>'
+          + '<td class="r num">' + fmt(r.cur, r.k.fmt) + '</td><td class="r num muted">' + fmt(r.prev, r.k.fmt) + '</td><td class="r">' + deltaHtml(r) + '</td><td>' + spark(r.series, r.k) + '</td>'
+          + '<td class="r">' + (r.k.good === 'none' ? '' : '<input class="target" type="text" inputmode="decimal" id="target-' + r.k.id + '" data-target="' + r.k.id + '" placeholder="Set" aria-label="Target for ' + esc(r.k.name) + '" value="' + (r.target != null ? r.target : '') + '"' + (ro() ? ' disabled' : '') + '>') + '</td>'
+          + '<td>' + chipHtml(r.status) + '</td></tr>'; });
+    });
+    n.innerHTML = html + '</tbody>';
+  });
+  guarded('footnotes', n => { const notes = latestNotes(); n.innerHTML = Object.keys(notes).filter(id => KPI[id]).map(id => '<li><b>' + esc(KPI[id].name) + '.</b> ' + esc(notes[id]) + '</li>').join(''); n.hidden = !n.innerHTML; });
+  guarded('freshness', n => { const L = S.weeks[S.order[S.order.length - 1]] || {}; n.textContent = weekLabel(w) + '. ' + (L.pulledAt ? 'Last pulled ' + md(L.pulledAt) + ' from ' + (L.sources || []).join(', ') + '.' : ''); });
+  guarded('blind', n => {
+    const bl = rows.filter(r => r.status === 'nodata' && r.k.connect);
+    $('#blindBlock').hidden = !bl.length;
+    n.innerHTML = '<thead><tr><th>Measure</th><th>Becomes an issue when</th><th>What it takes to measure</th></tr></thead><tbody>' + bl.map(r => '<tr><td class="name" style="font-weight:600;white-space:nowrap">' + esc(r.k.name) + '</td><td class="small">' + esc(r.k.rule) + '</td><td class="small">' + esc(r.k.connect) + '</td></tr>').join('') + '</tbody>';
+  });
+  guarded('reasons', n => {
+    const rs = (brand === 'maia' && w && w.supportReasons) || [];
+    $('#reasonsBlock').hidden = !rs.length;
+    n.innerHTML = '<thead><tr><th>Reason</th><th class="r">This week</th><th class="r">Last week</th><th class="r">Change</th></tr></thead><tbody>' + rs.map(x => { const rel = x.prev ? (x.now - x.prev) / x.prev : null;
+      return '<tr><td>' + esc(x.name) + '</td><td class="r num">' + nf0.format(x.now) + '</td><td class="r num muted">' + nf0.format(x.prev) + '</td><td class="r">' + (rel == null ? '' : '<span class="delta ' + (rel > 0 ? 'bad' : rel < 0 ? 'good' : 'flat') + '">' + (rel > 0 ? '▲ +' : rel < 0 ? '▼ −' : '') + Math.abs(rel * 100).toFixed(0) + '%</span>') + '</td></tr>'; }).join('') + '</tbody>';
+  });
+}
+function latestNotes(){ const L = S.weeks[S.order[S.order.length - 1]]; return (S.brand === 'maia' && L && L.notes) || {}; }
+function ownerSuffix(g){ const o = S.owners[g]; return o ? ' · ' + esc(o) : ' · no owner'; }
+
+/* ---------- Board ---------- */
+let formKey = '';
+function visibleItems(type){ return S.items.filter(i => i.type === type && (i.brand === 'both' || !i.brand || i.brand === S.brand)); }
+function isClosed(i){ return TYPES[i.type].closed.includes(i.status); }
+function renderBoard(){
+  const T = TYPES[S.board];
+  guarded('subtabs', n => { n.innerHTML = Object.keys(TYPES).filter(t => t !== 'action' && t !== 'hire').map(t => { const open = visibleItems(t).filter(i => !isClosed(i)).length;
+    return '<button type="button" data-board="' + t + '" aria-pressed="' + (t === S.board) + '">' + TYPES[t].label + '<span class="count">' + open + '</span></button>'; }).join(''); });
+  $('#boardHint').textContent = T.hint;
+  const openAll = S.items.filter(i => i.type === 'issue' && !isClosed(i)).length;
+  $('#boardCount').textContent = S.loaded.items && openAll ? openAll : '';
+  guarded('addForm', n => {
+    if(ro()){ n.hidden = true; formKey = ''; return; } n.hidden = false;
+    if(formKey === S.board) return; formKey = S.board;
+    const owners = Array.from(new Set(S.items.map(i => i.owner).concat(Object.values(S.owners)).filter(Boolean))).sort();
+    n.innerHTML = '<div class="f t"><label for="add-title">' + esc(T.label.replace(/s$/, '')) + '</label><input type="text" id="add-title" name="title" required maxlength="200" placeholder="' + esc(T.ph) + '"></div>'
+      + '<div class="f"><label for="add-owner">Owner</label><input type="text" id="add-owner" name="owner" maxlength="60" list="ownerList" placeholder="Name"><datalist id="ownerList">' + owners.map(o => '<option value="' + esc(o) + '">').join('') + '</datalist></div>'
+      + '<div class="f"><label for="add-brand">Brand</label><select id="add-brand" name="brand"><option value="both">Both</option><option value="maia">MAIA</option><option value="avia">AVIA</option></select></div>'
+      + (T.due ? '<div class="f"><label for="add-due">' + T.due + '</label><input type="date" id="add-due" name="due"></div>' : '<div class="f"></div>')
+      + '<button class="btn primary" type="submit">Add</button>'
+      + '<div class="f wide"><label for="add-note">Note</label><input type="text" id="add-note" name="note" maxlength="500" placeholder="Context, optional"></div>';
+  });
+  guarded('items', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="empty">The board is not reachable in this view. Open the page inside Claude while signed in.</div>'; return; }
+    if(!S.loaded.items){ n.innerHTML = '<div class="empty">Loading the board.</div>'; return; }
+    const all = visibleItems(S.board).sort((a,b) => (b.pin ? 1 : 0) - (a.pin ? 1 : 0) || String(b.created || '').localeCompare(String(a.created || '')));
+    const open = all.filter(i => !isClosed(i)), closed = all.filter(isClosed);
+    if(!all.length){ n.innerHTML = '<div class="empty">No ' + T.label.toLowerCase() + ' for ' + esc(BRAND_NAME[S.brand]) + ' yet.' + (ro() ? '' : ' Add the first one above.') + '</div>'; return; }
+    n.innerHTML = (open.length ? open.map(itemHtml).join('') : '<div class="empty">Nothing open.</div>')
+      + (closed.length ? '<details class="closedlist"><summary>Closed (' + closed.length + ')</summary>' + closed.map(itemHtml).join('') + '</details>' : '');
+  });
+}
+function itemHtml(i){
+  const T = TYPES[i.type]; const closed = isClosed(i); const today = new Date().toISOString().slice(0,10);
+  const meta = [];
+  if(i.pin) meta.push('<span class="chip tag">Pinned</span>');
+  if(i.type === 'hire') meta.push('<span class="chip tag">' + esc(i.status) + '</span>');
+  if(i.type === 'action' && i.status === 'blocked') meta.push('<span class="chip miss"><i aria-hidden="true">!</i>Blocked</span>');
+  if(i.type === 'action' && i.status === 'in progress') meta.push('<span class="chip tag">In progress</span>');
+  meta.push('<span>' + (i.owner ? esc(i.owner) : 'No owner') + '</span>');
+  if(i.brand && i.brand !== 'both') meta.push('<span>' + esc(BRAND_NAME[i.brand] || '') + '</span>');
+  if(i.due) meta.push('<span' + (!closed && i.due < today ? ' style="color:var(--crit-text)"' : '') + '>' + (T.due || 'Due') + ' ' + md(i.due) + (!closed && i.due < today ? ', overdue' : '') + '</span>');
+  if(i.created) meta.push('<span>Added ' + md(String(i.created).slice(0,10)) + '</span>');
+  if(i.by === 'claude') meta.push('<span class="chip tag">From the data pull</span>');
+  let h = '<div class="item' + (closed ? ' closed' : '') + '" data-id="' + esc(i.id) + '"><div class="main">' + (i.type === 'action' && !ro() ? '<button type="button" class="check" data-act="toggle" aria-pressed="' + closed + '" aria-label="' + (closed ? 'Reopen task' : 'Mark task done') + '">' + (closed ? '\u2713' : '') + '</button>' : '') + '<div class="body"><div class="t">' + esc(i.title) + '</div>'
+    + (i.note ? '<div class="note">' + esc(i.note) + '</div>' : '') + (i.outcome ? '<div class="note"><b>Outcome:</b> ' + esc(i.outcome) + '</div>' : '')
+    + '<div class="meta">' + meta.join('') + '</div></div></div>';
+  if(!ro()){
+    h += '<div class="acts">';
+    if(T.statuses.length > 1) h += '<select data-status aria-label="Status" id="st-' + esc(i.id) + '">' + T.statuses.map(s => '<option' + (s === i.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>';
+    if(i.type === 'issue' && !closed){ h += '<button type="button" class="btn" data-act="pin">' + (i.pin ? 'Unpin' : 'Pin') + '</button><button type="button" class="btn" data-act="solve">Log outcome</button>'; }
+    h += '<button type="button" class="btn quiet" data-act="edit">Edit</button>';
+    h += S.confirmDel === i.id ? '<button type="button" class="btn danger" data-act="del2">Delete for everyone</button><button type="button" class="btn quiet" data-act="delx">Keep</button>' : '<button type="button" class="btn quiet" data-act="del">Delete</button>';
+    h += '</div>';
+    if(S.editing === i.id){
+      h += '<form class="edit" data-edit><input type="text" name="title" id="e-title-' + esc(i.id) + '" aria-label="Title" required maxlength="200" value="' + esc(i.title) + '"><input type="text" name="owner" id="e-owner-' + esc(i.id) + '" aria-label="Owner" maxlength="60" placeholder="Owner" value="' + esc(i.owner || '') + '"><input type="date" name="due" id="e-due-' + esc(i.id) + '" aria-label="Date" value="' + esc(i.due || '') + '"><button class="btn primary" type="submit">Save</button><input class="full" type="text" name="note" id="e-note-' + esc(i.id) + '" aria-label="Note" maxlength="500" placeholder="Note" value="' + esc(i.note || '') + '"></form>';
+    }
+    if(S.solving === i.id){
+      h += '<form class="edit" data-solve><input type="text" name="text" id="s-text-' + esc(i.id) + '" aria-label="Outcome" required maxlength="200" placeholder="What happens next, or what was decided"><select name="kind" id="s-kind-' + esc(i.id) + '" aria-label="Outcome type"><option value="action">Task</option><option value="decision">Decision</option></select><input type="text" name="owner" id="s-owner-' + esc(i.id) + '" aria-label="Owner" maxlength="60" placeholder="Owner"><button class="btn primary" type="submit">Log and solve</button><input class="full" type="date" name="due" id="s-due-' + esc(i.id) + '" aria-label="Due date"></form>';
+    }
+  }
+  return h + '</div>';
+}
+
+/* ---------- date helpers ---------- */
+const DAY = 864e5;
+const addD = (s, n) => new Date(d8(s).getTime() + n * DAY).toISOString().slice(0,10);
+const diffD = (a, b) => Math.round((d8(a) - d8(b)) / DAY);
+const todayLocal = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+const mdy = s => md(s) + (s.slice(0,4) !== todayLocal().slice(0,4) ? ', ' + s.slice(0,4) : '');
+const pct0 = v => isNum(v) ? Math.round(v * 100) + '%' : '—';
+const STCHIP = {ok:['ok','✓'], near:['near','!'], miss:['miss','✕'], watch:['watch','!'], none:['none','']};
+const chipL = (st, label) => { const c = STCHIP[st] || STCHIP.none; return label ? '<span class="chip ' + c[0] + '">' + (c[1] ? '<i aria-hidden="true">' + c[1] + '</i>' : '') + esc(label) + '</span>' : ''; };
+function holderNames(){ return Array.from(new Set(S.items.map(i => i.owner).concat(Object.values(S.owners)).filter(Boolean))).sort(); }
+function fillHolderList(){ const dl = $('#holderList'); if(dl) dl.innerHTML = holderNames().map(o => '<option value="' + esc(o) + '">').join(''); }
+function actsHtml(i){ return '<button type="button" class="btn quiet" data-act="edit">Edit</button>' + (S.confirmDel === i.id ? '<button type="button" class="btn danger" data-act="del2">Delete for everyone</button><button type="button" class="btn quiet" data-act="delx">Keep</button>' : '<button type="button" class="btn quiet" data-act="del">Delete</button>'); }
+
+/* ---------- Tasks ---------- */
+let taskFormBuilt = false;
+const ym = s => String(s || '').slice(0,7);
+const curMonth = () => todayLocal().slice(0,7);
+const monthName = (m, long) => d8(m + '-01').toLocaleDateString('en-US', long ? {month:'long', year:'numeric', timeZone:'UTC'} : {month:'short', timeZone:'UTC'});
+const localDay = v => { const t = String(v || ''); if(/^\d{4}-\d{2}-\d{2}$/.test(t)) return t; if(!t) return ''; const d = new Date(t); return isNaN(d) ? '' : d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+const perKey = (v, tp) => { const d = localDay(v); return !d ? '' : tp === 'week' ? weekStartIso(d) : d.slice(0,7); };
+const perCur = tp => tp === 'week' ? weekStartIso(todayLocal()) : curMonth();
+const perName = (k, tp, long) => tp === 'week' ? 'W' + isoWeek(k) + (long ? ' \u00b7 ' + md(k) + ' to ' + md(addD(k, 6)) : '') : monthName(k, long);
+const perNext = (k, tp) => { if(tp === 'week') return addD(k, 7); const d = d8(k + '-01'); d.setUTCMonth(d.getUTCMonth() + 1); return d.toISOString().slice(0,7); };
+const taskTp = () => S.tp === 'month' ? 'month' : 'week';
+const taskOrigin = (i, tp) => perKey(i.due, tp) || perKey(i.created, tp) || perCur(tp);
+const isHireTask = i => i.type === 'hire' || (i.type === 'action' && String(i.workstream || '').trim().toLowerCase() === 'hires');
+const byFocus = (a,b) => (isNum(b.focus) ? b.focus : -1) - (isNum(a.focus) ? a.focus : -1) || (isNum(a.rank) ? a.rank : 1e9) - (isNum(b.rank) ? b.rank : 1e9) || String(a.created || '').localeCompare(String(b.created || ''));
+function tasksForPeriod(list, P, tp){ const cur = perCur(tp); return list.filter(i => { if(isClosed(i)) return i.doneAt ? perKey(i.doneAt, tp) === P : taskOrigin(i, tp) === P; const o = taskOrigin(i, tp); return P === cur ? o <= P : P > cur ? o === P : false; }); }
+function taskPeriods(list, tp){ const cur = perCur(tp); let lo = cur, hi = cur; list.forEach(i => { [taskOrigin(i, tp), perKey(i.doneAt, tp)].forEach(m => { if(m){ if(m < lo) lo = m; if(m > hi) hi = m; } }); }); const out = []; for(let m = lo; m <= hi && out.length < 80; m = perNext(m, tp)) out.push(m); if(!out.includes(cur)) out.push(cur); return out.sort(); }
+function scoreBits(i){ const b = []; if(isNum(i.focus)) b.push('<span>Focus ' + i.focus + '</span>'); if(isNum(i.leverage)) b.push('<span>Leverage ' + i.leverage + '</span>'); return b; }
+function taskRowHtml(i, M){
+  const closed = isClosed(i), late = !closed && i.due && i.due < todayLocal(), R = ro(), id = esc(i.id), tp = taskTp(), o = taskOrigin(i, tp);
+  let meta = [];
+  meta.push('<span class="chip tag">' + esc(i.brand && i.brand !== 'both' ? (BRAND_NAME[i.brand] || '') : 'Shared') + '</span>');
+  if(i.workstream) meta.push('<span class="chip tag">' + esc(i.workstream) + '</span>');
+  meta = meta.concat(scoreBits(i));
+  if(!closed && M && o < M) meta.push('<span class="chip near">Carried over from ' + perName(o, tp) + '</span>');
+  if(late) meta.push('<span class="chip miss"><i aria-hidden="true">!</i>Overdue</span>');
+  if(i.status === 'blocked') meta.push('<span class="chip miss"><i aria-hidden="true">!</i>Blocked</span>');
+  if(closed && i.doneAt && localDay(i.doneAt)) meta.push('<span>Done ' + md(localDay(i.doneAt)) + '</span>');
+  let h = '<div class="trow' + (closed ? ' closed' : '') + '" data-id="' + id + '">'
+    + '<div class="c-check">' + (R ? '' : '<button type="button" class="check" data-act="toggle" aria-pressed="' + closed + '" aria-label="' + (closed ? 'Reopen task' : 'Mark task done') + '">' + (closed ? '✓' : '') + '</button>') + '</div>'
+    + '<div class="c-task"><div class="t">' + esc(i.title) + '</div>' + (i.note ? '<div class="note">' + esc(i.note) + '</div>' : '') + '<div class="meta">' + meta.join('') + '</div></div>'
+    + '<div class="c-holder"><span class="mini">Task holder</span>' + (R ? '<span>' + esc(i.owner || 'Nobody yet') + '</span>' : '<input type="text" id="th-' + id + '" data-holder list="holderList" maxlength="60" placeholder="Assign" aria-label="Task holder" value="' + esc(i.owner || '') + '">') + '</div>'
+    + '<div class="c-due"><span class="mini">Due</span>' + (R ? '<span>' + (i.due ? md(i.due) : 'No date') + '</span>' : '<input type="date" id="td-' + id + '" data-due aria-label="Due date" value="' + esc(i.due || '') + '"' + (late ? ' class="late"' : '') + '>') + '</div>'
+    + '<div class="c-status"><span class="mini">Status</span>' + (R ? '<span>' + esc(i.status) + '</span>' : '<select data-status aria-label="Status" id="st-' + id + '">' + TYPES.action.statuses.map(s => '<option' + (s === i.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>') + '</div>'
+    + '<div class="c-acts">' + (R ? '' : actsHtml(i)) + '</div>';
+  if(!R && S.editing === i.id) h += editFormHtml(i, 'Task');
+  return h + '</div>';
+}
+function editFormHtml(i, label){ const id = esc(i.id);
+  return '<form class="edit e6" data-edit><input type="text" name="title" id="e-title-' + id + '" aria-label="' + label + '" required maxlength="200" value="' + esc(i.title) + '"><input type="text" name="note" id="e-note-' + id + '" aria-label="Note" maxlength="500" placeholder="Note" value="' + esc(i.note || '') + '">'
+    + '<input type="text" name="workstream" id="e-ws-' + id + '" aria-label="Workstream" list="wsList" maxlength="40" placeholder="Workstream" value="' + esc(i.workstream || '') + '"><input type="text" inputmode="numeric" name="focus" id="e-focus-' + id + '" aria-label="Focus score" placeholder="Focus" value="' + (isNum(i.focus) ? i.focus : '') + '"><input type="text" inputmode="numeric" name="leverage" id="e-lev-' + id + '" aria-label="Leverage" placeholder="Leverage" value="' + (isNum(i.leverage) ? i.leverage : '') + '"><button class="btn primary" type="submit">Save</button></form>'; }
+function renderTasks(){
+  const all = S.items.filter(i => i.type === 'action'); const today = todayLocal(), in7 = addD(today, 7), tp = taskTp(), cur = perCur(tp), unit = tp === 'week' ? 'week' : 'month';
+  const openAll = all.filter(i => !isClosed(i)); $('#taskCount').textContent = S.loaded.items && openAll.length ? openAll.length : '';
+  const months = taskPeriods(all, tp); if(!S.tm[tp] || !months.includes(S.tm[tp])) S.tm[tp] = cur; const M = S.tm[tp];
+  const inMonth = tasksForPeriod(all, M, tp), open = inMonth.filter(i => !isClosed(i)), done = inMonth.filter(isClosed), carried = open.filter(i => taskOrigin(i, tp) < M).length, later = all.filter(i => !isClosed(i) && taskOrigin(i, tp) > cur).length;
+  document.querySelectorAll('#taskPeriod button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tp === tp))); $('#taskPerLabel').textContent = tp === 'week' ? 'Week' : 'Month';
+  $('#taskSummary').textContent = !S.loaded.items ? '' : perName(M, tp, true) + ', both brands: ' + open.length + ' open' + (carried ? ' (' + carried + ' carried over)' : '') + ', ' + done.length + ' done, ' + open.filter(i => i.due && i.due < today).length + ' overdue, ' + open.filter(i => !i.owner).length + ' with no task holder.' + (M === cur && later ? ' ' + later + ' more scheduled for a later ' + unit + '.' : '');
+  document.querySelectorAll('#taskFilter button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tf === S.tf)));
+  document.querySelectorAll('#taskGroup button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tg === S.tg)));
+  const sel = $('#taskMonth'); if(document.activeElement !== sel) sel.innerHTML = months.slice().reverse().map(m => '<option value="' + m + '"' + (m === M ? ' selected' : '') + '>' + perName(m, tp, true) + (m === cur ? ' (this ' + unit + ')' : '') + '</option>').join('');
+  fillHolderList(); const wl = $('#wsList'); if(wl) wl.innerHTML = Array.from(new Set(S.items.map(i => i.workstream).filter(Boolean))).sort().map(x => '<option value="' + esc(x) + '">').join('');
+  guarded('taskForm', n => {
+    if(ro()){ n.hidden = true; taskFormBuilt = false; return; } n.hidden = false; if(taskFormBuilt) return; taskFormBuilt = true;
+    n.innerHTML = '<div class="f t"><label for="task-title">Task</label><input type="text" id="task-title" name="title" required maxlength="200" placeholder="What needs doing?"></div>'
+      + '<div class="f"><label for="task-ws">Workstream</label><input type="text" id="task-ws" name="workstream" list="wsList" maxlength="40" placeholder="Offers, Hires"></div>'
+      + '<div class="f"><label for="task-owner">Task holder</label><input type="text" id="task-owner" name="owner" list="holderList" maxlength="60" placeholder="Name"></div>'
+      + '<div class="f"><label for="task-brand">Brand</label><select id="task-brand" name="brand"><option value="both">Shared</option><option value="maia">MAIA</option><option value="avia">AVIA</option></select></div>'
+      + '<div class="f"><label for="task-due">Due</label><input type="date" id="task-due" name="due"></div>'
+      + '<button class="btn primary" type="submit">Add task</button>'
+      + '<div class="f why"><label for="task-note">Note</label><input type="text" id="task-note" name="note" maxlength="500" placeholder="Context, optional"></div>';
+  });
+  guarded('tasks', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="empty">Tasks are not reachable in this view. Open the page inside Claude while signed in.</div>'; return; }
+    if(!S.loaded.items){ n.innerHTML = '<div class="empty">Loading tasks.</div>'; return; }
+    const list = (S.tf === 'open' ? open : S.tf === 'done' ? done : inMonth).slice();
+    if(!list.length){ n.innerHTML = '<div class="empty">' + (M < cur && S.tf !== 'done' ? 'Nothing was completed in ' + perName(M, tp, true) + '. Anything left open then has been carried into ' + perName(cur, tp, true) + '.' : S.tf === 'done' ? 'Nothing marked done in ' + perName(M, tp, true) + ' yet.' : 'No tasks for ' + perName(M, tp, true) + ' yet.' + (ro() ? '' : ' Add the first one above.')) + '</div>'; return; }
+    const head = '<div class="trow thead"><div></div><div>Task</div><div>Task holder</div><div>Due</div><div>Status</div><div></div></div>';
+    const row = i => taskRowHtml(i, M);
+    if(S.tf === 'done'){ list.sort((a,b) => String(b.doneAt || b.created || '').localeCompare(String(a.doneAt || a.created || ''))); n.innerHTML = head + list.map(row).join(''); return; }
+    list.sort(byFocus);
+    const key = i => S.tg === 'owner' ? (i.owner || '') : S.tg === 'ws' ? (i.workstream || '') : S.tg === 'focus' ? '' : isClosed(i) ? 'Done' : !i.due ? 'No date' : i.due < today ? 'Overdue' : i.due <= in7 ? 'Next 7 days' : 'Later';
+    if(S.tg === 'focus'){ n.innerHTML = head + list.map(row).join(''); return; }
+    const groups = new Map(); list.forEach(i => { const k = key(i); if(!groups.has(k)) groups.set(k, []); groups.get(k).push(i); });
+    const keys = S.tg === 'due' ? ['Overdue','Next 7 days','Later','No date','Done'].filter(k => groups.has(k)) : Array.from(groups.keys()).sort((a,b) => (a === '' ? 1 : b === '' ? -1 : a.localeCompare(b)));
+    const blank = S.tg === 'owner' ? 'No task holder' : 'No workstream';
+    n.innerHTML = head + keys.map(k => '<div class="ghead"><b>' + esc(k || blank) + '</b><span>' + groups.get(k).length + '</span></div>' + groups.get(k).map(row).join('')).join('');
+  });
+}
+
+/* ---------- Hires ---------- */
+let hireFormBuilt = false;
+const HIRE_SRC = {plan:'In the cash flow model', suggested:'Suggested from the data'};
+function hireRowHtml(i){
+  const closed = isClosed(i), R = ro(), id = esc(i.id), late = !closed && i.due && i.due < todayLocal(), sts = TYPES[i.type].statuses;
+  let meta = [];
+  meta.push('<span class="chip tag">' + esc(i.brand && i.brand !== 'both' ? (BRAND_NAME[i.brand] || '') : 'Shared') + '</span>');
+  if(i.fn) meta.push('<span class="chip tag">' + esc(i.fn) + '</span>');
+  if(HIRE_SRC[i.src]) meta.push('<span class="chip none">' + HIRE_SRC[i.src] + '</span>');
+  meta = meta.concat(scoreBits(i));
+  if(late) meta.push('<span class="chip miss"><i aria-hidden="true">!</i>Past its date</span>');
+  let h = '<div class="hrow' + (closed ? ' closed' : '') + '" data-id="' + id + '">'
+    + '<div class="c-role"><div class="t">' + esc(i.title) + '</div>' + (i.note ? '<div class="note">' + esc(i.note) + '</div>' : '') + '<div class="meta">' + meta.join('') + '</div></div>'
+    + '<div><span class="mini">Needed by</span>' + (R ? '<span>' + (i.due ? mdy(i.due) : 'No date') + '</span>' : '<input type="date" id="hd-' + id + '" data-due aria-label="Needed by" value="' + esc(i.due || '') + '"' + (late ? ' class="late"' : '') + '>') + '</div>'
+    + '<div><span class="mini">Cost a month</span>' + (R ? '<span class="num">' + (isNum(i.cost) ? '$' + nf0.format(i.cost) : '—') + '</span>' : '<input type="text" inputmode="decimal" class="num" id="hc-' + id + '" data-cost aria-label="Monthly cost" placeholder="$" value="' + (isNum(i.cost) ? i.cost : '') + '">') + '</div>'
+    + '<div><span class="mini">Status</span>' + (R ? '<span>' + esc(i.status) + '</span>' : '<select data-status aria-label="Status" id="hs-' + id + '">' + sts.map(s => '<option' + (s === i.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>') + '</div>'
+    + '<div><span class="mini">Hiring owner</span>' + (R ? '<span>' + esc(i.owner || 'Nobody yet') + '</span>' : '<input type="text" id="ho-' + id + '" data-holder list="holderList" maxlength="60" placeholder="Assign" aria-label="Hiring owner" value="' + esc(i.owner || '') + '">') + '</div>'
+    + '<div class="c-acts">' + (R ? '' : actsHtml(i)) + '</div>';
+  if(!R && S.editing === i.id) h += editFormHtml(i, 'Role');
+  return h + '</div>';
+}
+function renderHires(){
+  const mine = S.items.filter(isHireTask), open = mine.filter(i => !isClosed(i)), closed = mine.filter(isClosed);
+  $('#hireCount').textContent = S.loaded.items && open.length ? open.length : '';
+  const cost = open.reduce((t,i) => t + (isNum(i.cost) ? i.cost : 0), 0), uncosted = open.filter(i => !isNum(i.cost)).length;
+  $('#hireSummary').textContent = !S.loaded.items ? '' : open.length + ' open across both brands. ' + (open.length === uncosted ? 'None costed yet.' : '$' + nf0.format(cost) + ' a month for the costed ones' + (uncosted ? ', ' + uncosted + ' not costed yet.' : '.'));
+  fillHolderList();
+  guarded('hireForm', n => {
+    if(ro()){ n.hidden = true; hireFormBuilt = false; return; } n.hidden = false; if(hireFormBuilt) return; hireFormBuilt = true;
+    n.innerHTML = '<div class="f t"><label for="hire-title">Role</label><input type="text" id="hire-title" name="title" required maxlength="200" placeholder="Role to hire"></div>'
+      + '<div class="f"><label for="hire-owner">Hiring owner</label><input type="text" id="hire-owner" name="owner" list="holderList" maxlength="60" placeholder="Name"></div>'
+      + '<div class="f"><label for="hire-brand">Brand</label><select id="hire-brand" name="brand"><option value="both">Shared</option><option value="maia">MAIA</option><option value="avia">AVIA</option></select></div>'
+      + '<div class="f"><label for="hire-due">Needed by</label><input type="date" id="hire-due" name="due"></div>'
+      + '<div class="f"><label for="hire-cost">Cost a month</label><input type="text" inputmode="decimal" id="hire-cost" name="cost" placeholder="$"></div>'
+      + '<button class="btn primary" type="submit">Add role</button>'
+      + '<div class="f why"><label for="hire-note">Why now</label><input type="text" id="hire-note" name="note" maxlength="500" placeholder="What it unblocks, what it costs to wait"></div>';
+  });
+  guarded('hires', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="empty">Hires are not reachable in this view. Open the page inside Claude while signed in.</div>'; return; }
+    if(!S.loaded.items){ n.innerHTML = '<div class="empty">Loading hires.</div>'; return; }
+    if(!mine.length){ n.innerHTML = '<div class="empty">No roles listed yet.' + (ro() ? '' : ' Add the next hire above, or give a task the Hires workstream.') + '</div>'; return; }
+    const byDue = (a,b) => (a.due || '9999').localeCompare(b.due || '9999') || byFocus(a,b);
+    const head = '<div class="hrow thead"><div>Role</div><div>Needed by</div><div>Cost a month</div><div>Status</div><div>Hiring owner</div><div></div></div>';
+    n.innerHTML = head + (open.length ? open.sort(byDue).map(hireRowHtml).join('') : '<div class="empty">No open roles.</div>')
+      + (closed.length ? '<details class="closedlist"><summary>Filled or closed (' + closed.length + ')</summary>' + closed.sort(byDue).map(hireRowHtml).join('') + '</details>' : '');
+  });
+}
+function renderLists(){ renderBoard(); renderTasks(); renderHires(); }
+
+/* ---------- Pacing against the plan ---------- */
+function planWeekOf(date){ return Math.floor(diffD(date, S.plan.weeks[0].start) / 7); }
+const wkActive = x => ({from: x.activeFrom || x.start, to: x.activeTo || x.end, days: x.activeDays || 7});
+const wkName = x => 'W' + (x.iso || isoWeek(x.start));
+const wkLabel = x => wkName(x) + ' · ' + md(x.start) + ' to ' + md(x.end);
+function sumRange(from, to, list){
+  const A = (S.actuals && S.actuals.days) || {}, through = S.actuals.through, o = {n:0, miss:0};
+  const each = d => { o.n++; const x = A[d]; if(!x || !isNum(x.revenue)){ o.miss++; return; } for(const k in x) if(isNum(x[k])) o[k] = (o[k] || 0) + x[k]; };
+  if(list) list.forEach(d => { if(d <= through) each(d); }); else for(let d = from; d <= to && d <= through; d = addD(d, 1)) each(d);
+  return o;
+}
+function weekActual(x){ const a = wkActive(x); return {A: sumRange(a.from, a.to), X: x.extra && x.extra.length ? sumRange(null, null, x.extra) : null, days: a.days}; }
+function cmPlanWeek(w){ const P = S.plan, L = P.lines.cacao, T = P.total, inp = P.inputs || {}; const share = T.revenue[w] ? L.revenue[w] / T.revenue[w] : 1; return L.revenue[w] * (1 - (inp.refundRate || 0) - (inp.processing || 0)) - L.fulfillment[w] - L.adSpend[w] - (T.cogs[w] || 0) * share; }
+function paceStatus(kind, pace){
+  if(!isNum(pace)) return ['none', ''];
+  if(kind === 'up') return pace >= 1 ? ['ok','On or ahead'] : pace >= 0.9 ? ['near','Within 10%'] : ['miss','Behind plan'];
+  if(kind === 'down') return pace <= 1 ? ['ok','At or under plan'] : pace <= 1.1 ? ['near','Within 10%'] : ['miss','Over plan'];
+  return Math.abs(pace - 1) <= 0.1 ? ['ok','On plan'] : ['watch', pace > 1 ? 'Over plan' : 'Under plan'];
+}
+const pDiv = (a,b) => isNum(a) && isNum(b) && b ? a / b : null, pSub = (a,b) => isNum(a) && isNum(b) ? a - b : null;
+function paceAdd(name, f, kind, plan, act, extra, n, days){
+  const frac = days ? n / days : 0, ptd = plan * frac, full = isNum(act) ? act + (isNum(extra) ? extra : 0) : null, pace = isNum(full) && ptd > 0 ? full / ptd : null, st = paceStatus(kind, pace);
+  return {name, f, act: full, plan, ptd, pace, proj: isNum(act) && n ? act / n * days + (isNum(extra) ? extra : 0) : null, st: st[0], label: st[1]};
+}
+function paceRatio(name, f, kind, plan, act){ const pace = isNum(act) && isNum(plan) && plan > 0 ? act / plan : null, st = paceStatus(kind, pace); return {name, f, act, plan, ptd: plan, pace, proj: null, st: st[0], label: st[1]}; }
+function paceRows(w, wa){
+  const P = S.plan, L = P.lines.cacao, U = P.units, A = wa.A, X = wa.X, n = A.n, d = wa.days;
+  const cm = X ? null : ([A.revenue, A.refunds, A.gateway, A.cogs, A.shipping, A.adSpend].every(isNum) ? A.revenue - A.refunds - A.gateway - A.cogs - A.shipping - A.adSpend : null);
+  const rebX = X ? pSub(X.revenue, X.ncRevenue) : null;
+  return [
+    paceAdd('Ad spend','usdK','band', L.adSpend[w], A.adSpend, null, n, d),
+    paceAdd('New customers','int','up', L.newOrders[w], A.ncOrders, null, n, d),
+    paceAdd('New-customer revenue','usdK','up', L.ncRevenue[w], A.ncRevenue, null, n, d),
+    paceRatio('First-order ROAS','x','up', L.ncRoas[w], pDiv(A.ncRevenue, A.adSpend)),
+    paceRatio('Cost per new customer','usd0','down', pDiv(L.adSpend[w], L.newOrders[w]), pDiv(A.adSpend, A.ncOrders)),
+    paceRatio('First-order value','usd0','up', pDiv(L.ncRevenue[w], L.newOrders[w]), pDiv(A.ncRevenue, A.ncOrders)),
+    paceAdd('Rebill revenue','usdK','up', L.rebillRevenue[w], pSub(A.revenue, A.ncRevenue), rebX, n, d),
+    paceAdd('Rebill orders','int','up', L.rebillOrders[w], pSub(A.orders, A.ncOrders), X ? pSub(X.orders, X.ncOrders) : null, n, d),
+    paceAdd('Total revenue','usdK','up', L.revenue[w], A.revenue, rebX, n, d),
+    X ? null : paceAdd('Contribution margin','usdK','up', cmPlanWeek(w), cm, null, n, d),
+    paceAdd('Cacao bags sold','int','band', U.cacao[w], A.bags, X ? X.bags : null, n, d),
+    paceAdd('Natto bottles sold','int','band', U.natto[w], A.bottles, X ? X.bottles : null, n, d)
+  ].filter(Boolean);
+}
+function meterHtml(r){ if(!isNum(r.pace)) return '<span class="muted">—</span>'; return '<span class="meter ' + r.st + '" role="img" aria-label="' + pct0(r.pace) + ' of plan"><i style="width:' + Math.min(100, r.pace * 50).toFixed(1) + '%"></i></span><span class="num">' + pct0(r.pace) + '</span>'; }
+function paceTable(rows, cols){
+  return '<table class="pace"><thead><tr><th>Measure</th><th class="r">Actual to date</th><th class="r">Plan to date</th><th>Pace</th><th class="r">' + cols[0] + '</th><th class="r">' + cols[1] + '</th><th>Status</th></tr></thead><tbody>'
+    + rows.map(r => '<tr><td class="name">' + esc(r.name) + '</td><td class="r num">' + fmt(r.act, r.f) + '</td><td class="r num muted">' + fmt(r.ptd, r.f) + '</td><td>' + meterHtml(r) + '</td><td class="r num">' + (r.proj == null ? '<span class="muted">—</span>' : fmt(r.proj, r.f)) + '</td><td class="r num muted">' + fmt(r.plan, r.f) + '</td><td>' + chipL(r.st, r.label) + '</td></tr>').join('') + '</tbody></table>';
+}
+/* Periods: the plan runs Oct 1, 2026 to Jun 30, 2027. Month, quarter and year views spread each plan week over its active days,
+   then sum those days inside the period, so every view agrees with the weekly one. */
+const PV = {week:'Week', month:'Month', quarter:'Quarter', year:'Plan year'};
+function planSpan(P){ const a = wkActive(P.weeks[0]), z = wkActive(P.weeks[P.weeks.length - 1]); return {from:a.from, to:z.to}; }
+const monthEnd = m => addD(addD(m + '-01', 32).slice(0,7) + '-01', -1);
+const qOf = m => { const y = +m.slice(0,4), q = Math.ceil(+m.slice(5,7) / 3); return y + '-Q' + q; };
+const qName = k => k.slice(5) + ' ' + k.slice(0,4);
+function periodList(P, kind){
+  const sp = planSpan(P), out = [];
+  if(kind === 'month'){ for(let m = ym(sp.from); m <= ym(sp.to); m = addD(m + '-01', 32).slice(0,7)){ const f = m + '-01' < sp.from ? sp.from : m + '-01', t = monthEnd(m) > sp.to ? sp.to : monthEnd(m); out.push({key:m, name:monthName(m, true), from:f, to:t, short:monthName(m)}); } }
+  else if(kind === 'quarter'){ const seen = {}; for(let m = ym(sp.from); m <= ym(sp.to); m = addD(m + '-01', 32).slice(0,7)){ const q = qOf(m); if(seen[q]) continue; seen[q] = 1; const qs = m.slice(0,4) + '-' + String((+q.slice(6) - 1) * 3 + 1).padStart(2, '0'), qe = monthEnd(m.slice(0,4) + '-' + String(+q.slice(6) * 3).padStart(2, '0')); const f = qs + '-01' < sp.from ? sp.from : qs + '-01', t = qe > sp.to ? sp.to : qe; out.push({key:q, name:qName(q), from:f, to:t, short:q.slice(5)}); } }
+  else out.push({key:'plan', name:'Plan year', from:sp.from, to:sp.to, short:'Plan year'});
+  return out;
+}
+/* Plan totals and plan to date for a date range. Lines are per active day of each plan week. */
+function periodPlan(P, from, to, through){
+  const L = P.lines.cacao, U = P.units, W = P.weeks.length, all = {}, td = {}; const add = (o,k,v) => { o[k] = (o[k] || 0) + v; };
+  for(let d = from; d <= to; d = addD(d, 1)){ const wi = planWeekOf(d); if(wi < 0 || wi >= W) continue; const a = wkActive(P.weeks[wi]); if(d < a.from || d > a.to) continue;
+    const v = {adSpend:L.adSpend[wi], newOrders:L.newOrders[wi], ncRevenue:L.ncRevenue[wi], rebillRevenue:L.rebillRevenue[wi], rebillOrders:L.rebillOrders[wi], revenue:L.revenue[wi], cm:cmPlanWeek(wi), bags:U.cacao[wi], bottles:U.natto[wi]};
+    for(const k in v){ const x = (v[k] || 0) / a.days; add(all, k, x); if(d <= through) add(td, k, x); } }
+  return {all, td};
+}
+/* Actuals for a date range, plus the Sep 28 to 30 rebills that the plan's first week counts (its rebills cover the whole week). */
+function periodActual(P, from, to, through){
+  const A = sumRange(from, to), X = {revenue:0, orders:0, bags:0, bottles:0, cm:0, any:false};
+  P.weeks.forEach(x => { if(!(x.extra && x.extra.length)) return; const a = wkActive(x); if(a.from < from || a.from > to) return; const q = sumRange(null, null, x.extra); if(!q.n || !isNum(q.revenue)) return; X.any = true;
+    const reb = pSub(q.revenue, q.ncRevenue) || 0, share = q.revenue ? reb / q.revenue : 0; X.revenue += reb; X.orders += pSub(q.orders, q.ncOrders) || 0; X.bags += q.bags || 0; X.bottles += q.bottles || 0;
+    X.cm += reb - ((q.refunds || 0) + (q.gateway || 0) + (q.cogs || 0) + (q.shipping || 0)) * share; });
+  const cm = [A.revenue, A.refunds, A.gateway, A.cogs, A.shipping, A.adSpend].every(isNum) ? A.revenue - A.refunds - A.gateway - A.cogs - A.shipping - A.adSpend : null;
+  return {A, X, cm, days: Math.max(0, diffD((to < through ? to : through), from) + 1), total: diffD(to, from) + 1};
+}
+function perAdd(name, f, kind, plan, act, extra){ const full = isNum(act) ? act + (extra || 0) : null, pace = isNum(full) && plan.td > 0 ? full / plan.td : null, st = paceStatus(kind, pace); return {name, f, act: full, plan: plan.all, ptd: plan.td, pace, proj: isNum(pace) ? pace * plan.all : null, st: st[0], label: st[1]}; }
+function periodRows(P, pa, pl){
+  const A = pa.A, X = pa.X, T = pl.td, F = pl.all, R = (k) => ({td:T[k] || 0, all:F[k] || 0});
+  return [
+    perAdd('Ad spend','usdK','band', R('adSpend'), A.adSpend),
+    perAdd('New customers','int','up', R('newOrders'), A.ncOrders),
+    perAdd('New-customer revenue','usdK','up', R('ncRevenue'), A.ncRevenue),
+    paceRatio('First-order ROAS','x','up', pDiv(T.ncRevenue, T.adSpend), pDiv(A.ncRevenue, A.adSpend)),
+    paceRatio('Cost per new customer','usd0','down', pDiv(T.adSpend, T.newOrders), pDiv(A.adSpend, A.ncOrders)),
+    paceRatio('First-order value','usd0','up', pDiv(T.ncRevenue, T.newOrders), pDiv(A.ncRevenue, A.ncOrders)),
+    perAdd('Rebill revenue','usdK','up', R('rebillRevenue'), pSub(A.revenue, A.ncRevenue), X.revenue),
+    perAdd('Rebill orders','int','up', R('rebillOrders'), pSub(A.orders, A.ncOrders), X.orders),
+    perAdd('Total revenue','usdK','up', R('revenue'), A.revenue, X.revenue),
+    perAdd('Contribution margin','usdK','up', R('cm'), pa.cm, X.cm),
+    perAdd('Cacao bags sold','int','band', R('bags'), A.bags, X.bags),
+    perAdd('Natto bottles sold','int','band', R('bottles'), A.bottles, X.bottles)
+  ];
+}
+/* Cumulative revenue, actual against plan, as an inline chart. */
+function cumChart(P, per, through){
+  const L = P.lines.cacao, W = P.weeks.length, pts = [], from = per.from, to = per.to, total = diffD(to, from) + 1; let cp = 0, ca = 0, hasA = false, lastA = 0;
+  for(let d = from, i = 0; d <= to; d = addD(d, 1), i++){ const wi = planWeekOf(d); if(wi >= 0 && wi < W){ const a = wkActive(P.weeks[wi]); if(d >= a.from && d <= a.to) cp += L.revenue[wi] / a.days; }
+    let av = null; if(d <= through){ const x = (S.actuals.days || {})[d]; if(x && isNum(x.revenue)){ ca += x.revenue; hasA = true; } av = ca; lastA = i; }
+    pts.push({d, i, p:cp, a:av}); }
+  const X = S.plan.weeks.find(x => x.extra && x.extra.length && wkActive(x).from >= from && wkActive(x).from <= to), xr = X ? (() => { const q = sumRange(null, null, X.extra); return pSub(q.revenue, q.ncRevenue) || 0; })() : 0;
+  const max = Math.max(cp, ca + xr, 1), Wd = 720, H = 220, pl = 54, pr = 14, pt = 14, pb = 28, iw = Wd - pl - pr, ih = H - pt - pb;
+  const xs = i => pl + (total > 1 ? i / (total - 1) * iw : 0), ys = v => pt + ih - v / max * ih;
+  const pp = pts.map(p => xs(p.i).toFixed(1) + ',' + ys(p.p).toFixed(1)).join(' ');
+  const ap = pts.filter(p => p.a != null).map(p => xs(p.i).toFixed(1) + ',' + ys(p.a + xr).toFixed(1)).join(' ');
+  const ticks = [0, .25, .5, .75, 1].map(t => '<g><line x1="' + pl + '" x2="' + (Wd - pr) + '" y1="' + ys(max * t).toFixed(1) + '" y2="' + ys(max * t).toFixed(1) + '" stroke="var(--line)"/><text x="' + (pl - 6) + '" y="' + (ys(max * t) + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + fmt(max * t, 'usdK') + '</text></g>').join('');
+  const lab = [0, Math.floor((total - 1) / 2), total - 1].map(i => '<text x="' + xs(i).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + (i === 0 ? 'start' : i === total - 1 ? 'end' : 'middle') + '" font-size="11" fill="var(--muted)">' + md(pts[i].d) + '</text>').join('');
+  const dot = hasA ? '<circle cx="' + xs(lastA).toFixed(1) + '" cy="' + ys(ca + xr).toFixed(1) + '" r="4" fill="var(--accent)"/>' : '';
+  return '<div class="panel" style="padding:12px 8px 4px"><svg viewBox="0 0 ' + Wd + ' ' + H + '" width="100%" role="img" aria-label="Cumulative revenue, actual against plan" style="display:block;font-family:var(--font-data)">' + ticks + '<polyline points="' + pp + '" fill="none" stroke="var(--line-strong)" stroke-width="2" stroke-dasharray="5 4"/>' + (ap ? '<polyline points="' + ap + '" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>' : '') + dot + lab + '</svg>'
+    + '<div class="legend" style="padding:6px 8px 8px"><span><i class="sw" style="background:var(--accent)"></i>Revenue to date' + (hasA ? ', ' + fmt(ca + xr, 'usdK') : '') + '</span><span><i class="sw" style="background:var(--line-strong)"></i>Plan, cumulative, ' + fmt(cp, 'usdK') + ' for the period</span></div></div>';
+}
+/* A sub-period table (weeks in a month, months in a quarter or year, quarters in the year). */
+function subTable(P, parts, through, title, note){
+  let t = '<div class="block"><div class="block-head"><h3>' + esc(title) + '</h3>' + (note ? '<p>' + esc(note) + '</p>' : '') + '</div><div class="panel scroll"><table style="min-width:860px"><thead><tr><th>Period</th><th class="r">Revenue</th><th class="r">Plan to date</th><th>Pace</th><th class="r">Full plan</th><th class="r">vs prior</th><th class="r">Ad spend</th><th class="r">Plan to date</th><th class="r">New customers</th><th class="r">Plan to date</th></tr></thead><tbody>';
+  let prev = null;
+  parts.forEach(q => { const started = q.from <= through, pa = started ? periodActual(P, q.from, q.to, through) : null, pl = periodPlan(P, q.from, q.to, through);
+    const rev = pa && isNum(pa.A.revenue) ? pa.A.revenue + pa.X.revenue : null, pace = isNum(rev) && pl.td.revenue > 0 ? rev / pl.td.revenue : null, st = paceStatus('up', pace);
+    const g = isNum(rev) && isNum(prev) && prev > 0 && pa.days >= pa.total ? rev / prev - 1 : null; if(pa && pa.days >= pa.total) prev = rev; else prev = null;
+    t += '<tr' + (started ? '' : ' class="nodata"') + '><td>' + esc(q.name) + (started && pa.days < pa.total ? ' <span class="muted">(' + pa.days + ' of ' + pa.total + ' days)</span>' : '') + '</td><td class="r num">' + fmt(rev, 'usdK') + '</td><td class="r num muted">' + fmt(started ? pl.td.revenue : null, 'usdK') + '</td><td>' + (started ? meterHtml({pace, st:st[0]}) : '<span class="muted">—</span>') + '</td><td class="r num muted">' + fmt(pl.all.revenue, 'usdK') + '</td><td class="r num">' + (g == null ? '<span class="muted">—</span>' : '<span class="delta ' + (g > 0 ? 'good' : g < 0 ? 'bad' : 'flat') + '">' + (g >= 0 ? '+' : '') + (g * 100).toFixed(0) + '%</span>') + '</td><td class="r num">' + fmt(pa ? pa.A.adSpend : null, 'usdK') + '</td><td class="r num muted">' + fmt(started ? pl.td.adSpend : null, 'usdK') + '</td><td class="r num">' + fmt(pa ? pa.A.ncOrders : null, 'int') + '</td><td class="r num muted">' + fmt(started ? pl.td.newOrders : null, 'int') + '</td></tr>'; });
+  return t + '</tbody></table></div></div>';
+}
+function renderPacing(){
+  guarded('pacingBody', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="notice"><strong>The plan is not reachable in this view.</strong> Open the page inside Claude while signed in.</div>'; return; }
+    if(!S.loaded.plan || !S.loaded.actuals) return;
+    const P = S.plan, A = S.actuals;
+    if(!P || !P.weeks || !P.lines){ n.innerHTML = '<div class="notice"><strong>No plan loaded yet.</strong> Ask Claude to read the cash flow model into this page.</div>'; return; }
+    const src = P.source || {}, W = P.weeks.length, through = A && A.through, have = !!(through && through >= wkActive(P.weeks[0]).from);
+    const cw = have ? Math.max(0, Math.min(W - 1, planWeekOf(through))) : 0;
+    if(S.pwk == null || S.pwk > cw || S.pwk < 0) S.pwk = cw; const w = S.pwk, wk = P.weeks[w];
+    if(!PV[S.pv]) S.pv = 'week'; const pv = S.pv;
+    const link = src.url ? '<a href="' + esc(src.url) + '" target="_blank" rel="noopener">' + esc(src.title || 'the plan') + '</a>' : esc(src.title || 'the plan');
+    let h = '<div style="display:flex;flex-direction:column;gap:28px"><div class="block"><div class="block-head"><h2>Pacing against the plan</h2><p>' + (have ? 'Actuals through ' + md(through) + (A.pulledAt ? ', pulled ' + md(A.pulledAt) : '') + '.' : 'No actuals inside the plan period yet.') + '</p></div>'
+      + '<p class="prose">Plan: ' + link + (src.read ? ', read ' + md(src.read) : '') + '. Weeks are calendar weeks, Monday to Sunday. A weekly plan number is spread evenly over its days to get the plan to date; months, quarters and the plan year add those days up, so every view agrees with the weekly one.</p>';
+    if(S.brand === 'avia'){
+      const L = P.lines.avia, first = L.adSpend.findIndex(v => v > 0);
+      h += '</div><div class="notice"><strong>Nothing to pace for AVIA yet.</strong> ' + (first >= 0 ? 'Its plan starts in ' + wkName(P.weeks[first]) + ' (' + md(P.weeks[first].start) + ') at $' + nf0.format(L.adSpend[first] / wkActive(P.weeks[first]).days) + ' a day.' : 'The plan has no AVIA spend.') + ' The AVIA store is connected in Triple Whale, so its weekly revenue, orders and ad spend are on the This week tab. Pacing starts when the plan does.</div>';
+      if(first >= 0) h += rampHtml(P, L, first, 'AVIA ramp in the plan');
+      n.innerHTML = h + '</div>'; return;
+    }
+    const seg = '<div class="seg" role="group" aria-label="View" id="paceView">' + Object.keys(PV).map(k => '<button type="button" data-pv="' + k + '" aria-pressed="' + (k === pv) + '">' + PV[k] + '</button>').join('') + '</div>';
+    if(pv === 'week'){
+      h += '<div class="taskbar">' + seg + '<div class="ctl"><label for="pwkSel">Week</label><select id="pwkSel" aria-label="Week">' + P.weeks.slice(0, cw + 1).map((x,i) => '<option value="' + i + '"' + (i === w ? ' selected' : '') + '>' + wkLabel(x) + '</option>').join('') + '</select></div></div></div>';
+      if(!have){ h += '<div class="notice"><strong>The plan starts ' + md(wkActive(P.weeks[0]).from) + '.</strong> Actuals will show once the first days are pulled.</div>' + rampHtml(P, P.lines.cacao, 0, 'The ramp ahead'); n.innerHTML = h + '</div>'; return; }
+      const wa = weekActual(wk), rows = paceRows(w, wa), L = P.lines.cacao;
+      const pick = ['Ad spend','New customers','Rebill revenue','Total revenue'].map(nm => rows.find(r => r.name === nm));
+      h += '<div class="tiles">' + pick.map(r => '<div class="tile"><div class="eyebrow">' + esc(r.name) + '</div><div class="v">' + pct0(r.pace) + '</div><div class="row"><span class="small muted">' + fmt(r.act, r.f) + ' against ' + fmt(r.ptd, r.f) + ' planned to date</span></div><div>' + chipL(r.st, r.label) + '</div></div>').join('') + '</div>';
+      h += '<div class="block"><div class="block-head"><h3>' + wkName(wk) + ', ' + md(wk.start) + ' to ' + md(wk.end) + '</h3><p>' + wa.A.n + ' of ' + wa.days + ' plan days in.' + (wa.A.miss ? ' ' + wa.A.miss + ' of those days have no data.' : '') + (wa.X ? ' Part week: spend and new customers cover ' + md(wkActive(wk).from) + ' onward, rebills and units cover the whole week.' : '') + ' The tick on each bar is 100% of plan.</p></div><div class="panel scroll">' + paceTable(rows, ['On track for', 'Plan for the week']) + '</div></div>';
+      /* cash */
+      const C = P.cash || {}, inp = P.inputs || {}, cashAct = (S.cashIn['w' + wk.n] || {}).cash;
+      if(C.closing){ const lowV = Math.min.apply(null, C.closing), lowI = C.closing.indexOf(lowV); const gap = isNum(cashAct) ? cashAct - C.closing[w] : null;
+        h += '<div class="block"><div class="block-head"><h3>Cash</h3><p>No bank feed is connected. Enter the balance at the end of the week to compare it with the plan.</p></div><div class="cashrow">'
+          + '<div><div class="eyebrow">Plan closing cash, ' + wkName(wk) + '</div><div class="v">' + fmt(C.closing[w], 'usdK') + '</div><span class="small muted">Card balance in the plan: ' + fmt(C.card[w], 'usdK') + '</span></div>'
+          + '<div><div class="eyebrow">Actual cash in bank</div><input type="text" inputmode="decimal" id="cash-in" data-cash="' + wk.n + '" placeholder="Enter balance" aria-label="Actual cash in bank for ' + wkName(wk) + '" value="' + (isNum(cashAct) ? cashAct : '') + '"' + (ro() ? ' disabled' : '') + '><span class="small muted">' + (gap == null ? 'Not entered' : (gap >= 0 ? fmt(gap, 'usdK') + ' above plan' : fmt(-gap, 'usdK') + ' below plan')) + '</span></div>'
+          + '<div><div class="eyebrow">Lowest point in the plan</div><div class="v">' + fmt(lowV, 'usdK') + '</div><span class="small muted">' + wkName(P.weeks[lowI]) + ', ' + md(P.weeks[lowI].start) + ' to ' + md(P.weeks[lowI].end) + '</span></div>'
+          + '<div><div class="eyebrow">Supplier payments, ' + wkName(wk) + '</div><div class="v">' + fmt(Math.abs((C.committed || [])[w] || 0), 'usdK') + '</div><span class="small muted">Cash buffer to hold: ' + fmt(inp.minBuffer, 'usdK') + '</span></div></div></div>'; }
+      h += rampHtml(P, L, w, 'The ramp ahead');
+      if(cw >= 1){ let t = '<div class="block"><h3>Week by week so far</h3><div class="panel scroll"><table style="min-width:720px"><thead><tr><th>Week</th><th class="r">Revenue</th><th class="r">Plan</th><th class="r">Ad spend</th><th class="r">Plan</th><th class="r">New customers</th><th class="r">Plan</th></tr></thead><tbody>';
+        for(let i = 0; i <= cw; i++){ const x = P.weeks[i], q = weekActual(x), fr = q.days ? q.A.n / q.days : 0, rx = q.X ? (pSub(q.X.revenue, q.X.ncRevenue) || 0) : 0; t += '<tr><td>' + wkLabel(x) + (q.A.n < q.days ? ' <span class="muted">(' + q.A.n + ' days)</span>' : '') + '</td><td class="r num">' + fmt(isNum(q.A.revenue) ? q.A.revenue + rx : null, 'usdK') + '</td><td class="r num muted">' + fmt(L.revenue[i] * fr, 'usdK') + '</td><td class="r num">' + fmt(q.A.adSpend, 'usdK') + '</td><td class="r num muted">' + fmt(L.adSpend[i] * fr, 'usdK') + '</td><td class="r num">' + fmt(q.A.ncOrders, 'int') + '</td><td class="r num muted">' + fmt(L.newOrders[i] * fr, 'int') + '</td></tr>'; }
+        h += t + '</tbody></table></div></div>'; }
+    } else {
+      const list = periodList(P, pv), started = list.filter(q => q.from <= (through || '')), cur = started.length ? started[started.length - 1] : list[0];
+      if(!S.pper || !list.some(q => q.key === S.pper && q.from <= (through || ''))) S.pper = cur.key; const per = list.find(q => q.key === S.pper) || cur;
+      h += '<div class="taskbar">' + seg + (pv === 'year' ? '' : '<div class="ctl"><label for="pperSel">' + PV[pv] + '</label><select id="pperSel" aria-label="' + PV[pv] + '">' + list.map(q => '<option value="' + q.key + '"' + (q.key === per.key ? ' selected' : '') + (q.from > (through || '') ? ' disabled' : '') + '>' + esc(q.name) + ' · ' + md(q.from) + ' to ' + md(q.to) + '</option>').join('') + '</select></div>') + '</div></div>';
+      if(!have){ h += '<div class="notice"><strong>The plan starts ' + md(wkActive(P.weeks[0]).from) + '.</strong> Actuals will show once the first days are pulled.</div>'; n.innerHTML = h + '</div>'; return; }
+      const pa = periodActual(P, per.from, per.to, through), pl = periodPlan(P, per.from, per.to, through), rows = periodRows(P, pa, pl);
+      const pick = ['Ad spend','New customers','Rebill revenue','Total revenue'].map(nm => rows.find(r => r.name === nm));
+      h += '<div class="tiles">' + pick.map(r => '<div class="tile"><div class="eyebrow">' + esc(r.name) + '</div><div class="v">' + pct0(r.pace) + '</div><div class="row"><span class="small muted">' + fmt(r.act, r.f) + ' against ' + fmt(r.ptd, r.f) + ' planned to date</span></div><div>' + chipL(r.st, r.label) + '</div></div>').join('') + '</div>';
+      const done = pa.days >= pa.total;
+      h += '<div class="block"><div class="block-head"><h3>' + esc(per.name) + ', ' + md(per.from) + ' to ' + md(per.to) + '</h3><p>' + (done ? 'Complete: ' + pa.total + ' days.' : pa.days + ' of ' + pa.total + ' days in.') + (pa.A.miss ? ' ' + pa.A.miss + ' of those days have no data.' : '') + ' On track for holds the pace so far against the rest of the period\'s plan, so it follows the ramp rather than a flat run rate.' + (pa.X.any ? ' Rebills, units and margin include Sep 28 to 30, which the plan\'s first week counts.' : '') + ' The tick on each bar is 100% of plan.</p></div><div class="panel scroll">' + paceTable(rows, ['On track for', 'Plan for the ' + (pv === 'year' ? 'plan year' : pv)]) + '</div></div>';
+      h += '<div class="block"><div class="block-head"><h3>Revenue, cumulative</h3><p>Where the period stands against the plan line, day by day.</p></div>' + cumChart(P, per, through) + '</div>';
+      if(pv === 'month'){ const wks = P.weeks.map((x, i) => ({x, i})).filter(o => { const a = wkActive(o.x); return a.to >= per.from && a.from <= per.to; }).map(o => { const a = wkActive(o.x); return {name: wkLabel(o.x), from: a.from < per.from ? per.from : a.from, to: a.to > per.to ? per.to : a.to}; });
+        h += subTable(P, wks, through, 'Weeks in ' + per.short, 'Weeks that straddle a month edge are cut at the edge here. The growth column compares complete periods only.'); }
+      else if(pv === 'quarter'){ h += subTable(P, periodList(P, 'month').filter(q => q.from >= per.from && q.to <= per.to), through, 'Months in ' + per.name, 'The growth column compares complete months only.'); }
+      else { h += subTable(P, periodList(P, 'quarter'), through, 'Quarters', 'The growth column compares complete quarters only.'); h += subTable(P, periodList(P, 'month'), through, 'Months', 'The growth column compares complete months only.'); }
+    }
+    const notes = (A.notes || []).concat(P.notes || []);
+    if(notes.length) h += '<div class="block"><h3>Read this before trusting the comparison</h3><ul class="plain">' + notes.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+    n.innerHTML = h + '</div>';
+  });
+}
+function rampHtml(P, L, from, title){
+  const C = P.cash || {}; let t = '<div class="block"><div class="block-head"><h3>' + title + '</h3><p>What the plan asks for in the next six weeks.</p></div><div class="panel scroll"><table style="min-width:760px"><thead><tr><th>Week</th><th class="r">Ad spend a day</th><th class="r">New customers</th><th class="r">First-order ROAS</th><th class="r">Rebill revenue</th><th class="r">Total revenue</th><th class="r">Closing cash, all lines</th></tr></thead><tbody>';
+  for(let i = from; i < Math.min(P.weeks.length, from + 6); i++){ const x = P.weeks[i]; t += '<tr><td>' + wkLabel(x) + '</td><td class="r num">' + fmt(L.adSpend[i] / wkActive(x).days, 'usdK') + '</td><td class="r num">' + fmt(L.newOrders[i], 'int') + '</td><td class="r num">' + fmt(L.ncRoas[i], 'x') + '</td><td class="r num">' + fmt(L.rebillRevenue[i], 'usdK') + '</td><td class="r num">' + fmt(L.revenue[i], 'usdK') + '</td><td class="r num">' + (C.closing ? fmt(C.closing[i], 'usdK') : '—') + '</td></tr>'; }
+  return t + '</tbody></table></div></div>';
+}
+
+/* ---------- Inventory ---------- */
+let invFormKey = '';
+const weekStartIso = s => addD(s, -((d8(s).getUTCDay() + 6) % 7));
+function deskPlanRate(p, date){ const pl = p.deskPlan || {}; const ks = Object.keys(pl).sort(); if(!ks.length) return null; const k = date.slice(0,7); if(pl[k] != null) return +pl[k]; return +(k > ks[ks.length - 1] ? pl[ks[ks.length - 1]] : pl[ks[0]]); }
+function modelRate(key, date){ const P = S.plan; const arr = P && P.units && P.units[key]; if(!arr || !arr.length) return 0; let w = planWeekOf(date); if(w < 0) w = 0; if(w >= arr.length) w = arr.length - 1; return (arr[w] || 0) / 7; }
+function deskForecast(p, Dk, asof, H){
+  const w0 = weekStartIso(addD(weekStartIso(asof), -1)); const rows = [];
+  for(let i = 0; i < (Dk.historyWeeks || 12); i++){ const ws = addD(w0, -7 * i); const u = ((Dk.weeks || {})[ws] || {})[p.actualKey] || 0; rows.push({ws, units:u, excluded: !!(Dk.cutoff && ws < Dk.cutoff)}); }
+  const valid = rows.filter(r => !r.excluded && r.units > 0); const planToday = deskPlanRate(p, asof);
+  const res = {rows, planToday, daily:[], method:'plan_only', rateNow:0, growth:1};
+  const amz = d => (+p.amazonPerDay || 0) * Math.pow(1 + (+p.amazonGrowthMo || 0), d / 30);
+  if(!valid.length){ for(let d = 1; d <= H; d++) res.daily.push(deskPlanRate(p, addD(asof, d)) || 0); return res; }
+  const beta = planToday ? (Dk.beta == null ? 0.7 : Dk.beta) : 1;
+  if(valid.length < 4){ const rn = valid.reduce((t,r) => t + r.units, 0) / (7 * valid.length);
+    for(let d = 1; d <= H; d++){ const pl = deskPlanRate(p, addD(asof, d)); res.daily.push(beta * rn + (1 - beta) * (pl == null ? rn : pl) + amz(d)); }
+    res.method = 'recent_avg'; res.rateNow = rn; return res; }
+  const a = Dk.alpha == null ? 0.75 : Dk.alpha, ew = valid.slice(0, Dk.ewmaWeeks || 8); let ws = 0, s = 0; ew.forEach((r,i) => { ws += Math.pow(a, i); s += Math.pow(a, i) * r.units; });
+  const rn = s / (7 * ws), rec = valid.slice(0, 4), old = valid.slice(4, 8), sum = x => x.reduce((t,r) => t + r.units, 0); let g = 1;
+  if(old.length >= 2 && sum(old) > 0) g = Math.pow((sum(rec) / rec.length) / (sum(old) / old.length), 0.25);
+  const clip = Dk.growthClip || [0.9, 1.1]; g = Math.max(clip[0], Math.min(clip[1], g));
+  for(let d = 1; d <= H; d++){ const dr = rn * Math.pow(g, d / 7); const pl = deskPlanRate(p, addD(asof, d)); res.daily.push(beta * dr + (1 - beta) * (pl == null ? dr : pl) + amz(d)); }
+  res.method = 'ewma_trend'; res.rateNow = rn; res.growth = g; return res;
+}
+function invCtx(){ const I = S.inv; if(!I || !I.pools) return null; const A = S.actuals, latest = A && (A.latest || A.through); const asOf = (S.desk && S.desk.asOf) || (latest ? addD(latest, 1) : todayLocal()); return {I, Dk:S.desk, A, asOf, latest}; }
+function poolCalc(key, c){
+  const p = c.I.pools[key], days = (c.A && c.A.days) || {}, through = c.A && c.A.through; let on = +p.count || 0, sold = 0, nd = 0;
+  (p.inbound || []).forEach(r => { if(r.status === 'received' && r.date >= p.countDate) on += (+r.qty || 0); });
+  if(p.actualKey) for(const d in days){ if(d >= p.countDate && isNum(days[d][p.actualKey])){ sold += days[d][p.actualKey]; nd++; } }
+  on = on - sold - (+p.amazonPerDay || 0) * nd;
+  const HZ = 240, isDesk = !!(p.actualKey && c.Dk); let fc = null, daily = [];
+  if(isDesk){ fc = deskForecast(p, c.Dk, c.asOf, HZ); daily = fc.daily; } else for(let d = 1; d <= HZ; d++) daily.push(modelRate(key, addD(c.asOf, d)));
+  const Ld = +p.leadDays || 0, R = +p.reviewDays || 0, Sf = +p.safetyDays || 0, arrival = addD(c.asOf, Ld);
+  const pos = (p.inbound || []).filter(r => r.status === 'in_transit');
+  const onL = pos.filter(r => r.date <= arrival).reduce((t,r) => t + (+r.qty || 0), 0);
+  const dl = daily.slice(0, Ld).reduce((a,b) => a + b, 0), dc = daily.slice(Ld, Ld + R + Sf).reduce((a,b) => a + b, 0);
+  const stockArrival = on + onL - dl, raw = Math.max(0, dc - stockArrival), pack = Math.max(1, +p.pack || 1);
+  let qty = raw > 0 ? Math.ceil(raw / pack) * pack : 0; if(qty > 0) qty = Math.max(qty, +p.moq || 0);
+  let cum = 0, avail = on, stockout = null;
+  for(let i = 0; i < daily.length; i++){ const day = addD(c.asOf, i + 1); avail += pos.filter(r => r.date === day || (i === 0 && r.date <= c.asOf)).reduce((t,r) => t + (+r.qty || 0), 0); cum += daily[i]; if(cum > avail){ stockout = day; break; } }
+  let recent = null; if(p.actualKey && through){ let t = 0, k = 0; for(let i = 0; i < 7; i++){ const x = days[addD(through, -i)]; if(x && isNum(x[p.actualKey])){ t += x[p.actualKey]; k++; } } if(k) recent = t / k; }
+  const hard = stockout ? addD(stockout, -Ld) : null, safe = hard ? addD(hard, -Sf) : null;
+  const status = !stockout ? 'ok' : stockout <= arrival ? 'crit' : safe <= addD(c.asOf, 14) ? 'low' : 'ok';
+  return {key, p, on: Math.round(on), sold, isDesk, fc, daily, arrival, onL, dl: Math.round(dl), dc: Math.round(dc), stockArrival: Math.round(stockArrival), qty, cost: qty * (+p.unitCost || 0), stockout, hard, safe, status,
+    expedite: !!(stockout && stockout <= arrival), cover: daily[0] > 0 ? Math.round(on / daily[0]) : null, recent, planNow: modelRate(key, c.asOf), nextIn: pos.slice().sort((a,b) => a.date.localeCompare(b.date))[0] || null, inCount: pos.length};
+}
+const INV_ST = {crit:['miss','Runs out before an order lands'], low:['watch','Order now'], ok:['ok','Covered']};
+const METHOD = {ewma_trend:'trend-adjusted average of recent weeks', recent_avg:'average of the weeks since the cutoff, blended with the plan rate', plan_only:'plan rate only, no usable history'};
+function renderInventory(){
+  const st = $('#invStatus'), main = $('#invMain');
+  if(S.mode === 'offline'){ st.hidden = false; main.hidden = true; st.innerHTML = '<strong>Inventory is not reachable in this view.</strong> Open the page inside Claude while signed in.'; return; }
+  if(!S.loaded.inv || !S.loaded.plan || !S.loaded.actuals){ st.hidden = false; main.hidden = true; return; }
+  const c = invCtx();
+  if(!c){ st.hidden = false; main.hidden = true; st.innerHTML = '<strong>No stock data yet.</strong> Ask Claude to load counts, inbound shipments and the reorder run into this page.'; return; }
+  st.hidden = true; main.hidden = false;
+  const brandLine = S.brand === 'avia' ? 'AVIA' : 'MAIA';
+  const keys = Object.keys(c.I.pools).sort((a,b) => (c.I.pools[a].order || 99) - (c.I.pools[b].order || 99));
+  const calcs = keys.map(k => poolCalc(k, c)), shown = calcs.filter(x => (x.p.line || 'MAIA') === brandLine);
+  const pays = ((S.plan && S.plan.payments) || []).slice().sort((a,b) => a.date.localeCompare(b.date)), paid = c.I.paid || {}, today = todayLocal();
+  $('#invFresh').textContent = 'Projected from ' + md(c.asOf) + '.' + (c.latest ? ' Units sold are in through ' + md(c.latest) + '.' : '');
+  guarded('invUrgent', n => {
+    const al = [];
+    shown.filter(x => x.status === 'crit').forEach(x => al.push(['miss','Stock gap','<b>' + esc(x.p.name) + ' run out around ' + md(x.stockout) + '.</b><p>About ' + nf0.format(x.on) + ' on hand' + (x.onL ? ' and ' + nf0.format(x.onL) + ' inbound' : '') + '. A standard order placed now lands ' + md(x.arrival) + ', after the shelf is empty.' + (x.qty ? ' The reorder math asks for ' + nf0.format(x.qty) + ' ' + esc(x.p.unit) + ', about ' + fmt(x.cost, 'usdK') + '.' : '') + ' Speed up an inbound shipment, air freight part of an order, or slow the units going out.</p>']));
+    const due = pays.filter(p => !paid[p.id] && p.date <= addD(today, 7));
+    if(due.length){ const tot = due.reduce((t,p) => t + (+p.amount || 0), 0), late = due.filter(p => p.date < today).length; al.push([late ? 'miss' : 'watch','Payments','<b>' + fmt(tot, 'usdK') + ' of supplier payments ' + (late ? 'are due or overdue' : 'fall due in the next 7 days') + '.</b><p>' + due.map(p => md(p.date) + ': $' + nf0.format(p.amount) + ', ' + esc(p.what)).join('. ') + '.</p>']); }
+    const PW = S.plan && S.plan.weeks, PO = S.plan && S.plan.planPO;
+    if(PW && PO){ const ci = Math.max(0, Math.min(PW.length - 1, planWeekOf(c.asOf))); for(let wi = Math.max(0, ci - 1); wi <= Math.min(PW.length - 1, ci + 1); wi++){ const parts = shown.filter(x => (PO[x.key] || [])[wi] > 0).map(x => esc(x.p.name) + ': ' + nf0.format(PO[x.key][wi])); if(!parts.length) continue; const val = (S.plan.poValue || [])[wi];
+      al.push(['watch','Plan order','<b>The cash flow model places purchase orders in ' + wkLabel(PW[wi]) + '.</b><p>' + parts.join('. ') + '.' + (val ? ' The whole round, all product lines, is ' + fmt(val, 'usdK') + '.' : '') + ' The model buys once a month with four weeks of safety stock, so its quantities are larger than the weekly reorder math below.</p>']); } }
+    shown.filter(x => x.status === 'low').forEach(x => al.push(['watch','Order soon','<b>' + esc(x.p.name) + ': order by ' + md(x.safe) + ' to keep ' + (x.p.safetyDays || 0) + ' days of safety stock.</b><p>Without a new order the shelf empties around ' + mdy(x.stockout) + '.' + (x.inCount ? ' That already counts ' + nf0.format(x.onL) + ' inbound, so confirm it is on its way.' : '') + (x.qty ? ' The reorder math asks for ' + nf0.format(x.qty) + ' now.' : ' The reorder math does not ask for an order this week.') + '</p>']));
+    const fast = shown.filter(x => isNum(x.recent) && x.planNow > 0 && x.recent > x.planNow * 1.25);
+    if(fast.length) al.push(['watch','Burn rate','<b>Selling faster than the cash flow model assumes.</b><p>' + fast.map(x => esc(x.p.name) + ': ' + nf0.format(x.recent) + ' a day against ' + nf0.format(x.planNow) + ' in the model').join('. ') + '. The model\'s purchase order timing is too late at this pace.</p>']);
+    const soft = shown.filter(x => ['conflict','estimate','assumed'].includes(x.p.conf));
+    if(soft.length) al.push(['none','Counts','<b>' + soft.length + ' of ' + shown.length + ' stock figures are not real counts.</b><p>' + soft.map(x => esc(x.p.name) + ': ' + esc(x.p.countNote || x.p.conf)).join(' ') + '</p>']);
+    n.innerHTML = al.length ? al.map(a => '<div class="al"><div>' + chipL(a[0], a[1]) + '</div><div>' + a[2] + '</div></div>').join('') : '<div class="empty">Nothing urgent for ' + esc(BRAND_NAME[S.brand]) + '. Every item is covered past its order lead time and no supplier payment falls due this week.</div>';
+  });
+  guarded('invStock', n => {
+    n.innerHTML = '<thead><tr><th>Item</th><th class="r">On hand now</th><th class="r">Last count</th><th class="r">Selling a day</th><th class="r">Model says</th><th class="r">Cover</th><th>Next inbound</th><th>Runs out</th><th>Order by</th><th>Status</th></tr></thead><tbody>'
+      + shown.map(x => { const p = x.p, s = INV_ST[x.status];
+        return '<tr><td class="name" style="font-weight:600">' + esc(p.name) + '</td><td class="r num">' + nf0.format(x.on) + '</td>'
+          + '<td class="r"><input class="target" style="width:92px" type="text" inputmode="numeric" id="count-' + esc(x.key) + '" data-count="' + esc(x.key) + '" aria-label="Count for ' + esc(p.name) + '" value="' + (+p.count || 0) + '"' + (ro() ? ' disabled' : '') + '><div class="small muted">' + (p.countDate ? md(p.countDate) : '') + '</div></td>'
+          + '<td class="r num">' + (isNum(x.recent) ? nf0.format(x.recent) : '<span class="muted">—</span>') + '</td><td class="r num muted">' + nf0.format(x.planNow) + '</td>'
+          + '<td class="r num">' + (x.cover == null ? '<span class="muted">No sales yet</span>' : x.cover + ' days') + '</td>'
+          + '<td>' + (x.nextIn ? '<span class="num">' + nf0.format(x.nextIn.qty) + '</span> on ' + md(x.nextIn.date) + (x.inCount > 1 ? ' <span class="muted">+' + (x.inCount - 1) + ' more</span>' : '') : '<span class="muted">None</span>') + '</td>'
+          + '<td>' + (x.stockout ? mdy(x.stockout) : '<span class="muted">Not within 8 months</span>') + '</td>'
+          + '<td>' + (!x.stockout ? '<span class="muted">—</span>' : x.status === 'crit' ? 'Overdue' : mdy(x.safe)) + '</td><td>' + chipL(s[0], s[1]) + '</td></tr>'; }).join('') + '</tbody>';
+  });
+  $('#invNotes').innerHTML = '<li>Selling a day is the average of the last seven full days from Shopify. Model says is what the cash flow model assumes for this week.</li><li>Cacao and nattokinase are projected with the Reorder Desk forecast. The other items use the cash flow model\'s demand and its ' + '8-week lead time with four weeks of safety stock.</li>';
+  /* reorder desk */
+  const desk = shown.filter(x => x.isDesk); $('#deskBlock').hidden = !desk.length;
+  if(desk.length){
+    const Dk = c.Dk; $('#deskFresh').innerHTML = 'Run as of ' + md(c.asOf) + ' on the same stock figures as above. ' + (Dk.url ? '<a href="' + esc(Dk.url) + '" target="_blank" rel="noopener">Open the full desk</a> to upload a Shopify export or change forecast settings.' : '');
+    guarded('invDesk', n => { n.innerHTML = desk.map(x => { const p = x.p, f = x.fc; const s = x.expedite ? ['miss','Expedite: stockout ' + md(x.stockout)] : x.stockout ? ['watch','Stockout ' + mdy(x.stockout) + ' if no order'] : ['ok','Covered through the horizon'];
+      return '<div class="rcard"><div class="top"><div><div class="eyebrow">' + esc(p.supplier || '') + '</div><h3>' + esc(p.name) + '</h3></div>' + chipL(s[0], s[1]) + '</div>'
+        + '<div class="qty num">' + nf0.format(x.qty) + '<small>' + esc(p.unit) + ' to order now' + (p.lbsPerBag && x.qty ? ', ' + nf0.format(x.qty * p.lbsPerBag) + ' lb raw' : '') + '</small></div>'
+        + '<div class="kv"><div><span>Estimated cost</span><span class="num">$' + nf0.format(x.cost) + '</span></div><div><span>Lands</span><span class="num">' + md(x.arrival) + '</span></div>'
+        + '<div><span>Rate now</span><span class="num">' + (f.rateNow ? nf0.format(f.rateNow) + ' a day' : '—') + '</span></div><div><span>Weekly growth</span><span class="num">×' + f.growth.toFixed(3) + '</span></div>'
+        + '<div><span>Plan rate today</span><span class="num">' + (f.planToday != null ? nf0.format(f.planToday) + ' a day' : '—') + '</span></div><div><span>On hand covers</span><span class="num">' + (x.cover == null ? '—' : x.cover + ' days') + '</span></div>'
+        + '<div><span>On hand</span><span class="num">' + nf0.format(x.on) + '</span></div><div><span>In transit by arrival</span><span class="num">' + nf0.format(x.onL) + '</span></div>'
+        + '<div><span>Demand to arrival</span><span class="num">' + nf0.format(x.dl) + '</span></div><div><span>Stock at arrival</span><span class="num">' + nf0.format(x.stockArrival) + '</span></div></div>'
+        + '<p class="small muted">Method: ' + (METHOD[f.method] || f.method) + '. An order lands in ' + (p.leadDays || 0) + ' days and must cover the ' + ((+p.reviewDays || 0) + (+p.safetyDays || 0)) + ' days after that (' + nf0.format(x.dc) + ' ' + esc(p.unit) + ') less what is projected on the shelf when it lands.</p></div>'; }).join(''); });
+    const rows0 = desk[0].fc.rows;
+    $('#invHist').innerHTML = '<thead><tr><th>Week of</th>' + desk.map(x => '<th class="r">' + esc(x.p.name) + '</th>').join('') + '<th>Used in the forecast</th></tr></thead><tbody>' + rows0.map((r,i) => '<tr><td>' + mdy(r.ws) + '</td>' + desk.map(x => '<td class="r num">' + nf0.format(x.fc.rows[i].units) + '</td>').join('') + '<td>' + (r.excluded ? '<span class="muted">No, before the ' + md(Dk.cutoff) + ' cutoff</span>' : 'Yes') + '</td></tr>').join('') + '</tbody>';
+    const po = desk.filter(x => x.qty > 0).map(x => '# PO ' + c.asOf + ' - ' + (x.p.supplier || x.p.name) + '\n\n' + x.p.name + ': order ' + nf0.format(x.qty) + ' ' + x.p.unit + (x.p.lbsPerBag ? ' (' + nf0.format(x.qty * x.p.lbsPerBag) + ' lb raw)' : '') + ', about $' + nf0.format(x.cost) + '.\nOn hand ' + nf0.format(x.on) + ' + in transit ' + nf0.format(x.onL) + ' - demand to arrival ' + nf0.format(x.dl) + ' = ' + nf0.format(x.stockArrival) + ' at arrival on ' + x.arrival + '. Need ' + nf0.format(x.dc) + ' to cover the following ' + ((+x.p.reviewDays || 0) + (+x.p.safetyDays || 0)) + ' days.\n' + (x.expedite ? 'Projected stockout ' + x.stockout + ' - EXPEDITE.' : 'Projected stockout: ' + (x.stockout || 'none in the horizon') + '.'));
+    $('#poText').textContent = po.length ? po.join('\n\n---\n\n') : 'The reorder math does not ask for an order this week.';
+  }
+  /* inbound */
+  const fk = keys.join(',') + '|' + ro();
+  guarded('invForm', n => { if(ro()){ n.hidden = true; invFormKey = ''; return; } n.hidden = false; if(invFormKey === fk) return; invFormKey = fk;
+    n.innerHTML = '<div class="f"><label for="inb-pool">Item</label><select id="inb-pool" name="pool">' + keys.map(k => '<option value="' + esc(k) + '">' + esc(c.I.pools[k].name) + '</option>').join('') + '</select></div>'
+      + '<div class="f"><label for="inb-qty">Units</label><input type="text" inputmode="numeric" id="inb-qty" name="qty" required placeholder="50000"></div>'
+      + '<div class="f"><label for="inb-date">Expected or received</label><input type="date" id="inb-date" name="date" required></div>'
+      + '<div class="f"><label for="inb-status">Status</label><select id="inb-status" name="status"><option value="in_transit">In transit</option><option value="received">Received</option></select></div>'
+      + '<button class="btn primary" type="submit">Add shipment</button>'
+      + '<div class="f wide"><label for="inb-note">Note</label><input type="text" id="inb-note" name="note" maxlength="300" placeholder="PO number, carrier, optional"></div>'; });
+  const inb = []; calcs.filter(x => (x.p.line || 'MAIA') === brandLine).forEach(x => (x.p.inbound || []).forEach(r => inb.push({x, r}))); inb.sort((a,b) => a.r.date.localeCompare(b.r.date));
+  $('#invInbound').innerHTML = inb.length ? '<thead><tr><th>Date</th><th>Item</th><th class="r">Units</th><th>Status</th><th>Note</th><th></th></tr></thead><tbody>' + inb.map(o => { const r = o.r, late = r.status === 'in_transit' && r.date < today;
+    return '<tr><td style="white-space:nowrap">' + mdy(r.date) + '</td><td>' + esc(o.x.p.name) + '</td><td class="r num">' + nf0.format(r.qty) + '</td><td>' + (r.status === 'received' ? chipL('ok','Received') : chipL(late ? 'miss' : 'watch', late ? 'Late' : 'In transit')) + '</td><td class="small" style="min-width:200px">' + esc(r.note || '') + '</td><td style="white-space:nowrap">' + (ro() ? '' : '<button type="button" class="btn quiet" data-inb="toggle" data-pool="' + esc(o.x.key) + '" data-rid="' + esc(r.id) + '">' + (r.status === 'received' ? 'Mark in transit' : 'Mark received') + '</button><button type="button" class="btn quiet" data-inb="del" data-pool="' + esc(o.x.key) + '" data-rid="' + esc(r.id) + '">Remove</button>') + '</td></tr>'; }).join('') + '</tbody>' : '<tbody><tr><td class="muted">No inbound shipments logged for ' + esc(BRAND_NAME[S.brand]) + '.</td></tr></tbody>';
+  /* payments */
+  const unpaid = pays.filter(p => !paid[p.id]);
+  $('#payHead').textContent = pays.length ? '$' + nf0.format(unpaid.reduce((t,p) => t + (+p.amount || 0), 0)) + ' still to pay across ' + unpaid.length + ' items, from the order tracker. Shared across both brands.' : '';
+  $('#invPay').innerHTML = pays.length ? '<thead><tr><th>Due</th><th class="r">Amount</th><th>For</th><th>Status</th><th></th></tr></thead><tbody>' + pays.map(p => { const done = !!paid[p.id], late = !done && p.date < today, soon = !done && !late && p.date <= addD(today, 7);
+    return '<tr' + (done ? ' class="nodata"' : '') + '><td style="white-space:nowrap">' + mdy(p.date) + '</td><td class="r num">$' + nf0.format(p.amount) + '</td><td>' + esc(p.what) + '</td><td>' + (done ? chipL('ok','Paid') : late ? chipL('miss','Overdue') : soon ? chipL('watch','Due this week') : chipL('none','Upcoming')) + '</td><td>' + (ro() ? '' : '<button type="button" class="btn quiet" data-pay="' + esc(p.id) + '">' + (done ? 'Mark unpaid' : 'Mark paid') + '</button>') + '</td></tr>'; }).join('') + '</tbody>' : '<tbody><tr><td class="muted">No committed supplier payments in the plan.</td></tr></tbody>';
+}
+
+/* ---------- Creative ---------- */
+function renderCreative(){
+  guarded('creativeBody', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="notice">The creative snapshot is not reachable in this view.</div>'; return; }
+    if(!S.loaded.weeks) return;
+    const L = S.weeks[S.order[S.order.length - 1]]; const c = L && L.creative;
+    if(!c){ n.innerHTML = '<div class="notice"><strong>No creative snapshot yet.</strong> It is written with the weekly pull from ClickUp and Meta.</div>'; return; }
+    const brand = S.brand; const lists = c.lists.filter(l => l.brand === brand); const max = Math.max.apply(null, c.lists.map(l => l.counts.reduce((a,b) => a + b, 0)).concat([1]));
+    const sum = k => lists.reduce((a,l) => a + (l[k] || 0), 0);
+    const st = (c.statics || {})[brand] || {};
+    const tile = (label, v, sub) => '<div class="tile"><div class="eyebrow">' + label + '</div><div class="v">' + v + '</div><div class="row"><span class="small muted">' + sub + '</span></div></div>';
+    const waiting = lists.reduce((a,l) => a + l.counts[4], 0), open = lists.reduce((a,l) => a + l.counts.reduce((x,y) => x + y, 0), 0);
+    let h = '<div style="display:flex;flex-direction:column;gap:28px">';
+    h += '<div class="block"><div class="block-head"><h2>Creative pipeline</h2><p>' + esc(BRAND_NAME[brand]) + ' video, ClickUp as of ' + (L.pulledAt ? md(L.pulledAt) : '') + '. ' + weekLabel(L) + '.</p></div>';
+    h += '<div class="tiles">' + tile('Video briefs in', sum('created'), sum('createdPrev') + ' the week before') + tile('Videos completed', sum('closed'), sum('closedPrev') + ' the week before')
+      + tile('Waiting to launch', waiting, 'of ' + open + ' open video tasks') + tile('Statics delivered', st.delivered || 0, (st.deliveredPrev || 0) + ' the week before') + '</div></div>';
+    h += '<div class="block"><div class="block-head"><h3>Where video work sits</h3><p>Open tasks by stage. Bars share one scale across both brands.</p></div><div class="legend">' + c.stages.map((s,i) => '<span><i class="sw" style="background:var(--st' + (i+1) + ')"></i>' + esc(s) + '</span>').join('') + '</div>';
+    h += '<div class="panel"><div class="pipe">' + lists.map(l => { const tot = l.counts.reduce((a,b) => a + b, 0);
+      return '<div class="lab">' + esc(l.name) + '</div><div class="stack" style="width:' + Math.max(4, tot / max * 100).toFixed(1) + '%">' + l.counts.map((v,i) => v ? '<div class="s" tabindex="0" style="flex:' + v + ' 1 0;background:var(--st' + (i+1) + ');color:var(--st' + (i+1) + '-ink)" data-tip="' + esc(l.name + ': ' + v + ' in ' + c.stages[i]) + '">' + (v / max > 0.07 ? v : '') + '</div>' : '').join('') + '</div><div class="tot">' + tot + '</div>'; }).join('') + '</div></div>';
+    h += '<div class="panel scroll"><table><thead><tr><th>List</th>' + c.stages.map(s => '<th class="r">' + esc(s) + '</th>').join('') + '<th class="r">Briefs in</th><th class="r">Completed</th></tr></thead><tbody>'
+      + lists.map(l => '<tr><td>' + esc(l.name) + '</td>' + l.counts.map(v => '<td class="r num">' + v + '</td>').join('') + '<td class="r num">' + l.created + ' <span class="muted">/ ' + l.createdPrev + '</span></td><td class="r num">' + l.closed + ' <span class="muted">/ ' + l.closedPrev + '</span></td></tr>').join('') + '</tbody></table></div>';
+    h += '<p class="small muted">Briefs in and Completed show this week / the week before. ' + ((c.unassigned || {})[brand] || 0) + ' open video tasks have no assignee. Statics: ' + (st.internalReview || 0) + ' in internal review, ' + (st.readyForDesign || 0) + ' ready for design. Open landing page tasks: ' + ((c.landingPages || {})[brand] || 0) + '.</p></div>';
+    if(brand === 'maia' && L.topAds && L.topAds.length){
+      h += '<div class="block"><div class="block-head"><h3>Top Meta ads by spend</h3><p>' + weekLabel(L) + '. Hook rate is 3-second views over impressions. Hold rate is ThruPlays over 3-second views.</p></div><div class="panel scroll"><table style="min-width:760px"><thead><tr><th>Ad</th><th class="r">Spend</th><th class="r">Hook</th><th class="r">Hold</th><th class="r">Cost per purchase</th><th class="r">ROAS</th></tr></thead><tbody>'
+        + L.topAds.map(a => '<tr><td style="overflow-wrap:anywhere">' + esc(a.name) + '</td><td class="r num">$' + nf0.format(a.spend) + '</td><td class="r num">' + (a.v3s ? (a.v3s / a.impressions * 100).toFixed(0) + '%' : '<span class="muted">Static</span>') + '</td><td class="r num">' + (a.v3s ? (a.thruplays / a.v3s * 100).toFixed(0) + '%' : '<span class="muted">—</span>') + '</td><td class="r num">' + (a.purchases ? '$' + nf0.format(a.spend / a.purchases) : '—') + '</td><td class="r num">' + (a.spend ? (a.value / a.spend).toFixed(2) + 'x' : '—') + '</td></tr>').join('') + '</tbody></table></div></div>';
+    }
+    if(c.notes && c.notes.length) h += '<div class="block"><h3>Read this before trusting the counts</h3><ul class="plain">' + c.notes.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+    n.innerHTML = h + '</div>';
+  });
+}
+
+/* ---------- Customer service ---------- */
+const hrsTxt = v => !isNum(v) ? '—' : v >= 3600 * 48 ? (v / 86400).toFixed(1) + ' days' : v >= 3600 ? (v / 3600).toFixed(1) + ' h' : Math.round(v / 60) + ' min';
+function csChg(cur, prev, good, pts){
+  if(!isNum(cur) || !isNum(prev)) return '<span class="delta flat">—</span>';
+  const d = pts ? cur - prev : (prev ? (cur - prev) / Math.abs(prev) : null); if(!isNum(d)) return '<span class="delta flat">—</span>';
+  const txt = pts ? (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1) + ' pts' : (d >= 0 ? '+' : '−') + Math.abs(d * 100).toFixed(Math.abs(d) >= 1 ? 0 : 1) + '%';
+  const cls = good === 'none' || Math.abs(d) < 1e-9 ? 'flat' : ((good === 'up') === (d > 0)) ? 'good' : 'bad';
+  return '<span class="delta ' + cls + '">' + (Math.abs(d) < 1e-9 ? '' : d > 0 ? '▲ ' : '▼ ') + txt + '</span>';
+}
+function renderService(){
+  guarded('csBody', n => {
+    if(S.mode === 'offline'){ n.innerHTML = '<div class="notice">Customer service numbers are not reachable in this view.</div>'; return; }
+    if(!S.loaded.cs) return;
+    const D = S.cs, head = '<div class="block-head"><h2>Customer service</h2>';
+    if(S.brand !== 'maia'){ n.innerHTML = '<div class="block">' + head + '</div><div class="notice"><strong>Nothing to show for AVIA.</strong> Commslayer and Quo hold MAIA conversations and calls only. AVIA needs its own inbox and phone line in those tools before its service can be measured.</div></div>'; return; }
+    if(!D || !D.weeks || !Object.keys(D.weeks).length){ n.innerHTML = '<div class="block">' + head + '</div><div class="notice"><strong>No customer service data loaded yet.</strong> It is written with the weekly update from Commslayer and Quo.</div></div>'; return; }
+    const keys = Object.keys(D.weeks).sort(), full = keys.filter(k => D.weeks[k].days >= 7);
+    if(!S.cwk || !D.weeks[S.cwk]) S.cwk = D.weeks[S.weekId] ? S.weekId : (full[full.length - 1] || keys[keys.length - 1]);
+    const W = D.weeks[S.cwk], pi = keys.indexOf(S.cwk) - 1, P = pi >= 0 ? D.weeks[keys[pi]] : null, N = D.now || {};
+    const E = W.email || {}, PE = (P && P.email) || {}, T = W.phone || {}, PT = (P && P.phone) || {}, A = W.ai || {}, PA = (P && P.ai) || {};
+    const wl = w => 'W' + (w.iso || isoWeek(w.start)), part = w => w.days < 7 ? ' (' + w.days + ' of 7 days)' : '', pl = P ? wl(P) : 'Prior week';
+    const num = v => isNum(v) ? nf0.format(v) : '—', pc = v => isNum(v) ? v.toFixed(1) + '%' : '—';
+    let h = '<div class="block">' + head + '<p>MAIA, ' + wl(W) + ', ' + md(W.start) + ' to ' + md(W.end) + part(W) + '. Commslayer and Quo, pulled ' + (D.pulledAt ? md(D.pulledAt) : '—') + '.</p></div>'
+      + '<div class="ctl"><label for="csWk">Week</label><select id="csWk" aria-label="Customer service week">' + keys.slice().reverse().map(k => '<option value="' + k + '"' + (k === S.cwk ? ' selected' : '') + '>' + wl(D.weeks[k]) + ' · ' + md(D.weeks[k].start) + ' to ' + md(D.weeks[k].end) + part(D.weeks[k]) + '</option>').join('') + '</select></div>';
+    /* what needs attention */
+    const al = [], age = N.age || [], old7 = age.slice(2).reduce((t,x) => t + (+x.n || 0), 0);
+    if(isNum(T.answerRate) && T.answerRate < 60) al.push(['miss','Phone','<b>' + pc(T.answerRate) + ' of inbound calls were answered.</b><p>' + num(T.answered) + ' answered out of ' + num(T.inbound) + '. ' + num(T.callersNeverAnswered) + ' of ' + num(T.callers) + ' callers never had a call picked up' + (isNum(PT.answerRate) ? '. ' + pl + ': ' + pc(PT.answerRate) : '') + '.</p>']);
+    if(T.spoke && isNum(T.spoke.pctNever) && T.spoke.pctNever > 20) al.push(['miss','Call backs','<b>' + pc(T.spoke.pctNever) + ' of missed calls never led to a conversation with an agent.</b><p>' + pc(T.callback && T.callback.pct24h) + ' got a call back within 24 hours, but ' + (T.outbound ? Math.round(T.outboundVoicemail / T.outbound * 100) : 0) + '% of outbound calls reached a voicemail.' + (T.repeatCallers ? ' ' + num(T.repeatCallers) + ' callers had to ring more than once.' : '') + '</p>']);
+    if(isNum(E.frS) && E.frS > 4 * 3600) al.push([E.frS > 12 * 3600 ? 'miss' : 'near','Email','<b>The median first reply took ' + hrsTxt(E.frS) + '.</b><p>' + (isNum(PE.frS) ? pl + ': ' + hrsTxt(PE.frS) + '. ' : '') + 'Median time to resolve: ' + hrsTxt(E.resS) + '. ' + num(E.created) + ' conversations came in and ' + num(E.closed) + ' were closed.</p>']);
+    if(S.cwk === keys[keys.length - 1] || keys.indexOf(S.cwk) === keys.length - 2){ if(old7 > 0) al.push([old7 > 300 ? 'miss' : 'near','Backlog','<b>' + num(old7) + ' open conversations are older than 7 days.</b><p>' + num(N.open) + ' open in total as of ' + (N.asOf ? md(N.asOf) : 'the last pull') + ', the oldest ' + num(N.oldestDays) + ' days old. ' + num(N.snoozed) + ' more are snoozed.</p>']); }
+    if(isNum(A.handoverRate) && A.pickedUp > 0 && A.handoverRate > 60) al.push(['near','AI agent','<b>The AI agent hands ' + pc(A.handoverRate) + ' of what it picks up back to a person.</b><p>It picked up ' + num(A.pickedUp) + ' conversations and resolved ' + num(A.resolved) + ' on its own (' + pc(A.resolutionRate) + ').</p>']);
+    if(T.texts && T.texts.inbound > 0 && !T.texts.outbound) al.push(['near','Texts','<b>' + num(T.texts.inbound) + ' texts came in and none were answered by text.</b><p>' + num(T.texts.noReply24h) + ' got no reply of any kind within 24 hours.</p>']);
+    if(W.csat && !W.csat.responses) al.push(['none','Satisfaction','<b>No satisfaction scores.</b><p>Surveys are switched off, so there is no measure of how customers rate the service.</p>']);
+    h += '<h3>What needs attention</h3><div class="panel"><div class="alerts">' + (al.length ? al.map(a => '<div class="al"><div>' + chipL(a[0], a[1]) + '</div><div>' + a[2] + '</div></div>').join('') : '<div class="empty">Nothing flagged this week.</div>') + '</div></div></div>';
+    const tile = (label, v, sub) => '<div class="tile"><div class="eyebrow">' + label + '</div><div class="v">' + v + '</div><div class="row"><span class="small muted">' + sub + '</span></div></div>';
+    h += '<div class="tiles">' + tile('Email conversations', num(E.created), pl + ': ' + num(PE.created)) + tile('Median first reply', hrsTxt(E.frS), pl + ': ' + hrsTxt(PE.frS)) + tile('Phone answer rate', pc(T.answerRate), pl + ': ' + pc(PT.answerRate)) + tile('Open backlog now', num(N.open), num(old7) + ' older than 7 days') + '</div>';
+    /* email */
+    const row = (name, cur, prev, f, good, pts) => '<tr><td class="name">' + name + '</td><td class="r num">' + f(cur) + '</td><td class="r num muted">' + f(prev) + '</td><td class="r">' + csChg(cur, prev, good, pts) + '</td></tr>';
+    const mh = '<thead><tr><th>Measure</th><th class="r">' + wl(W) + '</th><th class="r">' + pl + '</th><th class="r">Change</th></tr></thead>';
+    h += '<div class="block"><div class="block-head"><h3>Email, Commslayer</h3><p>Customer Care inbox. The Admin Inbox of automated notifications is left out (' + num(W.admin && W.admin.created) + ' conversations this week).</p></div><div class="two"><div class="panel scroll"><table>' + mh + '<tbody>'
+      + row('Conversations created', E.created, PE.created, num, 'none') + row('Conversations closed', E.closed, PE.closed, num, 'up') + row('Median first reply', E.frS, PE.frS, hrsTxt, 'down') + row('Median time to resolve', E.resS, PE.resS, hrsTxt, 'down')
+      + row('Average reply time', E.avgRespS, PE.avgRespS, hrsTxt, 'down') + row('Closed with one reply', E.oneTouch, PE.oneTouch, pc, 'up', true) + row('Messages sent', E.sent, PE.sent, num, 'none') + '</tbody></table></div>';
+    const dl = E.daily || {}, dn = (dl.created || []).length;
+    h += '<div class="panel scroll"><table><thead><tr><th>Day</th><th class="r">Created</th><th class="r">Closed</th><th class="r">Median first reply</th></tr></thead><tbody>'
+      + Array.from({length: dn}, (_, i) => { const d = addD(W.start, i); return '<tr><td>' + d8(d).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone:'UTC'}) + '</td><td class="r num">' + num(dl.created[i]) + '</td><td class="r num">' + num((dl.closed || [])[i]) + '</td><td class="r num">' + hrsTxt((dl.frS || [])[i]) + '</td></tr>'; }).join('') + '</tbody></table></div></div></div>';
+    /* backlog */
+    const tot = age.reduce((t,x) => t + (+x.n || 0), 0);
+    if(tot){ h += '<div class="block"><div class="block-head"><h3>Backlog right now</h3><p>Open conversations by age, as of ' + (N.asOf ? md(N.asOf) : '—') + '. ' + num(N.snoozed) + ' snoozed conversations are not included.</p></div><div class="legend">' + age.map((x,i) => '<span><i class="sw" style="background:var(--st' + (i + 1) + ')"></i>' + esc(x.label) + '</span>').join('') + '</div>'
+      + '<div class="panel"><div class="pipe"><div class="lab">Open</div><div class="stack">' + age.map((x,i) => x.n ? '<div class="s" tabindex="0" style="flex:' + x.n + ' 1 0;background:var(--st' + (i + 1) + ');color:var(--st' + (i + 1) + '-ink)" data-tip="' + esc(x.label + ': ' + nf0.format(x.n) + ' open conversations') + '">' + (x.n / tot > 0.06 ? nf0.format(x.n) : '') + '</div>' : '').join('') + '</div><div class="tot">' + num(tot) + '</div></div></div>'
+      + '<p class="small muted">Oldest open conversation: ' + num(N.oldestDays) + ' days. Unassigned: ' + (N.unassigned ? (N.unassigned[0] === N.unassigned[1] ? num(N.unassigned[0]) : 'between ' + num(N.unassigned[0]) + ' and ' + num(N.unassigned[1])) : '—') + '.' + ((N.holders || []).length ? ' Most open work sits with ' + N.holders.slice(0, 3).map(x => esc(x.name) + (x.role ? ' (' + esc(x.role.toLowerCase()) + ')' : '') + ' ' + num(x.open)).join(', ') + '.' : '') + '</p></div>'; }
+    /* reasons */
+    const R = W.reasons || {}, PR = (P && P.reasons) || {}, find = (list, x) => { const m = (list || []).find(y => y.name === x.name && (y.parent || '') === (x.parent || '')); return m ? m.n : null; };
+    const rt = (title, list, plist, withParent) => '<div class="panel scroll"><table><thead><tr><th>' + title + '</th><th class="r">' + wl(W) + '</th><th class="r">' + pl + '</th><th class="r">Change</th></tr></thead><tbody>' + (list || []).map(x => { const pv = find(plist, x); return '<tr><td>' + esc(x.name) + (x.auto ? '<span class="tagx">automated</span>' : '') + (withParent && x.parent ? '<div class="small muted">' + esc(x.parent) + '</div>' : '') + '</td><td class="r num">' + num(x.n) + '</td><td class="r num muted">' + num(pv) + '</td><td class="r">' + csChg(x.n, pv, x.auto ? 'none' : 'down') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    h += '<div class="block"><div class="block-head"><h3>Why customers write</h3><p>Contact reasons set by Commslayer on ' + num(R.withReason) + ' conversations across both inboxes. Automated mail is tagged.</p></div><div class="two">' + rt('Reason group', R.top, PR.top) + rt('Specific reason', R.children, PR.children, true) + '</div></div>';
+    /* phone */
+    const bh = T.byHour || [], mx = Math.max.apply(null, bh.map(x => x.inbound).concat([1]));
+    h += '<div class="block"><div class="block-head"><h3>Phone, Quo</h3><p>Toll-free support line. Answered and outbound counts are calls with a transcript, so they are lower bounds.</p></div><div class="two"><div class="panel scroll"><table>' + mh + '<tbody>'
+      + row('Inbound calls', T.inbound, PT.inbound, num, 'none') + row('Answered', T.answered, PT.answered, num, 'up') + row('Answer rate', T.answerRate, PT.answerRate, pc, 'up', true) + row('Missed', T.missed, PT.missed, num, 'down') + row('Voicemails left', T.voicemails, PT.voicemails, num, 'none')
+      + row('Missed calls called back within 1 hour', T.callback && T.callback.pct1h, PT.callback && PT.callback.pct1h, pc, 'up', true) + row('Called back within 24 hours', T.callback && T.callback.pct24h, PT.callback && PT.callback.pct24h, pc, 'up', true)
+      + row('Missed calls that never reached an agent', T.spoke && T.spoke.pctNever, PT.spoke && PT.spoke.pctNever, pc, 'down', true) + row('Outbound calls', T.outbound, PT.outbound, num, 'none') + row('Outbound calls that reached voicemail', T.outbound ? T.outboundVoicemail / T.outbound * 100 : null, PT.outbound ? PT.outboundVoicemail / PT.outbound * 100 : null, pc, 'down', true)
+      + row('Talk time, hours', T.talkHours, PT.talkHours, v => isNum(v) ? v.toFixed(1) : '—', 'none') + row('Texts received', T.texts && T.texts.inbound, PT.texts && PT.texts.inbound, num, 'none') + row('Texts sent', T.texts && T.texts.outbound, PT.texts && PT.texts.outbound, num, 'up') + '</tbody></table></div>';
+    h += '<div><div class="legend" style="margin-bottom:8px"><span><i class="sw" style="background:var(--st4)"></i>Answered</span><span><i class="sw" style="background:var(--st1)"></i>Missed</span></div><div class="panel"><div class="hours" role="img" aria-label="Inbound calls by hour of day, answered and missed">'
+      + bh.map(x => { const a = x.answered || 0, m = Math.max(0, (x.inbound || 0) - a); return '<div class="col' + (m ? '' : ' solo') + '" tabindex="0" data-tip="' + esc(x.h + ':00, ' + nf0.format(x.inbound) + ' inbound, ' + nf0.format(a) + ' answered' + (x.inbound ? ' (' + Math.round(a / x.inbound * 100) + '%)' : '')) + '">' + (m ? '<i class="miss" style="height:' + (m / mx * 100).toFixed(1) + '%"></i>' : '') + (a ? '<i class="ans" style="height:' + (a / mx * 100).toFixed(1) + '%"></i>' : '') + '</div>'; }).join('')
+      + '</div><div class="hourlab">' + bh.map(x => '<span>' + x.h + '</span>').join('') + '</div></div><p class="small muted" style="margin-top:8px">Inbound calls by hour of day, Eastern time. The dark part of each bar was answered.</p>'
+      + '<div class="panel scroll" style="margin-top:12px"><table><thead><tr><th>Day</th><th class="r">Inbound</th><th class="r">Answered</th><th class="r">Answer rate</th></tr></thead><tbody>' + (T.byWeekday || []).map(x => '<tr><td>' + esc(x.d) + '</td><td class="r num">' + num(x.inbound) + '</td><td class="r num">' + num(x.answered) + '</td><td class="r num">' + (x.inbound ? Math.round(x.answered / x.inbound * 100) + '%' : '—') + '</td></tr>').join('') + '</tbody></table></div></div></div>';
+    const cr = T.reasons || (keys.map(k => D.weeks[k].phone && D.weeks[k].phone.reasons).filter(Boolean).pop()), crW = T.reasons ? W : keys.map(k => D.weeks[k]).filter(x => x.phone && x.phone.reasons).pop();
+    if(cr && cr.length){ const sm = cr.reduce((t,x) => t + x.count, 0); h += '<p class="small muted">Why people call, from a sample of ' + sm + ' calls and voicemails in ' + wl(crW) + ': ' + cr.map(x => esc(x.reason.charAt(0).toLowerCase() + x.reason.slice(1)) + ' ' + Math.round(x.count / sm * 100) + '%').join(', ') + '.</p>'; }
+    h += '</div>';
+    /* team */
+    const first = s => String(s || '').trim().split(/\s+/)[0].toLowerCase(), people = new Map();
+    (W.agents || []).filter(a => !a.ai).forEach(a => { people.set(a.name + '|' + (a.role || ''), {name: a.name, role: a.role, e: a, key: first(a.name)}); });
+    const used = new Set(); (T.users || []).forEach(u => { if(u.name === 'UNATTRIBUTED') return; const k = first(u.name); const hit = Array.from(people.values()).filter(x => x.key === k && !x.q); if(hit.length === 1){ hit[0].q = u; used.add(u.name); } });
+    (T.users || []).forEach(u => { if(u.name !== 'UNATTRIBUTED' && !used.has(u.name)) people.set('q|' + u.name, {name: u.name, role: '', q: u, key: first(u.name)}); });
+    const hold = x => { const m = (N.holders || []).find(y => y.name === x.name && (y.role || '') === (x.role || '')); return m ? m.open : null; };
+    const prow = Array.from(people.values()).sort((a,b) => ((b.e ? b.e.closed : 0) + (b.q ? b.q.calls : 0)) - ((a.e ? a.e.closed : 0) + (a.q ? a.q.calls : 0)));
+    const un = (T.users || []).find(u => u.name === 'UNATTRIBUTED');
+    h += '<div class="block"><div class="block-head"><h3>Team</h3><p>Email work from Commslayer and calls from Quo, matched on first name. Open now is the backlog each person holds today.</p></div><div class="panel scroll"><table style="min-width:900px"><thead><tr><th>Person</th><th class="r">Email closed</th><th class="r">Messages sent</th><th class="r">Median first reply</th><th class="r">Open now</th><th class="r">Calls handled</th><th class="r">Inbound answered</th><th class="r">Outbound</th><th class="r">Talk hours</th></tr></thead><tbody>'
+      + prow.map(x => '<tr><td class="name">' + esc(x.name) + (x.role ? '<span class="tagx">' + esc(x.role) + '</span>' : '') + '</td><td class="r num">' + (x.e ? num(x.e.closed) : '—') + '</td><td class="r num">' + (x.e ? num(x.e.sent) : '—') + '</td><td class="r num">' + (x.e && x.e.sent ? hrsTxt(x.e.frS) : '—') + '</td><td class="r num">' + num(hold(x)) + '</td><td class="r num">' + (x.q ? num(x.q.calls) : '—') + '</td><td class="r num">' + (x.q ? num(x.q.inbound) : '—') + '</td><td class="r num">' + (x.q ? num(x.q.outbound) : '—') + '</td><td class="r num">' + (x.q && isNum(x.q.talkHours) ? x.q.talkHours.toFixed(1) : '—') + '</td></tr>').join('')
+      + (un ? '<tr><td class="name muted">Calls with no name spoken</td><td class="r num">—</td><td class="r num">—</td><td class="r num">—</td><td class="r num">—</td><td class="r num">' + num(un.calls) + '</td><td class="r num">' + num(un.inbound) + '</td><td class="r num">' + num(un.outbound) + '</td><td class="r num">' + (isNum(un.talkHours) ? un.talkHours.toFixed(1) : '—') + '</td></tr>' : '') + '</tbody></table></div></div>';
+    /* AI agent */
+    if(A.pickedUp || PA.pickedUp){ h += '<div class="block"><div class="block-head"><h3>AI agent</h3><p>Commslayer\'s AI agent on the Customer Care inbox.</p></div><div class="two"><div class="panel scroll"><table>' + mh + '<tbody>'
+      + row('Conversations picked up', A.pickedUp, PA.pickedUp, num, 'none') + row('Resolved without a person', A.resolved, PA.resolved, num, 'up') + row('Handed to a person', A.handedOver, PA.handedOver, num, 'none') + row('Share resolved', A.resolutionRate, PA.pickedUp ? PA.resolutionRate : null, pc, 'up', true)
+      + row('Share handed over', A.handoverRate, PA.pickedUp ? PA.handoverRate : null, pc, 'down', true) + row('Share of all conversations touched', A.involvementRate, PA.involvementRate, pc, 'none', true) + '</tbody></table></div>'
+      + '<div class="panel scroll"><table><thead><tr><th>Guidance rule</th><th class="r">Conversations</th><th class="r">Handed over</th><th class="r">Resolved</th></tr></thead><tbody>' + ((A.guidance || []).length ? A.guidance.map(g => '<tr><td style="overflow-wrap:anywhere">' + esc(g.name) + '</td><td class="r num">' + num(g.tickets) + '</td><td class="r num">' + pc(g.handoverPct) + '</td><td class="r num">' + pc(g.successPct) + '</td></tr>').join('') : '<tr><td colspan="4" class="muted">No guidance rule fired this week.</td></tr>') + '</tbody></table></div></div>'
+      + (N.knowledgeGaps && N.knowledgeGaps.open ? '<p class="small muted">' + num(N.knowledgeGaps.open) + ' knowledge gaps are open in the last 30 days. Most searched with no answer: ' + (N.knowledgeGaps.top || []).map(x => esc(x[0]) + ' (' + num(x[1]) + ')').join(', ') + '.</p>' : '') + '</div>'; }
+    if((D.gaps || []).length) h += '<div class="block"><h3>Not measured, or needs fixing</h3><div class="panel scroll"><table class="plan"><thead><tr><th>Area</th><th>What it takes</th></tr></thead><tbody>' + D.gaps.map(g => '<tr><td>' + esc(g.name) + '</td><td>' + esc(g.fix) + '</td></tr>').join('') + '</tbody></table></div></div>';
+    if((D.notes || []).length) h += '<div class="block"><h3>Read this before trusting the numbers</h3><ul class="plain">' + D.notes.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+    n.innerHTML = '<div style="display:flex;flex-direction:column;gap:28px">' + h + '</div>';
+  });
+}
+
+/* ---------- Strategist recap ---------- */
+const SM = {ncRoas:['NC ROAS','x'], hit:['Hit rate','pct0'], spend:['Spend','usdK'], ncpa:['NCPA','usd0']};
+function stratCalc(r){ r = r || {}; const sp = +r.spend || 0; return {spend: sp, ncRoas: sp ? (+r.ncRev || 0) / sp : null, ncpa: +r.nc ? sp / +r.nc : null, hit: +r.tested ? (+r.winners || 0) / +r.tested : null, tested: +r.tested || 0, winners: +r.winners || 0}; }
+function stratFmt(v, k){ if(!isNum(v)) return '<span class="muted">—</span>'; return k === 'hit' ? pct0(v) : fmt(v, SM[k][1]); }
+function renderStrat(){
+  guarded('stratBody', n => {
+    if(S.mode === 'offline' || !S.loaded.strat){ n.innerHTML = ''; return; }
+    const D = S.strat, head = '<div class="block-head"><h2>Strategist performance</h2>';
+    if(S.brand !== 'maia'){ n.innerHTML = '<div class="block">' + head + '</div><div class="notice"><strong>No strategist split for AVIA yet.</strong> The strategist dashboard reads MAIA ad names only. AVIA ads need the same naming rule before they can be split by strategist.</div></div>'; return; }
+    if(!D || !D.weeks || !Object.keys(D.weeks).length){ n.innerHTML = '<div class="block">' + head + '</div><div class="notice"><strong>No strategist recap loaded yet.</strong> It is written with the weekly update from the Maia Creative Strategy Dashboard.</div></div>'; return; }
+    const keys = Object.keys(D.weeks).sort(), full = keys.filter(k => D.weeks[k].days >= 7);
+    if(!S.swk || !D.weeks[S.swk]) S.swk = D.weeks[S.weekId] ? S.weekId : (full[full.length - 1] || keys[keys.length - 1]);
+    const W = D.weeks[S.swk], pi = keys.indexOf(S.swk) - 1, P = pi >= 0 ? D.weeks[keys[pi]] : null, R = D.rules || {}, names = D.names || {};
+    const win = isNum(R.winRoas) ? R.winRoas : 0.9, pot = isNum(R.potRoas) ? R.potRoas : 0.7, cpa = isNum(R.winCpa) ? R.winCpa : 90, minS = isNum(R.minSpend) ? R.minSpend : 50;
+    const wl = w => 'W' + (w.iso || isoWeek(w.start)), part = w => w.days < 7 ? ' (' + w.days + ' of 7 days)' : '';
+    const src = D.source || {}, link = src.url ? '<a href="' + esc(src.url) + '" target="_blank" rel="noopener">' + esc(src.title || 'the strategist dashboard') + '</a>' : esc(src.title || 'the strategist dashboard');
+    const T = stratCalc(W.total), TP = P ? stratCalc(P.total) : null;
+    const st = v => !isNum(v) ? ['none',''] : v >= win ? ['ok','At or above ' + win.toFixed(2) + 'x'] : v >= pot ? ['near', pot.toFixed(2) + 'x to ' + win.toFixed(2) + 'x'] : ['miss','Below ' + pot.toFixed(2) + 'x'];
+    const sub = (c, k) => P ? '<div class="small muted">' + wl(P) + ': ' + (c && isNum(c[k]) ? (k === 'hit' ? pct0(c[k]) : fmt(c[k], SM[k][1])) : '—') + '</div>' : '';
+    let h = '<div class="block">' + head + '<p>MAIA Meta ads, ' + wl(W) + ', ' + md(W.dataFrom || W.start) + ' to ' + md(W.dataTo || W.end) + part(W) + '. Data through ' + md(D.through) + '.</p></div>'
+      + '<p class="prose">Ads are grouped by the strategist code in the ad name. Numbers come from ' + link + ', which holds the ad-level detail. New-customer revenue here is Triple Whale pixel attribution per ad, so NC ROAS reads lower than the first-order ROAS on the scorecard.</p>'
+      + '<div class="ctl"><label for="stratWk">Week</label><select id="stratWk" aria-label="Strategist week">' + keys.slice().reverse().map(k => '<option value="' + k + '"' + (k === S.swk ? ' selected' : '') + '>' + wl(D.weeks[k]) + ' · ' + md(D.weeks[k].start) + ' to ' + md(D.weeks[k].end) + part(D.weeks[k]) + '</option>').join('') + '</select></div>';
+    const tile = (label, v, k) => '<div class="tile"><div class="eyebrow">' + label + '</div><div class="v">' + stratFmt(v, k) + '</div><div class="row"><span class="small muted">' + (TP ? wl(P) + ': ' + (isNum(TP[k]) ? (k === 'hit' ? pct0(TP[k]) : fmt(TP[k], SM[k][1])) : '—') : 'First week of data') + '</span></div></div>';
+    h += '<div class="tiles">' + tile('Spend, all strategists', T.spend, 'spend') + tile('NC ROAS', T.ncRoas, 'ncRoas') + tile('NCPA', T.ncpa, 'ncpa') + tile('Hit rate', T.hit, 'hit') + '</div></div>';
+    const codes = Object.keys(W.rows || {}).sort((a,b) => (a === 'UNASSIGNED') - (b === 'UNASSIGNED') || (W.rows[b].spend || 0) - (W.rows[a].spend || 0));
+    h += '<div class="block"><div class="block-head"><h3>' + wl(W) + ' by strategist</h3><p>Tested means at least $' + nf0.format(minS) + ' spent in the week. A winner has NC ROAS at or above ' + win.toFixed(2) + 'x' + (cpa > 0 ? ' or NCPA at or below $' + nf0.format(cpa) : '') + '. Hit rate is winners over tested ads.</p></div>'
+      + '<div class="panel scroll"><table style="min-width:860px"><thead><tr><th>Strategist</th><th class="r">Spend</th><th class="r">Share</th><th class="r">NC ROAS</th><th class="r">NCPA</th><th class="r">Hit rate</th><th class="r">Winners / tested</th><th>NC ROAS against the lines</th></tr></thead><tbody>'
+      + codes.map(c => { const x = stratCalc(W.rows[c]), px = P && P.rows && P.rows[c] ? stratCalc(P.rows[c]) : null, q = st(x.ncRoas);
+        return '<tr><td class="name" style="font-weight:600">' + esc(names[c] || c) + '</td><td class="r num">' + stratFmt(x.spend, 'spend') + sub(px, 'spend') + '</td><td class="r num">' + (T.spend ? pct0(x.spend / T.spend) : '—') + '</td><td class="r num">' + stratFmt(x.ncRoas, 'ncRoas') + sub(px, 'ncRoas') + '</td><td class="r num">' + stratFmt(x.ncpa, 'ncpa') + sub(px, 'ncpa') + '</td><td class="r num">' + stratFmt(x.hit, 'hit') + sub(px, 'hit') + '</td><td class="r num">' + x.winners + ' / ' + x.tested + '</td><td>' + chipL(q[0], q[1]) + '</td></tr>'; }).join('')
+      + '<tr class="total"><td class="name">All strategists</td><td class="r num">' + stratFmt(T.spend, 'spend') + '</td><td class="r num">100%</td><td class="r num">' + stratFmt(T.ncRoas, 'ncRoas') + '</td><td class="r num">' + stratFmt(T.ncpa, 'ncpa') + '</td><td class="r num">' + stratFmt(T.hit, 'hit') + '</td><td class="r num">' + T.winners + ' / ' + T.tested + '</td><td>' + chipL(st(T.ncRoas)[0], st(T.ncRoas)[1]) + '</td></tr></tbody></table></div></div>';
+    const tk = keys.slice(-6), m = SM[S.sm] ? S.sm : 'ncRoas', all = Array.from(new Set(tk.reduce((a,k) => a.concat(Object.keys(D.weeks[k].rows || {})), [])));
+    const lastSpend = c => { for(let i = tk.length - 1; i >= 0; i--){ const r = (D.weeks[tk[i]].rows || {})[c]; if(r) return r.spend || 0; } return 0; };
+    all.sort((a,b) => (a === 'UNASSIGNED') - (b === 'UNASSIGNED') || lastSpend(b) - lastSpend(a));
+    h += '<div class="block"><div class="block-head"><h3>Week by week</h3><p>The last ' + tk.length + ' weeks in the data, one measure at a time.</p></div>'
+      + '<div class="seg" role="group" aria-label="Measure" id="stratMeasure">' + Object.keys(SM).map(k => '<button type="button" data-sm="' + k + '" aria-pressed="' + (k === m) + '">' + SM[k][0] + '</button>').join('') + '</div>'
+      + '<div class="panel scroll"><table style="min-width:' + (220 + tk.length * 120) + 'px"><thead><tr><th>Strategist</th>' + tk.map(k => '<th class="r">' + wl(D.weeks[k]) + (D.weeks[k].days < 7 ? '<div class="small muted" style="font-weight:400;text-transform:none;letter-spacing:0">' + D.weeks[k].days + ' days</div>' : '') + '</th>').join('') + '</tr></thead><tbody>'
+      + all.map(c => '<tr><td class="name">' + esc(names[c] || c) + '</td>' + tk.map(k => { const r = (D.weeks[k].rows || {})[c]; return '<td class="r num">' + (r ? stratFmt(stratCalc(r)[m], m) : '<span class="muted">—</span>') + '</td>'; }).join('') + '</tr>').join('')
+      + '<tr class="total"><td class="name">All strategists</td>' + tk.map(k => '<td class="r num">' + stratFmt(stratCalc(D.weeks[k].total)[m], m) + '</td>').join('') + '</tr></tbody></table></div></div>';
+    n.innerHTML = '<div style="display:flex;flex-direction:column;gap:28px">' + h + '</div>';
+  });
+}
+
+/* ---------- Data freshness ---------- */
+function renderFresh(){
+  const n = document.getElementById('fresh'); if(!n) return;
+  const L = S.weeks[S.order[S.order.length - 1]], A = S.actuals, D = S.strat, P = S.plan, Dk = S.desk, R = S.refresh, rows = [];
+  rows.push(['Scorecard', L ? weekLabel(L) : 'No week loaded', L && L.pulledAt ? md(L.pulledAt) : '—', 'Triple Whale, Commslayer, ClickUp, Lifetimely']);
+  rows.push(['Pacing actuals and units sold', A && A.through ? 'Through ' + md(A.through) : 'Not loaded', A && A.pulledAt ? md(A.pulledAt) : '—', 'Triple Whale, Shopify (refreshed every morning)']);
+  rows.push(['Strategist recap', D && D.through ? 'Through ' + md(D.through) : 'Not loaded', D && D.pulledAt ? md(D.pulledAt) : '—', 'Maia Creative Strategy Dashboard']);
+  rows.push(['Customer service', S.cs && S.cs.weeks ? (() => { const ks = Object.keys(S.cs.weeks).sort(), w = S.cs.weeks[ks[ks.length - 1]]; return w ? 'Through ' + md(addD(w.start, (w.days || 7) - 1)) : 'Not loaded'; })() : 'Not loaded', S.cs && S.cs.pulledAt ? md(S.cs.pulledAt) : '—', 'Commslayer, Quo']);
+  rows.push(['Reorder run', Dk && Dk.asOf ? 'Projected from ' + md(Dk.asOf) : 'Not loaded', '—', 'Shopify units, counts typed on the Inventory tab']);
+  rows.push(['Plan', P && P.source ? esc(P.source.title || 'Cash flow model') : 'Not loaded', P && P.source && P.source.read ? md(P.source.read) : '—', 'Google Sheet, re-read only when the model changes']);
+  rows.push(['Tasks, hires, issues, targets, counts', 'Live', 'As typed', 'Edited on this page by the team']);
+  let h = '<div class="panel scroll"><table class="plan"><thead><tr><th>Data</th><th>Covers</th><th>Last pulled</th><th>Source</th></tr></thead><tbody>' + rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td></tr>').join('') + '</tbody></table></div>';
+  const logs = [R, S.refreshCs, S.refreshDaily].filter(x => x && x.at);
+  if(!logs.length) h += '<p class="small muted" style="margin-top:10px">The automatic weekly update has not run yet. Its checks will be listed here after the first run.</p>';
+  logs.forEach(L2 => { const ck = L2.checks || [], bad = ck.filter(c => !c.ok);
+    h += '<p class="small muted" style="margin-top:10px">Last update: ' + esc(mdy(String(L2.at).slice(0,10))) + (L2.by ? ' (' + esc(L2.by) + ')' : '') + (L2.week ? ', for ' + esc(L2.week) : '') + '. ' + (bad.length ? bad.length + ' of ' + ck.length + ' checks need attention.' : ck.length ? 'All ' + ck.length + ' checks passed.' : '') + '</p>';
+    if(ck.length) h += '<ul class="plain" style="margin-top:8px">' + ck.map(c => '<li>' + chipL(c.ok ? 'ok' : 'miss', c.ok ? 'Done' : 'Needs attention') + ' <b>' + esc(c.name || '') + '.</b> ' + esc(c.note || '') + '</li>').join('') + '</ul>'; });
+  n.innerHTML = h;
+}
+
+/* ---------- static tabs ---------- */
+function renderStatic(){
+  $('#sources').innerHTML = '<thead><tr><th>Question</th><th>Source</th><th>What it is trusted for</th></tr></thead><tbody>' + SOURCES.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>').join('') + '</tbody>';
+  $('#defs').innerHTML = '<thead><tr><th>Measure</th><th>Definition</th><th>Source</th><th>When it becomes an issue</th></tr></thead><tbody>' + GROUPS.map(g => '<tr class="group"><th colspan="4"><div class="gh"><b>' + esc(g.name) + '</b></div></th></tr>' + KPIS.filter(k => k.g === g.id).map(k => '<tr><td>' + esc(k.name) + '</td><td>' + esc(k.def) + '</td><td>' + esc(k.src) + '</td><td>' + esc(k.rule) + '</td></tr>').join('')).join('') + '</tbody>';
+  $('#coverage').innerHTML = '<thead><tr><th>Area</th><th>What gets covered</th><th>Where it lives</th></tr></thead><tbody>' + COVERAGE.map(r => '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>').join('') + '</tbody>';
+  renderSegs();
+}
+function renderSeats(){ $('#seats').innerHTML = '<div class="seat"><span>Chair</span><span class="muted">Runs the clock, pins the issues</span></div>' + GROUPS.map(g => '<div class="seat"><span>' + esc(g.seat) + '</span><span' + (S.owners[g.id] ? '' : ' class="muted"') + '>' + esc(S.owners[g.id] || 'Unassigned') + '</span></div>').join(''); }
+
+/* ---------- timer ---------- */
+const Tm = {idx:-1, left:0, running:false, h:null};
+function renderSegs(){ let at = 0; $('#segs').innerHTML = SEGS.map((s,i) => { const a = at; at += s.min; return '<li class="' + (i === Tm.idx ? 'on' : '') + '"><span class="min">' + a + ' to ' + at + ' min</span><div><b>' + esc(s.name) + '</b><p>' + esc(s.desc) + '</p></div></li>'; }).join(''); }
+function drawClock(){
+  const c = $('#clock'); const neg = Tm.left < 0; const a = Math.abs(Tm.left);
+  c.textContent = (neg ? '+' : '') + Math.floor(a / 60) + ':' + String(a % 60).padStart(2, '0'); c.classList.toggle('over', neg);
+  $('#clockLabel').textContent = Tm.idx < 0 ? 'Not started' : Tm.idx >= SEGS.length ? 'Done' : (neg ? 'Over time' : 'Now') ;
+  $('#clockSeg').textContent = Tm.idx < 0 ? 'Start the timer when everyone has joined.' : Tm.idx >= SEGS.length ? 'Call complete.' : SEGS[Tm.idx].name + ', ' + SEGS[Tm.idx].min + ' minutes';
+  $('#tStart').textContent = Tm.running ? 'Pause' : (Tm.idx < 0 ? 'Start' : 'Resume');
+}
+function tick(){ Tm.left -= 1; drawClock(); }
+function goSeg(i){ Tm.idx = i; if(i < 0){ Tm.left = 0; } else if(i >= SEGS.length){ Tm.running = false; clearInterval(Tm.h); Tm.left = 0; } else Tm.left = SEGS[i].min * 60; renderSegs(); drawClock(); }
+$('#tStart').addEventListener('click', () => { if(Tm.idx >= SEGS.length) goSeg(-1); if(Tm.running){ Tm.running = false; clearInterval(Tm.h); } else { if(Tm.idx < 0) goSeg(0); Tm.running = true; clearInterval(Tm.h); Tm.h = setInterval(tick, 1000); } drawClock(); });
+$('#tNext').addEventListener('click', () => { if(Tm.idx < SEGS.length) goSeg(Tm.idx + 1); });
+$('#tReset').addEventListener('click', () => { Tm.running = false; clearInterval(Tm.h); Tm.idx = -1; Tm.left = 0; renderSegs(); drawClock(); });
+
+/* ---------- navigation ---------- */
+function renderAll(){
+  document.querySelectorAll('.seg button[data-brand]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.brand === S.brand)));
+  renderWeek(); renderLists(); renderPacing(); renderInventory(); renderService(); renderStrat(); renderCreative(); renderSeats(); renderFresh();
+}
+function setTab(t){
+  if(!['week','pacing','tasks','board','hires','inventory','service','creative','agenda','plan'].includes(t)) t = 'week'; S.tab = t;
+  document.querySelectorAll('section.tab').forEach(s => { s.hidden = s.id !== 'tab-' + t; });
+  document.querySelectorAll('.tabs a').forEach(a => { if(a.dataset.tab === t) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+}
+window.addEventListener('hashchange', () => setTab(location.hash.slice(1)));
+document.querySelectorAll('.seg button[data-brand]').forEach(b => b.addEventListener('click', () => { S.brand = b.dataset.brand; S.editing = S.solving = S.confirmDel = null; try{ localStorage.setItem('wbr.brand', S.brand); }catch(e){} renderAll(); }));
+$('#csBody').addEventListener('change', e => { if(e.target.id === 'csWk'){ S.cwk = e.target.value; e.target.blur(); renderService(); } });
+$('#weekSel').addEventListener('change', e => { S.weekId = e.target.value; S.swk = null; S.cwk = null; e.target.blur(); renderAll(); });
+$('#stratBody').addEventListener('change', e => { if(e.target.id === 'stratWk'){ S.swk = e.target.value; e.target.blur(); renderStrat(); } });
+$('#pacingBody').addEventListener('click', e => { const b = e.target.closest('[data-pv]'); if(!b) return; S.pv = b.dataset.pv; try{ localStorage.setItem('wbr.pv', S.pv); }catch(e2){} renderPacing(); });
+$('#stratBody').addEventListener('click', e => { const b = e.target.closest('[data-sm]'); if(!b) return; S.sm = b.dataset.sm; renderStrat(); });
+function fillWeeks(){ const sel = $('#weekSel'); if(!S.order.length){ sel.innerHTML = '<option>No weeks yet</option>'; return; } sel.innerHTML = S.order.slice().reverse().map(id => '<option value="' + esc(id) + '"' + (id === S.weekId ? ' selected' : '') + '>' + esc(weekLabel(S.weeks[id])) + '</option>').join(''); }
+
+/* ---------- tooltip ---------- */
+const tip = $('#tip');
+function showTip(e){ const t = e.target.closest && e.target.closest('[data-tip]'); if(!t){ tip.hidden = true; return; } tip.textContent = t.dataset.tip; tip.hidden = false; const r = t.getBoundingClientRect(); const w = tip.offsetWidth; tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px'; tip.style.top = Math.max(8, r.top - tip.offsetHeight - 6) + 'px'; }
+document.addEventListener('pointerover', showTip); document.addEventListener('focusin', showTip);
+document.addEventListener('pointerout', e => { if(e.target.closest && e.target.closest('[data-tip]')) tip.hidden = true; });
+document.addEventListener('focusout', e => { if(e.target.closest && e.target.closest('[data-tip]')) tip.hidden = true; });
+window.addEventListener('scroll', () => { tip.hidden = true; }, {passive:true});
+
+/* ---------- writes ---------- */
+const queue = {};
+function write(path, fn){
+  const run = () => fn().catch(err => { if(err && err.code === 'invalid_argument' && S.canWrite !== true){ S.canWrite = false; toast('You have view access, so changes are not saved.'); renderAll(); } else if(err && err.code === 'quota_exceeded') toast('The page\'s storage is full. Delete closed items to make room.'); else toast('That change did not save. Try again in a moment.'); });
+  queue[path] = (queue[path] || Promise.resolve()).then(run, run); return queue[path];
+}
+function merge(path, patch){ const ref = S.db.doc(path); return write(path, () => ref.update(patch).catch(err => { if(err && err.code === 'invalid_argument') return ref.set(patch); throw err; })); }
+document.addEventListener('change', e => {
+  const t = e.target; if(!S.db) return;
+  if(t.dataset.target){ const raw = t.value.replace(/[$,%x\s]/g, ''); const v = raw === '' ? null : Number(raw); if(v !== null && !isFinite(v)){ toast('Targets are numbers, for example 120 or 2.5.'); t.value = ''; return; } const cur = (S.targets[S.brand] || {})[t.dataset.target]; if((cur == null ? null : cur) === v) return; const p = {}; p[S.brand] = {}; p[S.brand][t.dataset.target] = v; merge('settings/targets', p); }
+  else if(t.dataset.owner){ const v = t.value.trim(); if((S.owners[t.dataset.owner] || '') === v) return; const p = {}; p[t.dataset.owner] = v; merge('settings/owners', p); }
+  else if(t.dataset.note){ const key = S.weekId + '__' + S.brand; const v = t.value.trim(); if(((S.comments[key] || {})[t.dataset.note] || '') === v) return; const p = {}; p[t.dataset.note] = v; merge('comments/' + key, p); }
+  else if(t.dataset.count){ const raw = t.value.replace(/[,\s]/g, ''), v = Number(raw), pl = S.inv && S.inv.pools && S.inv.pools[t.dataset.count]; if(!pl) return; if(raw === '' || !isFinite(v) || v < 0){ toast('A count is a number of units, for example 204117.'); t.value = +pl.count || 0; return; } if(+pl.count === v) return; const patch = {pools:{}}; patch.pools[t.dataset.count] = {count:v, countDate:todayLocal(), countNote:'Count entered on this page.', conf:'counted'}; merge('inventory/pools', patch); }
+  else if(t.dataset.cash){ const raw = t.value.replace(/[$,\s]/g, ''), v = raw === '' ? null : Number(raw); if(v !== null && !isFinite(v)){ toast('Cash is a number, for example 602000.'); t.value = ''; return; } const patch = {}; patch['w' + t.dataset.cash] = {cash:v}; merge('actuals/cash', patch); }
+  else if(t.id === 'pwkSel'){ S.pwk = +t.value; t.blur(); renderPacing(); }
+  else if(t.id === 'pperSel'){ S.pper = t.value; t.blur(); renderPacing(); }
+  else if(t.hasAttribute('data-holder') || t.hasAttribute('data-due') || t.hasAttribute('data-cost')){ const row = t.closest('[data-id]'); if(!row) return; const id = row.dataset.id, it = S.items.find(x => x.id === id); if(!it) return; let patch;
+    if(t.hasAttribute('data-holder')){ const v = t.value.trim(); if((it.owner || '') === v) return; patch = {owner:v}; }
+    else if(t.hasAttribute('data-due')){ if((it.due || '') === t.value) return; patch = {due:t.value}; }
+    else { const raw = t.value.replace(/[$,\s]/g, ''), v = raw === '' ? null : Number(raw); if(v !== null && !isFinite(v)){ toast('Monthly cost is a number, for example 7500.'); t.value = ''; return; } if((it.cost == null ? null : it.cost) === v) return; patch = {cost:v}; }
+    write('items/' + id, () => S.db.doc('items/' + id).update(patch)); }
+  else if(t.hasAttribute('data-status')){ const it = t.closest('[data-id]'); if(it){ const id = it.dataset.id; t.blur(); const patch = t.value === 'done' ? {status:'done', doneAt:new Date().toISOString()} : {status:t.value}; write('items/' + id, () => S.db.doc('items/' + id).update(patch)); } }
+});
+$('#subtabs').addEventListener('click', e => { const b = e.target.closest('[data-board]'); if(!b) return; S.board = b.dataset.board; S.editing = S.solving = S.confirmDel = null; try{ localStorage.setItem('wbr.board', S.board); }catch(err){} renderBoard(); });
+function onAdd(type, e){
+  e.preventDefault(); if(!S.db) return; const f = new FormData(e.target); const title = String(f.get('title') || '').trim(); if(!title) return;
+  const T = TYPES[type]; const doc = {type:type, title, owner:String(f.get('owner') || '').trim(), brand:String(f.get('brand') || 'both'), due:String(f.get('due') || ''), note:String(f.get('note') || '').trim(), status:T.statuses[0], created:new Date().toISOString(), week:S.order[S.order.length - 1] || ''};
+  if(f.has('workstream')) doc.workstream = String(f.get('workstream') || '').trim();
+  e.target.reset(); if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  const ref = S.db.collection('items').doc(); write(ref.path, () => ref.set(doc));
+}
+$('#addForm').addEventListener('submit', e => onAdd(S.board, e));
+$('#taskForm').addEventListener('submit', e => onAdd('action', e));
+$('#taskFilter').addEventListener('click', e => { const b = e.target.closest('[data-tf]'); if(!b) return; S.tf = b.dataset.tf; renderTasks(); });
+$('#taskGroup').addEventListener('click', e => { const b = e.target.closest('[data-tg]'); if(!b) return; S.tg = b.dataset.tg; renderTasks(); });
+$('#taskMonth').addEventListener('change', e => { S.tm[taskTp()] = e.target.value; S.editing = S.confirmDel = null; e.target.blur(); renderTasks(); });
+$('#taskPeriod').addEventListener('click', e => { const b = e.target.closest('[data-tp]'); if(!b) return; S.tp = b.dataset.tp; S.editing = S.confirmDel = null; try{ localStorage.setItem('wbr.tp', S.tp); }catch(err){} renderTasks(); });
+function onListClick(e){
+  const b = e.target.closest('[data-act]'); if(!b || !S.db) return; const id = b.closest('[data-id]').dataset.id; const it = S.items.find(x => x.id === id); if(!it) return; const a = b.dataset.act;
+  if(a === 'edit'){ S.editing = S.editing === id ? null : id; S.solving = null; }
+  else if(a === 'solve'){ S.solving = S.solving === id ? null : id; S.editing = null; }
+  else if(a === 'pin'){ write('items/' + id, () => S.db.doc('items/' + id).update({pin:!it.pin})); }
+  else if(a === 'del'){ S.confirmDel = id; }
+  else if(a === 'delx'){ S.confirmDel = null; }
+  else if(a === 'del2'){ S.confirmDel = null; write('items/' + id, () => S.db.doc('items/' + id).delete()); }
+  else if(a === 'toggle'){ const patch = isClosed(it) ? {status:'backlog'} : {status:'done', doneAt:new Date().toISOString()}; write('items/' + id, () => S.db.doc('items/' + id).update(patch)); }
+  renderLists();
+}
+function onListSubmit(e){
+  e.preventDefault(); if(!S.db) return; const form = e.target; const id = form.closest('[data-id]').dataset.id; const it = S.items.find(x => x.id === id); if(!it) return; const f = new FormData(form);
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  if(form.hasAttribute('data-edit')){ const title = String(f.get('title') || '').trim(); if(!title) return; S.editing = null; const patch = {title}; ['owner','due','note','workstream'].forEach(k => { if(f.has(k)) patch[k] = String(f.get(k) || '').trim(); }); ['focus','leverage'].forEach(k => { if(f.has(k)){ const raw = String(f.get(k) || '').trim(), v = Number(raw); patch[k] = raw !== '' && isFinite(v) ? v : null; } }); write('items/' + id, () => S.db.doc('items/' + id).update(patch)); }
+  else { const text = String(f.get('text') || '').trim(); if(!text) return; const kind = f.get('kind') === 'decision' ? 'decision' : 'action'; S.solving = null;
+    const ref = S.db.collection('items').doc(); const doc = {type:kind, title:text, owner:String(f.get('owner') || '').trim(), brand:it.brand || 'both', due:kind === 'action' ? String(f.get('due') || '') : '', note:'From issue: ' + it.title, status:TYPES[kind].statuses[0], created:new Date().toISOString(), week:S.order[S.order.length - 1] || ''};
+    write(ref.path, () => ref.set(doc)); write('items/' + id, () => S.db.doc('items/' + id).update({status:'solved', pin:false, outcome:(kind === 'action' ? 'Task: ' : 'Decision: ') + text})); }
+  renderLists();
+}
+['items','tasks','hires'].forEach(id => { const n = document.getElementById(id); n.addEventListener('click', onListClick); n.addEventListener('submit', onListSubmit); });
+$('#hireForm').addEventListener('submit', e => {
+  e.preventDefault(); if(!S.db) return; const f = new FormData(e.target); const title = String(f.get('title') || '').trim(); if(!title) return;
+  const raw = String(f.get('cost') || '').replace(/[$,\s]/g, ''); const cost = raw === '' || !isFinite(Number(raw)) ? null : Number(raw);
+  const doc = {type:'action', workstream:'Hires', title, owner:String(f.get('owner') || '').trim(), brand:String(f.get('brand') || 'both'), due:String(f.get('due') || ''), cost, note:String(f.get('note') || '').trim(), status:'backlog', created:new Date().toISOString(), week:S.order[S.order.length - 1] || ''};
+  e.target.reset(); if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  const ref = S.db.collection('items').doc(); write(ref.path, () => ref.set(doc));
+});
+$('#invMain').addEventListener('click', e => {
+  const b = e.target.closest('[data-inb],[data-pay]'); if(!b || !S.db || !S.inv) return;
+  if(b.dataset.pay){ const patch = {paid:{}}; patch.paid[b.dataset.pay] = !((S.inv.paid || {})[b.dataset.pay]); merge('inventory/pools', patch); return; }
+  const key = b.dataset.pool, pl = S.inv.pools[key]; if(!pl) return; let list = (pl.inbound || []).map(r => Object.assign({}, r));
+  if(b.dataset.inb === 'del'){ if(S.confirmDel !== 'inb:' + b.dataset.rid){ S.confirmDel = 'inb:' + b.dataset.rid; b.textContent = 'Remove for everyone'; b.classList.add('danger'); return; } S.confirmDel = null; list = list.filter(r => r.id !== b.dataset.rid); }
+  else list.forEach(r => { if(r.id === b.dataset.rid){ if(r.status === 'received') r.status = 'in_transit'; else { r.status = 'received'; r.date = todayLocal(); } } });
+  const patch = {pools:{}}; patch.pools[key] = {inbound:list}; merge('inventory/pools', patch);
+});
+$('#invForm').addEventListener('submit', e => {
+  e.preventDefault(); if(!S.db || !S.inv) return; const f = new FormData(e.target); const key = String(f.get('pool')), pl = S.inv.pools[key];
+  const qty = Number(String(f.get('qty') || '').replace(/[,\s]/g, '')), date = String(f.get('date') || ''); if(!pl || !isFinite(qty) || qty <= 0 || !date){ toast('Enter the units and a date for the shipment.'); return; }
+  const list = (pl.inbound || []).map(r => Object.assign({}, r)); list.push({id:'in-' + Date.now().toString(36), date, qty, status:f.get('status') === 'received' ? 'received' : 'in_transit', note:String(f.get('note') || '').trim()});
+  e.target.reset(); if(document.activeElement && document.activeElement.blur) document.activeElement.blur(); const patch = {pools:{}}; patch.pools[key] = {inbound:list}; merge('inventory/pools', patch);
+});
+$('#poCopy').addEventListener('click', async () => { const node = $('#poText'); try{ await navigator.clipboard.writeText(node.textContent); toast('Copied.'); }catch(err){ const r = document.createRange(); r.selectNodeContents(node); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Text selected. Copy it with your keyboard.'); } });
+
+/* ---------- data ---------- */
+async function start(){
+  setTab(location.hash.slice(1)); renderStatic(); drawClock(); renderAll();
+  const use = window.claude && window.claude.use ? n => window.claude.use(n) : () => Promise.resolve(null);
+  const res = await Promise.all([use('db'), use('user')]); const db = res[0], user = res[1];
+  if(!db){ S.mode = 'offline'; $('#weekSel').innerHTML = '<option>Unavailable</option>'; renderAll(); return; }
+  S.db = db; S.mode = 'live';
+  if(user){ try{ S.canWrite = await user.can('data.write'); }catch(e){ S.canWrite = null; } }
+  const fail = () => { S.mode = 'offline'; renderAll(); };
+  db.collection('weeks').onSnapshot(snap => { S.weeks = {}; snap.docs.forEach(d => { const x = d.data(); if(x && x.start && x.end) S.weeks[d.id] = x; }); S.order = Object.keys(S.weeks).sort(); if(!S.weekId || !S.weeks[S.weekId]) S.weekId = S.order[S.order.length - 1] || null; S.loaded.weeks = true; fillWeeks(); renderAll(); }, fail);
+  db.collection('settings').onSnapshot(snap => { snap.docs.forEach(d => { if(d.id === 'targets') S.targets = d.data() || {}; if(d.id === 'owners') S.owners = d.data() || {}; }); renderAll(); }, () => {});
+  db.collection('comments').onSnapshot(snap => { S.comments = {}; snap.docs.forEach(d => { S.comments[d.id] = d.data() || {}; }); renderWeek(); }, () => {});
+  db.collection('plan').onSnapshot(snap => { S.plan = null; snap.docs.forEach(d => { if(d.id === 'model') S.plan = d.data(); }); S.loaded.plan = true; renderPacing(); renderInventory(); }, () => {});
+  db.collection('actuals').onSnapshot(snap => { S.actuals = null; S.cashIn = {}; snap.docs.forEach(d => { if(d.id === 'daily') S.actuals = d.data(); if(d.id === 'cash') S.cashIn = d.data() || {}; }); S.loaded.actuals = true; renderPacing(); renderInventory(); }, () => {});
+  db.collection('inventory').onSnapshot(snap => { S.inv = null; S.desk = null; snap.docs.forEach(d => { if(d.id === 'pools') S.inv = d.data(); if(d.id === 'desk') S.desk = d.data(); }); S.loaded.inv = true; renderInventory(); }, () => {});
+  db.collection('strategists').onSnapshot(snap => { S.strat = null; snap.docs.forEach(d => { if(d.id === 'weekly') S.strat = d.data(); }); S.loaded.strat = true; renderStrat(); renderFresh(); }, () => { S.loaded.strat = true; renderStrat(); });
+  db.collection('meta').onSnapshot(snap => { S.refresh = null; S.refreshCs = null; S.refreshDaily = null; snap.docs.forEach(d => { if(d.id === 'refresh') S.refresh = d.data(); if(d.id === 'refresh_cs') S.refreshCs = d.data(); if(d.id === 'refresh_daily') S.refreshDaily = d.data(); }); renderFresh(); }, () => {});
+  db.collection('cs').onSnapshot(snap => { S.cs = null; snap.docs.forEach(d => { if(d.id === 'weekly') S.cs = d.data(); }); S.loaded.cs = true; renderService(); renderFresh(); }, () => { S.loaded.cs = true; renderService(); });
+  db.collection('items').onSnapshot(snap => { S.items = snap.docs.map(d => Object.assign({id:d.id}, d.data())).filter(i => TYPES[i.type] && typeof i.title === 'string'); S.items.forEach(i => { if(i.type === 'action' && !TYPES.action.statuses.includes(i.status)) i.status = i.status === 'doing' ? 'in progress' : 'backlog'; }); S.loaded.items = true; renderLists(); }, fail);
+}
+start();
+})();
+</script>
+</body>
+</html>
