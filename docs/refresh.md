@@ -34,15 +34,20 @@ When the review page itself changes (a new version is published), update
 
 ## Cash Flow Forecast
 
-1. Export the model from Google Sheets as text with every tab (the format of `sources/cashflow/model-export.txt`:
-   a line `## Sheet name: <tab>` and then that tab as CSV). Attaching the sheet to a Claude chat produces this file.
-2. Replace `sources/cashflow/model-export.txt`, and update `sources/cashflow/source.json` (sheet link, the day the
-   sheet was last edited, the day the export was taken).
-3. `python3 -I tools/sync.py`. It prints the number of weeks and the lowest closing cash, and stops if the lowest
+The model lives in Google Sheets. The holdco cash flow chat in Claude saves each update as a new sheet titled
+`Holdco_CashFlow_Model_...` in admin@trymaia.co's Drive, so the newest one by last edit is the current model.
+The daily refresh does this itself; by hand:
+
+1. Google Drive connector: `search_files` for titles containing `Holdco_CashFlow_Model`, take the one edited last.
+2. `download_file_content` with that id and exportMimeType
+   `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`. The result is too large to show, so the session
+   saves it to a file; note that file's path.
+3. `python3 tools/cashflow_import.py <that file> --id <sheet id> --title "<sheet title>" --edited <YYYY-MM-DD of the last edit>`
+4. `python3 -I tools/sync.py`. It prints the number of weeks and the lowest closing cash, and stops if the lowest
    weekly cash does not match the model's own summary row.
 
-The tabs it reads are "1. Inputs", "7. Cash Flow Weekly", "8. Monthly Summary", "9. Ramp Scenarios" and
-"10. Committed POs". If a tab is renamed the build stops and says which row it could not find.
+The tabs it reads are "1. Inputs", "7. Cash Flow Weekly", "7b. CM Weekly" (optional), "8. Monthly Summary",
+"9. Ramp Scenarios" and "10. Committed POs". If one is renamed the import stops and lists the tabs it found.
 
 ## Creative Dashboard
 

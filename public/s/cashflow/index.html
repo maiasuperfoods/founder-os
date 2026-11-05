@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<link rel="icon" href="data:,">
+<link rel="icon" type="image/png" href="/brand/favicon-64.png">
 <title>Cash Flow Forecast</title>
 <link rel="stylesheet" href="/assets/os.css">
 <style>
@@ -87,6 +87,12 @@ table.s td.r{text-align:right;white-space:nowrap}
         <div class="keyline"><span><i></i>Closing cash</span><span><i class="ref"></i><span id="bufKey">Minimum buffer</span></span><span><i class="lo"></i>Weeks under the buffer</span></div>
         <details class="fold"><summary>Weekly cash flow as a table</summary><div class="scroll-x"><table class="m" id="weekly"></table></div></details>
       </div>
+    </section>
+
+    <section class="block" id="cmBlock" hidden>
+      <div class="block-h"><h2>Contribution margin by week</h2><p id="cmIntro"></p></div>
+      <div class="seg" role="group" aria-label="Line" id="cmSeg" style="align-self:flex-start"></div>
+      <div class="panel scroll-x"><table class="m" id="cm"></table></div>
     </section>
 
     <section class="block">
@@ -196,7 +202,7 @@ function weeklyTable(){
   const h = el('tr'); h.append(el('th', 'Line')); w.labels.forEach((l, i) => { const th = el('th', l); th.title = 'Week of ' + w.starts[i]; h.append(th); });
   const thead = el('thead'); thead.append(h); const tb = el('tbody');
   ROWS.forEach(([k, lab]) => { const tr = el('tr', null, k === 'closing' || k === 'net' ? 'key' : ''); tr.append(el('td', lab));
-    w.rows[k].forEach((v) => tr.append(el('td', v == null ? '' : v === 0 ? '-' : money(v), v < 0 ? 'neg' : ''))); tb.append(tr); });
+    w.rows[k].forEach((v) => tr.append(el('td', v == null ? '' : v === 0 ? '-' : money(v), (k === 'closing' || k === 'net') && v < 0 ? 'neg' : ''))); tb.append(tr); });
   t.replaceChildren(thead, tb);
 }
 
@@ -207,8 +213,23 @@ function monthlyTable(){
   M.groups.forEach((g) => {
     if (g.title) { const tr = el('tr', null, 'g'), td = el('td', g.title); td.colSpan = 1 + M.months.length + M.extra.length; tr.append(td); tb.append(tr); }
     g.rows.forEach((r) => { const tr = el('tr', null, KEY.test(r.label) ? 'key' : ''); tr.append(el('td', r.label));
-      r.cells.concat(r.total.length ? r.total : M.extra.map(() => '')).forEach((c) => tr.append(el('td', c, /^\(/.test(c) ? 'neg' : ''))); tb.append(tr); });
+      const k = KEY.test(r.label); r.cells.concat(r.total.length ? r.total : M.extra.map(() => '')).forEach((c) => tr.append(el('td', c, k && /^\(/.test(c) ? 'neg' : ''))); tb.append(tr); });
   });
+  t.replaceChildren(thead, tb);
+}
+
+let cmPick = null;
+function cmWeekly(){
+  const C = D.cmWeekly; if (!C || !C.groups.length) return;
+  $('cmBlock').hidden = false;
+  $('cmIntro').textContent = 'The profit view, week by week: revenue less refunds and processing, product cost, fulfillment and ad spend. Amounts in brackets are costs.';
+  if (cmPick == null) cmPick = C.groups.length - 1;
+  const seg = $('cmSeg'); seg.replaceChildren();
+  C.groups.forEach((g, i) => { const b = el('button', g.title.replace(/ \(all three lines\)/, ''), ''); b.type = 'button'; b.setAttribute('aria-pressed', String(i === cmPick)); b.addEventListener('click', () => { cmPick = i; cmWeekly(); }); seg.append(b); });
+  const g = C.groups[cmPick], t = $('cm'), KEY = /^(Contribution margin$|Contribution margin %|Operating profit$|Revenue$)/;
+  const h = el('tr'); h.append(el('th', 'Line')); C.labels.forEach((l, i) => { const th = el('th', l); if (C.starts[i]) th.title = 'Week of ' + C.starts[i]; h.append(th); });
+  const thead = el('thead'); thead.append(h); const tb = el('tbody');
+  g.rows.forEach((r) => { const tr = el('tr', null, KEY.test(r.label) ? 'key' : ''); tr.append(el('td', r.label)); const k = KEY.test(r.label); r.cells.forEach((c) => tr.append(el('td', c, k && /^\(|^-\d/.test(c) ? 'neg' : ''))); tb.append(tr); });
   t.replaceChildren(thead, tb);
 }
 
@@ -262,7 +283,7 @@ fetch('data.json', {credentials: 'same-origin', cache: 'no-store'}).then((r) => 
   $('sub').textContent = 'Holdco model for MAIA Cacao, MAIA Haskap and AVIA, Oct 1, 2026 to Jun 30, 2027. These figures are a copy of the Google Sheet taken ' + fmt(d.source.exportTaken) + '; the sheet was last edited ' + fmt(d.source.sheetLastEdited) + '. Plan figures, not bank balances.';
   $('bufKey').textContent = 'Minimum buffer, ' + short(d.buffer);
   $('sheetLink').href = d.source.sheetUrl;
-  tiles(); chart(); weeklyTable(); monthlyTable(); payments(); scenarios(); inputs();
+  tiles(); chart(); weeklyTable(); cmWeekly(); monthlyTable(); payments(); scenarios(); inputs();
   let t = null; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if ($('planView').style.display !== 'none') chart(); }, 120); });
 }).catch((e) => { $('sub').textContent = 'The cash flow model did not load (' + e.message + '). Reload the page.'; });
 })();

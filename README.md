@@ -21,6 +21,8 @@ This repo holds revenue, the cash plan, supplier payments and per-person numbers
 | `public/s/<section>/` | The mirrored sections (see the table below). |
 | `sources/sections.json` | The list of sections the navigation is built from. Add a section here. |
 | `sources/cashflow/` | The cash flow model export and a note of which sheet it came from. |
+| `tools/cashflow_import.py` | Turns a downloaded copy of the model sheet into that export. |
+| `public/brand/` | Renaissance Commerce logo, wordmark and icons (the only files served before sign-in). |
 | `tools/sync.py` | Rebuilds the sections from their sources and stamps how fresh each is. |
 | `tools/dev-server.mjs` | Local preview through the real gate with a stand-in for Supabase. |
 | `docs/refresh.md` | How to refresh each section, step by step. |
@@ -30,7 +32,7 @@ This repo holds revenue, the cash plan, supplier payments and per-person numbers
 | Section | Source | How it gets here |
 |---|---|---|
 | Weekly Business Review, Customer Service Report | Claude page `LcXDzCN1AfkGiLN4mmUvo1` (its database) | `tools/sync.py --wbr <clone> [--wbr-export <folder>]` |
-| Cash Flow Forecast | Google Sheet (see `sources/cashflow/source.json`) | replace `sources/cashflow/model-export.txt`, run `tools/sync.py` |
+| Cash Flow Forecast | the newest Google Sheet titled `Holdco_CashFlow_Model_*` (the holdco cash flow chat in Claude saves each update as one; see `sources/cashflow/source.json`) | download it as .xlsx, `tools/cashflow_import.py`, then `tools/sync.py` (the daily refresh does this) |
 | Creative Dashboard (MAIA, AVIA, weekly recaps) | repo `maiasuperfoods/maia-creative-dashboard`, rebuilt daily by its own GitHub Action | `tools/sync.py --creative <clone>` |
 | Competitor Intelligence, AVIA Cortisol Detox | repo `maiasuperfoods/competitor-intelligence`, run `avia-cortisol-detox-2026-10-24-v3` | `tools/sync.py --ci <clone>` |
 | Competitor Intelligence, MAIA Haskap | Claude dashboard `7rd7XGoHUG71n3VMDMEpWV` (page and data files copied once into `public/s/competitors/studies/haskap/`) | fixed study; re-copy only if the study is redone |

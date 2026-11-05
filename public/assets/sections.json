@@ -23,7 +23,7 @@
      "live": "https://docs.google.com/spreadsheets/d/1nhh26rHhuckvfrJTr6W6gro-V-4PCf2fFfFhnQKH5Io/edit",
      "liveLabel": "Open the Google Sheet",
      "kind": "Model export",
-     "asOf": "2026-11-04"
+     "asOf": "2026-11-05"
     },
     {
      "id": "service",
@@ -114,5 +114,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-05T13:22Z"
+ "builtAt": "2026-11-05T14:08Z"
 }

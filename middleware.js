@@ -67,27 +67,28 @@ const ERRORS = {
 function loginPage(error, back, email) {
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>Sign in · ${SITE}</title><link rel="icon" href="data:,">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700;800&display=swap">
+<meta name="robots" content="noindex,nofollow"><title>Sign in · ${SITE} · Renaissance Commerce</title>
+<link rel="icon" type="image/png" href="/brand/favicon-64.png"><link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Schibsted+Grotesk:wght@400;600;700&display=swap">
 <style>
-:root{--bg:#edf0f3;--card:#ffffff;--ink:#0e1b2a;--ink2:#44536a;--line:#c6cfd9;--accent:#0f2233;--accent-ink:#fff;--mark:#e9a80c;--bad:#b3362a}
-@media (prefers-color-scheme:dark){:root{--bg:#0c131b;--card:#131c27;--ink:#e9eef4;--ink2:#a9b7c7;--line:#2c3b4d;--accent:#e9eef4;--accent-ink:#0c131b;--bad:#f08a7e}}
+:root{--bg:#1e1b17;--card:#26221c;--ink:#ede7dc;--ink2:#b3aa98;--line:#3d372e;--stone:#d4ccbe;--gold:#c6b048;--bad:#f08a7e}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:15px/1.5 'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:16px}
-form{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--mark);border-radius:12px;padding:28px 26px 26px}
-.mark{font-size:13px;color:var(--ink2);margin:0 0 2px}
-h1{font-size:28px;font-weight:800;line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
-p{margin:0 0 18px;color:var(--ink2);font-size:14px}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:var(--bg);color:var(--ink);font:15px/1.5 'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px}
+.logo{display:block;width:min(300px,78vw);height:auto}
+form{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 26px 24px}
+h1{font-family:'EB Garamond',Garamond,Georgia,serif;font-size:30px;font-weight:600;line-height:1.1;margin:0 0 4px;color:var(--stone)}
+p{margin:0 0 16px;color:var(--ink2);font-size:14px}
 label{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin:14px 0 6px}
-input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink)}
-input:focus-visible{outline:2px solid #1c5fbf;outline-offset:1px}
-button{margin-top:20px;width:100%;font:inherit;font-weight:700;padding:11px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-ink);cursor:pointer}
-button:focus-visible{outline:2px solid #1c5fbf;outline-offset:2px}
+input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#1b1814;color:var(--ink)}
+input:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+button{margin-top:20px;width:100%;font:inherit;font-weight:700;padding:11px;border:0;border-radius:8px;background:var(--stone);color:#1e1b17;cursor:pointer}
+button:hover{background:#e3dccf}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .err{color:var(--bad);font-size:14px;margin-top:14px}
-.foot{margin:18px 0 0;font-size:12.5px}
+.foot{margin:16px 0 0;font-size:13px}
 </style></head><body>
+<img class="logo" src="/brand/rc-wordmark.png" alt="Renaissance Commerce" width="300" height="101">
 <form method="POST" action="/__login">
-<div class="mark">Renaissance Commerce</div>
 <h1>${SITE}</h1><p>Sign in with your work email.</p>
 <label for="em">Email</label><input id="em" name="email" type="email" autocomplete="username" value="${esc(email)}" ${email ? '' : 'autofocus'} required>
 <label for="pw">Password</label><input id="pw" name="password" type="password" autocomplete="current-password" ${email ? 'autofocus' : ''} required>
@@ -104,6 +105,9 @@ export default async function middleware(req) {
   const url = new URL(req.url);
   const path = url.pathname;
   const token = cookieOf(req, COOKIE);
+
+  // the logo and icons are the only files served before sign-in (the sign-in page shows them)
+  if (/^\/brand\/[a-z0-9-]+\.png$/.test(path)) return next();
 
   // sign in
   if (path === '/__login') {

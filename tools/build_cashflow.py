@@ -105,6 +105,35 @@ def monthly(rows):
     return {'months': months, 'extra': extra, 'groups': [g for g in groups if g['rows']]}
 
 
+def cm_weekly(rows):
+    """Tab 7b: contribution margin by week, one block per line (MAIA Cacao, Haskap, AVIA, consolidated)."""
+    if rows is None:
+        return None
+    head = find(rows, 'Line')
+    n = len([c for c in head[1:] if c.strip()])
+    starts = find(rows, 'Week start')
+    groups, cur, on = [], None, False
+    for r in rows:
+        if not r or not r[0].strip():
+            continue
+        if r[0].startswith('Line'):
+            on = True
+            continue
+        if not on or r[0].startswith('Week start'):
+            continue
+        cells = (r[1:1 + n] + [''] * n)[:n]
+        if not any(c.strip() for c in cells):
+            cur = {'title': r[0].strip(), 'rows': []}
+            groups.append(cur)
+            continue
+        if cur is None:
+            cur = {'title': '', 'rows': []}
+            groups.append(cur)
+        cur['rows'].append({'label': r[0].strip(), 'cells': [c.strip() for c in cells]})
+    intro = [r[0] for r in rows[:2] if r and r[0].strip()]
+    return {'labels': [c.strip() for c in head[1:1 + n]], 'starts': (starts[1:1 + n] + [''] * n)[:n], 'groups': [g for g in groups if g['rows']], 'intro': intro}
+
+
 def pos(rows):
     out, on = [], False
     for r in rows:
@@ -178,6 +207,7 @@ def main():
         'weekly': weekly(T['7. Cash Flow Weekly']),
         'monthly': monthly(T['8. Monthly Summary']),
         'payments': pos(T['10. Committed POs']),
+        'cmWeekly': cm_weekly(T.get('7b. CM Weekly')),
         'scenarios': scenarios(T['9. Ramp Scenarios']),
         'inputs': inputs(inp),
     }
