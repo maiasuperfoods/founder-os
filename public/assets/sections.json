@@ -28,8 +28,8 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1",
      "liveLabel": "Edit on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-07",
-     "through": "2026-11-06"
+     "asOf": "2026-11-08",
+     "through": "2026-11-07"
     },
     {
      "id": "cash",
@@ -51,8 +51,8 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service",
      "liveLabel": "Open on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-07",
-     "through": "2026-11-06"
+     "asOf": "2026-11-08",
+     "through": "2026-11-07"
     }
    ]
   },
@@ -84,7 +84,7 @@
        "src": "/s/creative/recaps/"
       }
      ],
-     "asOf": "2026-11-07"
+     "asOf": "2026-11-08"
     },
     {
      "id": "competitors",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-08T05:32Z"
+ "builtAt": "2026-11-08T20:52Z"
 }

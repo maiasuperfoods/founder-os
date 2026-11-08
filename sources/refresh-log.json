@@ -1,20 +1,6 @@
 {
- "at": "2026-11-06T07:59:11-05:00",
- "review": {
-  "ok": false,
-  "through": "2026-10-29",
-  "note": "Not updated: the page database export was refused (\"Documents that other people may have written are not saved to files, because a file drops the note that marks them as others' — nothing was saved.\"), so the site still shows the review repo's snapshot of 2026-10-30 with actuals through 2026-10-29."
- },
- "creative": {
-  "ok": true,
-  "through": "2026-11-06",
-  "note": "Copied from maia-creative-dashboard; links rewritten in 19 pages, data as of 2026-11-06."
- },
- "cashflow": {
-  "ok": true,
-  "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4",
-  "edited": "2026-11-04",
-  "changed": false,
-  "note": "Newest sheet Holdco_CashFlow_Model_Oct26-Jun27 (last edit 2026-11-04 America/Toronto) is the one already imported, so no import was needed; page rebuilt with 40 weeks, lowest closing cash 81,279 in W52."
- }
+ "at": "2026-11-08T06:40:12-05:00",
+ "review": {"ok": true, "through": "2026-11-07", "note": "Exported 10 collections from the review page database (comments was empty); export.py merged them and sync copied the page; actuals run through 2026-11-07, last scorecard week 2026-10-26."},
+ "creative": {"ok": true, "through": "2026-11-08", "note": "Copied maia-creative-dashboard public/ (last commit 2026-11-08), links rewritten in 19 pages."},
+ "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet in Drive is the one already imported (edited 2026-11-04 Toronto); model rebuilt from the existing export: 40 weeks, lowest closing cash 81,279 in W52."}
 }
