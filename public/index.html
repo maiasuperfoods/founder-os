@@ -134,7 +134,7 @@ table.sys td.when{white-space:nowrap}
     <span class="spacer"></span>
     <a class="out" id="secLive" target="_blank" rel="noopener" hidden></a>
   </div>
-  <iframe id="frame" title="Section" hidden></iframe>
+  <iframe id="frame" title="Section" allow="clipboard-write" hidden></iframe>
 
   <div id="home">
     <div class="home">
@@ -188,7 +188,8 @@ function freshText(s, v){
   const asOf = (v && v.asOf) || s.asOf, through = s.through;
   if (!asOf) return {text: '', stale: false};
   const age = daysOld(through || asOf);
-  const base = through ? 'Numbers through ' + day(through) + ', copied ' + day(asOf) : (s.kind || 'Copy') + ' from ' + day(asOf);
+  const base = s.id === 'initiatives' ? 'Tasks are live; latest call ' + day(asOf)
+    : through ? 'Numbers through ' + day(through) + ', copied ' + day(asOf) : (s.kind || 'Copy') + ' from ' + day(asOf);
   const limit = s.kind === 'Daily build' ? 2 : s.kind === 'Snapshot' && s.id !== 'org' ? 8 : null;
   const stale = limit != null && age != null && age > limit;
   return {text: base + (stale ? ' (' + age + ' days old)' : ''), stale};

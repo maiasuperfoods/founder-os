@@ -4,6 +4,14 @@
    "label": "Run the business",
    "items": [
     {
+     "id": "initiatives",
+     "title": "Company Initiatives",
+     "blurb": "Tasks, owners and due dates from the Performance Call and the Creative Call, with each call's recap and transcript.",
+     "src": "/s/initiatives/",
+     "kind": "Live tasks",
+     "asOf": "2026-11-06"
+    },
+    {
      "id": "wbr",
      "title": "Weekly Business Review",
      "blurb": "Scorecard, pacing against the plan, tasks, board, hires, inventory, run of show.",
@@ -114,5 +122,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-08T04:48Z"
+ "builtAt": "2026-11-08T05:16Z"
 }

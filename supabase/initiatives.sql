@@ -1,0 +1,7 @@
+-- Company Initiatives (applied as migrations founder_os_initiatives and founder_os_initiatives_share_link).
+-- Tables os_init_tasks (live tasks) and os_shares (the share link's key); RLS on, no policies; reached only
+-- through these functions. Granted to anon: os_share_ok, os_init_list, os_init_progress, os_init_save,
+-- os_init_delete, os_init_share_link. Not granted (run by the scheduled call import with the owner's rights):
+-- os_init_ingest(call_id, kind, tasks jsonb), which adds a call's tasks once.
+-- The full definitions live in the migrations; read them with:
+--   select pg_get_functiondef(p.oid) from pg_proc p where p.proname like 'os_init%' or p.proname like 'os%share%';

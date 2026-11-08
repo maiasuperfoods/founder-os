@@ -1,0 +1,268 @@
+[
+ {
+  "id": "01M6E2QMT4BYSW90CK8FJ1Y28K",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-06T18:30:00.000Z",
+  "date": "2026-11-06",
+  "minutes": 36,
+  "speakers": [
+   "Brandon",
+   "Lucas Rocha Alves",
+   "Damian",
+   "Adarsha Shrestha",
+   "Youssef"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6E2QMT4BYSW90CK8FJ1Y28K",
+  "summary": "The team agreed to test AppLovin with MAIA's best Meta videos cut under 60 seconds with animated offer end cards, starting with 20 to 30 videos. Production shifts toward cholesterol, brain, neuropathy and prostate because the main campaign already has about 90 videos. Scaling happens near 0.8 ROAS only where there are enough videos to support it.",
+  "points": [
+   "AppLovin: repurpose Meta winners, test single-video against multi-asset creative sets, possible $700 to $1,000 a day later",
+   "Neuropathy and prostate budgets cut to about $1,500 to $2,500 because new video volume was low",
+   "Cholesterol fell the most and needs two to three new videos a day; only about four are in the pipeline",
+   "Brain holds at about $5,000 a day and cannot scale without more videos",
+   "Blood Sugar launched at $1,000 a day with one video (rejected) and six statics",
+   "AVIA near target at about $5,000 a day; November budget about $300,000 to $320,000, expected revenue about $250,000",
+   "AVIA videos sent to the PDP converted (about $350 spend, around 1.0 ROAS)",
+   "Black Friday: buy two products and get three gifts, aimed at site visitors who did not buy"
+  ],
+  "decisions": [
+   "Pause new blood pressure, plaque and blood-flow submissions for about five days and redirect production to under-covered angles",
+   "Scale around 0.8 ROAS only where creative supply supports it; main campaign stays unscaled while below 0.8",
+   "Send 100% of MAIA video traffic to the PDP; new static ads use a new pre-sales link for comparison",
+   "Keep Blood Sugar at the test budget through the weekend and pause it Sunday or Monday if it does not develop",
+   "No AVIA scaling until creative supply improves"
+  ],
+  "tasksImported": [
+   {
+    "title": "Send finished pipeline videos for the AppLovin test",
+    "owner": "Lucas Rocha Alves",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Compile the winning blood-pressure videos for AppLovin",
+    "owner": "Damian",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Set up the AppLovin creative approach and decide on a dedicated AppLovin strategist",
+    "owner": "Brandon",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Talk to each creative strategist about uneven angle coverage",
+    "owner": "Brandon",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Hire two creative strategists for AVIA",
+    "owner": "Brandon",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Shift briefs to cholesterol, brain, neuropathy and prostate; pause new BP, plaque and blood-flow briefs for five days",
+    "owner": "Adarsha Shrestha",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Shift briefs to cholesterol, brain, neuropathy and prostate; pause new BP, plaque and blood-flow briefs for five days",
+    "owner": "Sujal Chitrakar",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Deliver brain campaign creatives",
+    "owner": "Adarsha Shrestha, Sujal Chitrakar",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Keep Blood Sugar at $1,000 a day through the weekend; pause it Sunday or Monday if weak",
+    "owner": "Damian",
+    "due": "2026-11-09"
+   },
+   {
+    "title": "Launch new AVIA video ads to the PDP",
+    "owner": "Damian",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Redirect all MAIA video traffic to the PDP",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Create the new pre-sales link for MAIA static ads",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Build the general AVIA PDP and rework the thyroid page",
+    "owner": "Youssef",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Share the Black Friday offer brief in the group (buy 2, get 3 gifts)",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Scale campaigns near 0.8 ROAS where there are enough videos",
+    "owner": "Damian",
+    "due": "2026-11-13"
+   }
+  ]
+ },
+ {
+  "id": "01M64D00V66VMT1J8GGYEXPN4S",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-04T18:30:00.000Z",
+  "date": "2026-11-04",
+  "minutes": 44,
+  "speakers": [
+   "Damian",
+   "Youssef",
+   "Adarsha Shrestha",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M64D00V66VMT1J8GGYEXPN4S",
+  "summary": "Meta efficiency improved: account new-customer ROAS rose from 0.67 to 0.79 and the main campaign reached 0.80, still below target, with winning ads starting to fatigue. Business pacing moved from 41% to 46 to 47% of plan, with scaling aimed at weeks 47 and 48 at about 0.85 first-order ROAS and a $115 to $120 cost per new customer.",
+  "points": [
+   "Brain and Neuro strong at low spend; Cholesterol softened; Prostate and Neuropathy need more creative",
+   "Blood Sugar expansion waits on a landing page; statics tested before broader video production",
+   "AVIA spend reduced while its pipeline builds; video winners tested straight to the PDP",
+   "AVIA production to rise from six to ten videos a week",
+   "The pod makes 45 videos a week against 50 to 55 capacity; one more editor is being sought"
+  ],
+  "decisions": [
+   "Build backup creative before scaling winners",
+   "Test AVIA video ads on the PDP"
+  ],
+  "tasksImported": []
+ },
+ {
+  "id": "01M6E2QMT59JB4FFDEMSMCKC8N",
+  "kind": "creative",
+  "kindLabel": "Creative Call",
+  "title": "Creative Strategy",
+  "at": "2026-11-04T15:00:00.000Z",
+  "date": "2026-11-04",
+  "minutes": 22,
+  "speakers": [
+   "Brandon",
+   "Youssef",
+   "Dusan Zvekic",
+   "Lucas Rocha Alves",
+   "Peter Nguyen",
+   "Elissa Jabbour"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6E2QMT59JB4FFDEMSMCKC8N",
+  "summary": "AVIA's pipeline is too thin to scale, with one brief ready for launch in the last seven days against five the week before. MAIA ran at 0.79 seven-day ROAS against a 0.85 to 0.90 target and a $110 to $120 cost per new customer. Production is about 150 concepts a week, toward roughly 1,000 a month across both brands, with a shift to unaware ads.",
+  "points": [
+   "Strategist ROAS over seven days: Elissa 0.81, Adarsha 0.79, Lucas 0.78 on about $100,000 spend",
+   "MAIA had 25 to 26 briefs ready for launch and 130 new briefs, up from 92",
+   "Editor capacity: two more editors for Lucas, Denver moves to Peter, Elissa stays at about 15 a week",
+   "Black Friday: banners, statics and bottom-of-funnel creative first; offer changes would be front-end gifts",
+   "A competitor's cease and desist removed the Cosmos study from use",
+   "Unaware ads hit 25% with $88,000 spend from four wins, against 53 wins for $123,000 in aware ads"
+  ],
+  "decisions": [
+   "Put the emphasis on AVIA output and raise the AVIA budget",
+   "No specific flavanol amounts (milligrams) and no Mars-funded studies; 'high flavanols' is fine",
+   "Tone down artery-plaque claims (about 10% of spend) after FDA lawyer advice",
+   "Formats to push: AI animation, AI UGC, AI authority, VSL and AI drama, mostly unaware",
+   "Switch to a stronger editor when an editor cannot deliver a format"
+  ],
+  "tasksImported": [
+   {
+    "title": "Deliver five AVIA briefs",
+    "owner": "Dusan Zvekic",
+    "due": "2026-11-08"
+   },
+   {
+    "title": "Re-upload the ads hit by the ban wave",
+    "owner": "Dusan Zvekic",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Shift testing toward unaware concepts",
+    "owner": "Dusan Zvekic",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Reassign the departed editors' pipeline ads to new editors",
+    "owner": "Lucas Rocha Alves",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Add Denver as a third video editor",
+    "owner": "Peter Nguyen",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Ask Damian to launch the ads waiting in Ready for launch",
+    "owner": "Peter Nguyen",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Raise video output to 15 a week, with emphasis on AVIA",
+    "owner": "Elissa Jabbour",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Start Black Friday creative: banners, static ads, bottom-of-funnel",
+    "owner": "Brandon",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Send the creative strategy dashboard to Dusan",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Increase the AVIA budget",
+    "owner": "Brandon",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Remove flavanol amounts and Mars-funded studies from new ads; tone down plaque claims",
+    "owner": "Creative team",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Test more unaware formats: AI animation, AI UGC, AI authority, VSL, AI drama",
+    "owner": "Creative team",
+    "due": "2026-11-11"
+   }
+  ]
+ },
+ {
+  "id": "01M5F573XTA6XE74YTRMAGY1F6",
+  "kind": "creative",
+  "kindLabel": "Creative Call",
+  "title": "Creative Strategy / Landing Pages Huddle",
+  "at": "2026-10-29T14:00:00.000Z",
+  "date": "2026-10-29",
+  "minutes": 24,
+  "speakers": [
+   "Sujal Chitrakar",
+   "Brandon",
+   "Lucas Rocha Alves",
+   "Adarsha Shrestha",
+   "Elissa Jabbour"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M5F573XTA6XE74YTRMAGY1F6",
+  "summary": "October fell well short of plan (Oct 19 to 25: $190,000 spend against $560,000 planned, 1,200 new customers against 4,600, 0.65 first-order ROAS against 0.90), tied to too few net-new concepts and expensive CPMs. The goal is to lift spend from about $30,000 a day to $50,000 to $70,000 within weeks, then back to $100,000.",
+  "points": [
+   "Priorities: unaware brain, prostate, kidney, blood pressure, plaque and cholesterol angles",
+   "Formats: drama, singing and conspiratorial-style ads",
+   "The broader brain landing page is about to publish on the existing URL",
+   "Jennifer Casper Caras joins Elissa's group"
+  ],
+  "decisions": [
+   "Lucas pauses AppLovin and focuses on Meta",
+   "No Cosmos study references; no exact flavanol amounts in future creative (existing 500 mg videos may still launch)"
+  ],
+  "tasksImported": []
+ }
+]

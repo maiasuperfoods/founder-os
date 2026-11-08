@@ -1,0 +1,33 @@
+# Posts a Company Initiatives call recap to Slack when the call import pushes a new file to sources/initiatives/outbox/.
+# Needs the repo secret SLACK_BOT_TOKEN (the creative dashboard's bot token, xoxb-...).
+name: Company Initiatives Slack recap
+on:
+  push:
+    branches: [main]
+    paths: ['sources/initiatives/outbox/**']
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'Outbox file to (re)post, e.g. sources/initiatives/outbox/01M6....json'
+        required: true
+permissions:
+  contents: read
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Post new recaps
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          FILE: ${{ github.event.inputs.file }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$FILE" ]; then files="$FILE"; else
+            base="$BEFORE"; git cat-file -e "$base" 2>/dev/null || base=HEAD^
+            files=$(git diff --name-only --diff-filter=A "$base" HEAD -- 'sources/initiatives/outbox/*.json')
+          fi
+          if [ -z "$files" ]; then echo "no new recaps"; exit 0; fi
+          python3 tools/slack_post.py $files

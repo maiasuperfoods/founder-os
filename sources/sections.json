@@ -1,27 +1,116 @@
 {
  "groups": [
-  {"label": "Run the business", "items": [
-   {"id": "wbr", "title": "Weekly Business Review", "blurb": "Scorecard, pacing against the plan, tasks, board, hires, inventory, run of show.",
-    "src": "/s/wbr/", "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1", "liveLabel": "Edit on the Claude page", "kind": "Snapshot"},
-   {"id": "cash", "state": "cashflow", "title": "Cash Flow Forecast", "blurb": "Holdco model, Oct 2026 to Jun 2027: weekly cash, monthly P&L, supplier payments, ramp scenarios.",
-    "src": "/s/cashflow/", "live": "https://docs.google.com/spreadsheets/d/1nhh26rHhuckvfrJTr6W6gro-V-4PCf2fFfFhnQKH5Io/edit", "liveLabel": "Open the Google Sheet", "kind": "Model export"},
-   {"id": "service", "state": "wbr", "title": "Customer Service Report", "blurb": "Email and phone: volume, response times, backlog, contact reasons, team table.",
-    "src": "/s/wbr/?only=service#service", "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service", "liveLabel": "Open on the Claude page", "kind": "Snapshot"}
-  ]},
-  {"label": "Growth", "items": [
-   {"id": "creative", "title": "Creative Dashboard", "blurb": "Ad performance per strategist and creative output per editor.",
-    "src": "/s/creative/", "live": "https://claude.ai/artifact/GxDnCj5BGznkeVwRsZsd5B", "liveLabel": "Open the Claude page", "kind": "Daily build",
-    "views": [{"id": "maia", "label": "MAIA", "src": "/s/creative/"}, {"id": "avia", "label": "AVIA", "src": "/s/creative/avia/"}, {"id": "recaps", "label": "Weekly recaps", "src": "/s/creative/recaps/"}]},
-   {"id": "competitors", "title": "Competitor Intelligence", "blurb": "What competitors run, what wins, and what to test next, per product.",
-    "src": "/s/competitors/?study=avia-cortisol-detox", "kind": "Study",
-    "views": [
-     {"id": "avia-cortisol-detox", "state": "ci-avia", "label": "AVIA Cortisol Detox", "src": "/s/competitors/?study=avia-cortisol-detox", "live": "https://claude.ai/artifact/CQeeKB3vnqb3utGxfpVTz8"},
-     {"id": "haskap", "state": "ci-haskap", "label": "MAIA Haskap", "src": "/s/competitors/?study=haskap", "live": "https://claude.ai/artifact/7rd7XGoHUG71n3VMDMEpWV"}],
-    "liveLabel": "Open the Claude page"}
-  ]},
-  {"label": "People", "items": [
-   {"id": "org", "title": "Org Chart", "blurb": "Current team and the roles still to hire, MAIA and AVIA.",
-    "src": "/s/org/", "live": "https://claude.ai/artifact/EZCd6yrm3abTw2Ep75v5Nc", "liveLabel": "Edit on the Claude page", "kind": "Snapshot", "asOf": "2026-11-04", "asOfFixed": true}
-  ]}
+  {
+   "label": "Run the business",
+   "items": [
+    {
+     "id": "initiatives",
+     "title": "Company Initiatives",
+     "blurb": "Tasks, owners and due dates from the Performance Call and the Creative Call, with each call's recap and transcript.",
+     "src": "/s/initiatives/",
+     "kind": "Live tasks"
+    },
+    {
+     "id": "wbr",
+     "title": "Weekly Business Review",
+     "blurb": "Scorecard, pacing against the plan, tasks, board, hires, inventory, run of show.",
+     "src": "/s/wbr/",
+     "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1",
+     "liveLabel": "Edit on the Claude page",
+     "kind": "Snapshot"
+    },
+    {
+     "id": "cash",
+     "state": "cashflow",
+     "title": "Cash Flow Forecast",
+     "blurb": "Holdco model, Oct 2026 to Jun 2027: weekly cash, monthly P&L, supplier payments, ramp scenarios.",
+     "src": "/s/cashflow/",
+     "live": "https://docs.google.com/spreadsheets/d/1nhh26rHhuckvfrJTr6W6gro-V-4PCf2fFfFhnQKH5Io/edit",
+     "liveLabel": "Open the Google Sheet",
+     "kind": "Model export"
+    },
+    {
+     "id": "service",
+     "state": "wbr",
+     "title": "Customer Service Report",
+     "blurb": "Email and phone: volume, response times, backlog, contact reasons, team table.",
+     "src": "/s/wbr/?only=service#service",
+     "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service",
+     "liveLabel": "Open on the Claude page",
+     "kind": "Snapshot"
+    }
+   ]
+  },
+  {
+   "label": "Growth",
+   "items": [
+    {
+     "id": "creative",
+     "title": "Creative Dashboard",
+     "blurb": "Ad performance per strategist and creative output per editor.",
+     "src": "/s/creative/",
+     "live": "https://claude.ai/artifact/GxDnCj5BGznkeVwRsZsd5B",
+     "liveLabel": "Open the Claude page",
+     "kind": "Daily build",
+     "views": [
+      {
+       "id": "maia",
+       "label": "MAIA",
+       "src": "/s/creative/"
+      },
+      {
+       "id": "avia",
+       "label": "AVIA",
+       "src": "/s/creative/avia/"
+      },
+      {
+       "id": "recaps",
+       "label": "Weekly recaps",
+       "src": "/s/creative/recaps/"
+      }
+     ]
+    },
+    {
+     "id": "competitors",
+     "title": "Competitor Intelligence",
+     "blurb": "What competitors run, what wins, and what to test next, per product.",
+     "src": "/s/competitors/?study=avia-cortisol-detox",
+     "kind": "Study",
+     "views": [
+      {
+       "id": "avia-cortisol-detox",
+       "state": "ci-avia",
+       "label": "AVIA Cortisol Detox",
+       "src": "/s/competitors/?study=avia-cortisol-detox",
+       "live": "https://claude.ai/artifact/CQeeKB3vnqb3utGxfpVTz8"
+      },
+      {
+       "id": "haskap",
+       "state": "ci-haskap",
+       "label": "MAIA Haskap",
+       "src": "/s/competitors/?study=haskap",
+       "live": "https://claude.ai/artifact/7rd7XGoHUG71n3VMDMEpWV"
+      }
+     ],
+     "liveLabel": "Open the Claude page"
+    }
+   ]
+  },
+  {
+   "label": "People",
+   "items": [
+    {
+     "id": "org",
+     "title": "Org Chart",
+     "blurb": "Current team and the roles still to hire, MAIA and AVIA.",
+     "src": "/s/org/",
+     "live": "https://claude.ai/artifact/EZCd6yrm3abTw2Ep75v5Nc",
+     "liveLabel": "Edit on the Claude page",
+     "kind": "Snapshot",
+     "asOf": "2026-11-04",
+     "asOfFixed": true
+    }
+   ]
+  }
  ]
 }

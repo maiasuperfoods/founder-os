@@ -10,6 +10,12 @@ const COOKIE = 'os_session';
 const DAYS = 30;
 const CACHE_MS = 60 * 1000;   // how long a checked session is trusted before asking Supabase again
 const SITE = 'Founder OS';
+// Company Initiatives can be opened without an account through its share link (/share/initiatives?k=...).
+// The link's key is checked by Supabase (table os_shares) and kept in its own cookie, which opens only
+// the initiatives page, its files, and the two API calls below (read tasks, change a task's progress).
+const SHARE_COOKIE = 'os_share_init';
+const SHARE_DAYS = 365;
+const SHARE_PATHS = /^\/(s\/initiatives(\/.*)?|assets\/os\.css|__api\/initiatives\/(list|progress))$/;
 
 export const config = { matcher: '/:path*' };
 
@@ -48,6 +54,25 @@ async function whoIs(token) {
   if (cache.size > 500) cache.clear();
   cache.set(token, { who, until: Date.now() + CACHE_MS });
   return who;
+}
+
+async function shareOk(key) {
+  if (!key || !/^[0-9a-f]{64}$/.test(key)) return false;
+  const hit = cache.get('share:' + key);
+  if (hit && hit.until > Date.now()) return hit.ok;
+  const r = await rpc('os_share_ok', { p_name: 'initiatives', p_share: key });
+  const ok = !!(r && r.ok);
+  cache.set('share:' + key, { ok, until: Date.now() + CACHE_MS });
+  return ok;
+}
+const shareCookie = (value, maxAge) => `${SHARE_COOKIE}=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Lax`;
+
+function deadLinkPage() {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Link not valid · Company Initiatives</title>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1e1b17;color:#ede7dc;font:15px/1.5 system-ui,sans-serif;padding:24px 16px;text-align:center}
+img{display:block;width:min(260px,70vw);margin:0 auto 24px}p{max-width:420px;color:#b3aa98}</style></head><body><div>
+<img src="/brand/rc-wordmark.png" alt="Renaissance Commerce"><p>This Company Initiatives link is no longer valid. Ask a founder for the current link.</p></div></body></html>`;
 }
 
 // a POST must come from this site's own pages
@@ -130,14 +155,57 @@ export default async function middleware(req) {
     return redirect('/', { 'set-cookie': setCookie('', 0) });
   }
 
-  // everything else needs a session
+  // the Company Initiatives share link: check the key, keep it in a cookie, open the page
+  if (path === '/share/initiatives') {
+    const k = (url.searchParams.get('k') || '').trim();
+    let ok = false;
+    try { ok = await shareOk(k); } catch (e) { return html(loginPage('down', '/', ''), 503); }
+    if (!ok) return html(deadLinkPage(), 404);
+    return redirect('/s/initiatives/' + (url.hash || ''), { 'set-cookie': shareCookie(k, SHARE_DAYS * 86400) });
+  }
+
+  // everything else needs a session (or, for the initiatives page only, the share link)
   let who = null;
   try { who = await whoIs(token); }
   catch (e) { return path.startsWith('/__api/') ? json({ ok: false, error: 'down' }, 503) : html(loginPage('down', safeBack(path + url.search), ''), 503); }
-  if (!who) {
+  let share = null;
+  if (!who && SHARE_PATHS.test(path)) {
+    const k = cookieOf(req, SHARE_COOKIE);
+    try { if (await shareOk(k)) share = k; } catch (e) { /* treated as signed out */ }
+  }
+  if (!who && !share) {
     if (path.startsWith('/__api/')) return json({ ok: false, error: 'signed_out' }, 401);
     return html(loginPage('', safeBack(path + url.search), ''), 401);
   }
+
+  // Company Initiatives API: members and share-link holders read tasks and change progress;
+  // only members add, edit or delete tasks and see the share link
+  if (path.startsWith('/__api/initiatives/')) {
+    const name = path.slice('/__api/initiatives/'.length);
+    const sess = who ? token : null;
+    try {
+      if (name === 'list' && req.method === 'GET') return json(await rpc('os_init_list', { p_token: sess, p_share: share }));
+      if (req.method !== 'POST' || !sameSite(req, url)) return json({ ok: false, error: 'not_allowed' }, 405);
+      const b = await body(req);
+      if (name === 'progress') {
+        if (!/^[0-9a-f-]{36}$/.test(String(b.id || ''))) return json({ ok: false, error: 'not_found' }, 404);
+        return json(await rpc('os_init_progress', { p_token: sess, p_share: share, p_id: String(b.id || ''), p_progress: String(b.progress || '') }));
+      }
+      if (!who) return json({ ok: false, error: 'signed_out' }, 401);
+      if (name === 'save') return json(await rpc('os_init_save', { p_token: token, p_task: b.task || {} }));
+      if (name === 'delete') {
+        if (!/^[0-9a-f-]{36}$/.test(String(b.id || ''))) return json({ ok: false, error: 'not_found' }, 404);
+        return json(await rpc('os_init_delete', { p_token: token, p_id: String(b.id || '') }));
+      }
+      if (name === 'share-link') {
+        const r = await rpc('os_init_share_link', { p_token: token, p_new: !!b.renew });
+        if (r && r.ok) { r.url = `${url.origin}/share/initiatives?k=${r.token}`; delete r.token; }
+        return json(r);
+      }
+    } catch (e) { return json({ ok: false, error: 'down' }, 503); }
+    return json({ ok: false, error: 'not_found' }, 404);
+  }
+  if (!who) return next();   // share-link holder on the initiatives page
 
   // small API for the account and people pages
   if (path.startsWith('/__api/')) {

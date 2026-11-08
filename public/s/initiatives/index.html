@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="/brand/favicon-64.png">
+<title>Company Initiatives</title>
+<link rel="stylesheet" href="/assets/os.css">
+<style>
+/* Layout: header with counts and actions; filter bar; the task list (the working surface);
+   then one card per call with its recap, its tasks and the full transcript on demand. */
+.wrap{max-width:1180px;margin:0 auto;padding:26px 24px 80px;display:flex;flex-direction:column;gap:30px}
+.brandbar{display:flex;align-items:center;gap:14px;padding:14px 24px;background:var(--rail);color:var(--rail-ink)}
+.brandbar img{height:30px;width:auto;display:block}
+.brandbar span{font-size:13px;color:var(--rail-mute)}
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
+.top .acts{display:flex;gap:8px;flex-wrap:wrap}
+#sub{color:var(--ink-2);margin-top:6px;max-width:70ch}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.tiles>div{padding:14px 18px;border-left:1px solid var(--line);min-width:0}
+.tiles>div:first-child{border-left:0}
+.tiles b{display:block;font:600 28px/1.1 var(--font);font-variant-numeric:tabular-nums;margin-top:4px}
+.tiles span{font-size:13px;color:var(--ink-3);font-weight:600}
+.tiles .bad b{color:var(--bad)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:7px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-left:1px solid var(--line)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.bar select,.bar input[type=search]{background:var(--surface);border:1px solid var(--line-2);border-radius:7px;padding:7px 10px;min-width:0}
+.bar label.chk{display:inline-flex;gap:7px;align-items:center;font-size:14px;color:var(--ink-2);cursor:pointer}
+.sect h2{margin-bottom:12px}
+.sect .hint{color:var(--ink-3);font-size:13px;margin:-6px 0 12px}
+table.tasks{border-collapse:collapse;width:100%}
+table.tasks th,table.tasks td{padding:10px 12px;border-top:1px solid var(--line);text-align:left;vertical-align:middle}
+table.tasks thead th{border-top:0;font-size:12.5px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+table.tasks td.t{min-width:260px}
+table.tasks td.t b{font-weight:600}
+table.tasks td.t small{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
+table.tasks td.due{white-space:nowrap;font-variant-numeric:tabular-nums}
+table.tasks td.due.late{color:var(--bad);font-weight:600}
+table.tasks tr.done td.t b{text-decoration:line-through;color:var(--ink-3);font-weight:500}
+table.tasks td.from a{white-space:nowrap;font-size:13px}
+table.tasks td.ed{text-align:right;white-space:nowrap}
+select.prog{border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600;background:var(--surface);cursor:pointer}
+select.prog[data-v="In progress"]{background:var(--warn-wash);color:var(--warn);border-color:transparent}
+select.prog[data-v="Blocked"]{background:var(--bad-wash);color:var(--bad);border-color:transparent}
+select.prog[data-v="Done"]{background:var(--good-wash);color:var(--good);border-color:transparent}
+select.prog:disabled{opacity:.6}
+tr.editing td{background:var(--sunken)}
+.editgrid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) 150px;gap:10px}
+.editgrid .wide{grid-column:1/-1}
+.editgrid input,.editgrid textarea,.editgrid select{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:7px;padding:8px 10px;font:inherit}
+.editgrid textarea{min-height:56px;resize:vertical}
+.editacts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+.empty{padding:28px;text-align:center;color:var(--ink-3)}
+.calls{display:flex;flex-direction:column;gap:16px}
+article.call{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;scroll-margin-top:16px}
+article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.call .meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:13px;color:var(--ink-3)}
+.call h3{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:0;margin:6px 0 8px}
+.call .sum{color:var(--ink-2);max-width:80ch}
+.call .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:14px}
+.call h4{margin:0 0 6px;font-size:13px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.call ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.call .ctasks{margin-top:14px}
+.call .ctasks li span{color:var(--ink-3);font-size:13px}
+.call .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tx{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.tx input{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--line-2);border-radius:7px;padding:7px 10px;margin-bottom:10px}
+.tx ol{list-style:none;margin:0;padding:0;max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:var(--r-sm)}
+.tx li{display:grid;grid-template-columns:52px 150px minmax(0,1fr);gap:10px;padding:6px 12px;border-top:1px solid var(--line);font-size:14px}
+.tx li:first-child{border-top:0}
+.tx li time{color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:12.5px;padding-top:1px}
+.tx li b{font-weight:600;font-size:13px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tx mark{background:var(--warn-wash);color:inherit}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:14px;z-index:20}
+@media (max-width:760px){
+  .wrap{padding:20px 16px 64px}
+  .brandbar{padding:12px 16px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiles>div:nth-child(3){border-left:0}
+  .tiles>div:nth-child(n+3){border-top:1px solid var(--line)}
+  .call .cols{grid-template-columns:minmax(0,1fr)}
+  .editgrid{grid-template-columns:minmax(0,1fr)}
+  table.tasks thead{display:none}
+  table.tasks,table.tasks tbody,table.tasks tr,table.tasks td{display:block;width:100%}
+  table.tasks tr{border-top:1px solid var(--line);padding:10px 4px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px}
+  table.tasks td{border:0;padding:0}
+  table.tasks td.t{grid-column:1/-1;min-width:0}
+  table.tasks td.ed{grid-column:1/-1;text-align:left}
+  .tx li{grid-template-columns:44px minmax(0,1fr)}
+  .tx li b{grid-column:2}
+  .tx li span{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="brandbar" id="brandbar" hidden><img src="/brand/rc-wordmark.png" alt="Renaissance Commerce" width="89" height="30"><span>Shared view</span></div>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Company Initiatives</h1>
+      <p id="sub">Loading.</p>
+    </div>
+    <div class="acts" id="memberActs" hidden>
+      <button class="btn" type="button" id="share">Copy share link</button>
+      <button class="btn primary" type="button" id="add">Add task</button>
+    </div>
+  </div>
+  <div class="note bad" id="err" role="alert" hidden></div>
+
+  <div class="tiles" id="tiles" aria-label="Task counts"></div>
+
+  <section class="sect" aria-labelledby="hTasks">
+    <h2 id="hTasks">Tasks</h2>
+    <p class="hint" id="hint">Change a task's progress from the dropdown; it saves straight away.</p>
+    <div class="bar" style="margin-bottom:12px">
+      <div class="seg" role="group" aria-label="Call" id="kindSeg">
+        <button type="button" data-k="" aria-pressed="true">All</button>
+        <button type="button" data-k="performance" aria-pressed="false">Performance Call</button>
+        <button type="button" data-k="creative" aria-pressed="false">Creative Call</button>
+      </div>
+      <select id="owner" aria-label="Owner"><option value="">Everyone</option></select>
+      <label class="chk"><input type="checkbox" id="showDone"> Show done</label>
+    </div>
+    <div class="panel scroll-x">
+      <table class="tasks" id="tbl">
+        <thead><tr><th>Task</th><th>Owner</th><th>Due</th><th>Progress</th><th>From</th><th class="ed"><span class="sr" hidden>Edit</span></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sect" aria-labelledby="hCalls">
+    <h2 id="hCalls">Calls</h2>
+    <p class="hint">Recaps of the Performance Call and the Creative Call, newest first, with the full transcript from Fireflies.</p>
+    <div class="calls" id="calls"></div>
+  </section>
+</div>
+<datalist id="people"></datalist>
+<script>
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+  const PROG = ['Not started', 'In progress', 'Blocked', 'Done'];
+  const KIND = {performance: 'Performance Call', creative: 'Creative Call', other: 'Other'};
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const pd = (s) => { if (!s) return null; const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const fd = (s, wd) => { const d = pd(s); return d ? d.toLocaleDateString('en-US', wd ? {weekday: 'short', month: 'short', day: 'numeric'} : {month: 'short', day: 'numeric'}) : ''; };
+  const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem('init-' + k); localStorage.setItem('init-' + k, v); } catch (e) { return null; } };
+  let mode = 'share', tasks = [], calls = [], kind = pref('kind') || '', editing = null;
+  const fail = (m) => { $('err').textContent = m; $('err').hidden = false; };
+  function toast(m){ const t = el('div', m, 'toast'); t.setAttribute('role', 'status'); document.body.append(t); setTimeout(() => t.remove(), 2200); }
+  async function api(path, body){
+    try {
+      const r = await fetch('/__api/initiatives/' + path, body ? {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)} : {credentials: 'same-origin'});
+      return await r.json();
+    } catch (e) { return {ok: false, error: 'down'}; }
+  }
+  const callOf = (id) => calls.find((c) => c.id === id);
+
+  function tiles(){
+    const open = tasks.filter((t) => t.progress !== 'Done');
+    const late = open.filter((t) => t.due && pd(t.due) < today);
+    const blocked = open.filter((t) => t.progress === 'Blocked');
+    const wk = new Date(today); wk.setDate(wk.getDate() - 7);
+    const doneWk = tasks.filter((t) => t.progress === 'Done' && new Date(t.updated_at) >= wk);
+    const box = $('tiles'); box.replaceChildren();
+    [['Open', open.length], ['Overdue', late.length, late.length ? 'bad' : ''], ['Blocked', blocked.length, blocked.length ? 'bad' : ''], ['Done in the last 7 days', doneWk.length]].forEach(([l, n, c]) => {
+      const d = el('div', null, c || ''); d.append(el('span', l), el('b', String(n))); box.append(d);
+    });
+    const last = calls[0];
+    $('sub').textContent = 'Tasks from the Performance Call and the Creative Call. ' + (last ? 'Latest call: ' + last.kindLabel + ', ' + fd(last.date, true) + '.' : 'No calls imported yet.');
+  }
+
+  function owners(){
+    const s = $('owner'), cur = s.value || pref('owner') || '';
+    const names = [...new Set(tasks.map((t) => t.owner).filter(Boolean))].sort();
+    s.replaceChildren(el('option', 'Everyone')); s.firstChild.value = '';
+    names.forEach((n) => { const o = el('option', n); o.value = n; s.append(o); });
+    s.value = names.includes(cur) ? cur : '';
+    const dl = $('people'); dl.replaceChildren(); names.forEach((n) => { const o = document.createElement('option'); o.value = n; dl.append(o); });
+  }
+
+  function progSelect(t){
+    const s = el('select', null, 'prog'); s.setAttribute('aria-label', 'Progress of ' + t.title);
+    PROG.forEach((p) => { const o = el('option', p); o.value = p; s.append(o); });
+    s.value = t.progress; s.dataset.v = t.progress;
+    s.addEventListener('change', async () => {
+      const prev = t.progress, v = s.value; s.dataset.v = v; s.disabled = true;
+      const r = await api('progress', {id: t.id, progress: v});
+      s.disabled = false;
+      if (r && r.ok) { t.progress = v; t.updated_at = new Date().toISOString(); toast('Saved: ' + v); render(); }
+      else { s.value = prev; s.dataset.v = prev; toast(r && r.error === 'signed_out' ? 'Your link or sign-in has expired. Reload the page.' : 'Not saved. Try again.'); }
+    });
+    return s;
+  }
+
+  function editRow(t){
+    const tr = el('tr', null, 'editing'), td = el('td'); td.colSpan = 6;
+    const g = el('div', null, 'editgrid');
+    const f = (label, input, cls) => { const w = el('div', null, 'field' + (cls ? ' ' + cls : '')); const l = el('label', label); const id = 'e' + Math.random().toString(36).slice(2); l.htmlFor = id; input.id = id; w.append(l, input); g.append(w); return input; };
+    const ti = f('Task', Object.assign(document.createElement('input'), {value: t.title || '', maxLength: 300}));
+    const ow = f('Owner', Object.assign(document.createElement('input'), {value: t.owner || '', maxLength: 120})); ow.setAttribute('list', 'people');
+    const du = f('Due', Object.assign(document.createElement('input'), {type: 'date', value: t.due || ''}));
+    const kd = document.createElement('select'); ['performance', 'creative', 'other'].forEach((k) => { const o = el('option', KIND[k]); o.value = k; kd.append(o); }); kd.value = t.kind || (kind || 'other');
+    if (!t.id) f('Call', kd);
+    const nt = f('Note', Object.assign(document.createElement('textarea'), {value: t.note || '', maxLength: 1000}), 'wide');
+    const acts = el('div', null, 'editacts');
+    const save = el('button', t.id ? 'Save' : 'Add task', 'btn primary'), cancel = el('button', 'Cancel', 'btn quiet');
+    save.type = cancel.type = 'button';
+    if (t.id) {
+      const del = el('button', 'Delete', 'btn danger'); del.type = 'button';
+      del.addEventListener('click', async () => {
+        if (del.dataset.sure !== '1') { del.dataset.sure = '1'; del.textContent = 'Delete this task'; return; }
+        const r = await api('delete', {id: t.id}); if (r && r.ok) { tasks = tasks.filter((x) => x.id !== t.id); editing = null; toast('Deleted'); render(); } else toast('Not deleted. Try again.');
+      });
+      acts.append(del);
+    }
+    acts.append(cancel, save);
+    cancel.addEventListener('click', () => { editing = null; render(); });
+    save.addEventListener('click', async () => {
+      if (!ti.value.trim()) { ti.focus(); return; }
+      save.disabled = true;
+      const task = {id: t.id || '', title: ti.value, owner: ow.value, due: du.value, note: nt.value, progress: t.progress || 'Not started', kind: t.id ? t.kind : kd.value, call_id: t.call_id || ''};
+      const r = await api('save', {task});
+      save.disabled = false;
+      if (r && r.ok) { editing = null; toast(t.id ? 'Saved' : 'Task added'); await load(); } else toast(r && r.error === 'bad_date' ? 'That due date is not valid.' : 'Not saved. Try again.');
+    });
+    td.append(g, acts); tr.append(td);
+    setTimeout(() => ti.focus(), 0);
+    return tr;
+  }
+
+  function render(){
+    tiles(); owners();
+    document.querySelectorAll('#kindSeg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.k === kind)));
+    const who = $('owner').value, done = $('showDone').checked;
+    const rows = tasks.filter((t) => (!kind || t.kind === kind) && (!who || t.owner === who) && (done || t.progress !== 'Done' || editing === t.id));
+    rows.sort((a, b) => (a.progress === 'Done') - (b.progress === 'Done') || (a.due || '9999') .localeCompare(b.due || '9999'));
+    const tb = $('tbl').tBodies[0]; tb.replaceChildren();
+    if (editing === 'new') tb.append(editRow({kind: kind || 'other'}));
+    rows.forEach((t) => {
+      if (editing === t.id) { tb.append(editRow(t)); return; }
+      const tr = el('tr', null, t.progress === 'Done' ? 'done' : '');
+      const a = el('td', null, 't'); a.append(el('b', t.title)); if (t.note) a.append(el('small', t.note));
+      const late = t.progress !== 'Done' && t.due && pd(t.due) < today;
+      const due = el('td', t.due ? fd(t.due) + (late ? ' · overdue' : '') : 'No date', 'due' + (late ? ' late' : '')); if (!t.due) due.classList.add('muted');
+      const p = el('td'); p.append(progSelect(t));
+      const fr = el('td', null, 'from'); const c = callOf(t.call_id);
+      if (c) { const l = el('a', c.kindLabel.replace(' Call', '') + ' · ' + fd(c.date)); l.href = '#call-' + c.id; fr.append(l); } else fr.append(el('span', KIND[t.kind] || '', 'muted small'));
+      const ed = el('td', null, 'ed');
+      if (mode === 'member') { const b = el('button', 'Edit', 'btn quiet'); b.type = 'button'; b.setAttribute('aria-label', 'Edit ' + t.title); b.addEventListener('click', () => { editing = t.id; render(); }); ed.append(b); }
+      tr.append(a, el('td', t.owner || 'No owner', t.owner ? '' : 'muted'), due, p, fr, ed); tb.append(tr);
+    });
+    if (!rows.length && editing !== 'new') { const tr = el('tr'), td = el('td', tasks.length ? 'No tasks match these filters.' : 'No tasks yet. They are added after each call.', 'empty'); td.colSpan = 6; tr.append(td); tb.append(tr); }
+    renderCalls();
+  }
+
+  function renderCalls(){
+    const box = $('calls'); const keep = new Set([...box.querySelectorAll('article.call.open')].map((a) => a.id));
+    box.replaceChildren();
+    const list = calls.filter((c) => !kind || c.kind === kind);
+    if (!list.length) { box.append(el('div', 'No calls yet.', 'panel empty')); return; }
+    list.forEach((c) => {
+      const art = el('article', null, 'call'); art.id = 'call-' + c.id;
+      const meta = el('div', null, 'meta'); meta.append(el('span', c.kindLabel, 'chip plain'), el('span', fd(c.date, true)), el('span', c.minutes + ' min'), el('span', c.speakers.length + ' speakers'));
+      art.append(meta, el('h3', c.title), el('p', c.summary, 'sum'));
+      const cols = el('div', null, 'cols');
+      [['Discussed', c.points], ['Decided', c.decisions]].forEach(([h, items]) => { if (!items || !items.length) return; const d = el('div'); d.append(el('h4', h)); const ul = el('ul'); items.forEach((x) => ul.append(el('li', x))); d.append(ul); cols.append(d); });
+      if (cols.children.length) art.append(cols);
+      const mine = tasks.filter((t) => t.call_id === c.id);
+      if (mine.length) {
+        const d = el('div', null, 'ctasks'); d.append(el('h4', 'Tasks from this call (' + mine.filter((t) => t.progress === 'Done').length + ' of ' + mine.length + ' done)'));
+        const ul = el('ul'); mine.forEach((t) => { const li = el('li', t.title + ' '); li.append(el('span', '— ' + (t.owner || 'no owner') + ' · ' + t.progress)); ul.append(li); }); d.append(ul); art.append(d);
+      }
+      const acts = el('div', null, 'acts');
+      const tb = el('button', 'Read the transcript', 'btn'); tb.type = 'button'; tb.setAttribute('aria-expanded', 'false');
+      const ff = el('a', 'Open in Fireflies', 'btn quiet'); ff.href = c.fireflies; ff.target = '_blank'; ff.rel = 'noopener';
+      acts.append(tb, ff); art.append(acts);
+      tb.addEventListener('click', () => toggleTx(art, c, tb));
+      box.append(art);
+      if (keep.has(art.id)) toggleTx(art, c, tb);
+    });
+  }
+
+  const cache = {};
+  async function toggleTx(art, c, btn){
+    const open = art.querySelector('.tx');
+    if (open) { open.remove(); art.classList.remove('open'); btn.textContent = 'Read the transcript'; btn.setAttribute('aria-expanded', 'false'); return; }
+    art.classList.add('open'); btn.textContent = 'Hide the transcript'; btn.setAttribute('aria-expanded', 'true');
+    const box = el('div', null, 'tx'); box.append(el('p', 'Loading the transcript.', 'muted small')); art.append(box);
+    try { cache[c.id] = cache[c.id] || await (await fetch('data/calls/' + c.id + '.json', {credentials: 'same-origin'})).json(); }
+    catch (e) { box.replaceChildren(el('p', 'The transcript could not be loaded.', 'muted small')); return; }
+    const q = Object.assign(document.createElement('input'), {type: 'search', placeholder: 'Find in the transcript'}); q.setAttribute('aria-label', 'Find in the transcript');
+    const ol = el('ol'), count = el('p', '', 'muted small');
+    const draw = () => {
+      const s = q.value.trim().toLowerCase(); ol.replaceChildren(); let n = 0;
+      cache[c.id].transcript.forEach(([t, who, x]) => {
+        if (s && !x.toLowerCase().includes(s) && !who.toLowerCase().includes(s)) return; n++;
+        const li = el('li'); const tm = el('time', Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'));
+        const span = el('span');
+        if (s) { const i = x.toLowerCase().indexOf(s); if (i >= 0) { span.append(x.slice(0, i)); span.append(el('mark', x.slice(i, i + s.length))); span.append(x.slice(i + s.length)); } else span.textContent = x; }
+        else span.textContent = x;
+        li.append(tm, el('b', who), span); ol.append(li);
+      });
+      count.textContent = s ? n + ' lines match' : cache[c.id].transcript.length + ' lines';
+    };
+    q.addEventListener('input', draw); draw();
+    box.replaceChildren(q, count, ol);
+  }
+
+  function goHash(){
+    const m = location.hash.match(/^#call-([0-9A-Z]+)$/); if (!m) return;
+    const c = callOf(m[1]); if (!c) return;
+    if (kind && c.kind !== kind) { kind = ''; render(); }
+    const art = $('call-' + c.id); if (!art) return;
+    document.querySelectorAll('article.call.hit').forEach((a) => a.classList.remove('hit'));
+    art.classList.add('hit'); art.scrollIntoView({block: 'start'});
+  }
+
+  async function load(){
+    const [r, idx] = await Promise.all([api('list'), fetch('data/calls.json', {credentials: 'same-origin'}).then((x) => x.ok ? x.json() : []).catch(() => [])]);
+    if (!r || !r.ok) { fail(r && r.error === 'signed_out' ? 'This link has expired. Ask a founder for the current Company Initiatives link.' : 'Tasks could not be loaded. Try again in a minute.'); return; }
+    $('err').hidden = true;
+    mode = r.mode; tasks = r.tasks; calls = idx;
+    $('memberActs').hidden = mode !== 'member';
+    $('brandbar').hidden = !(mode === 'share' && window.top === window);
+    $('hint').textContent = mode === 'member' ? 'Change a task’s progress from the dropdown; it saves straight away. Edit a task to change its owner, due date or note.' : 'Change a task’s progress from the dropdown; it saves straight away.';
+    render();
+  }
+
+  $('kindSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; kind = b.dataset.k; pref('kind', kind); render(); });
+  $('owner').addEventListener('change', () => { pref('owner', $('owner').value); render(); });
+  $('showDone').addEventListener('change', render);
+  $('add').addEventListener('click', () => { editing = 'new'; render(); });
+  $('share').addEventListener('click', async () => {
+    const r = await api('share-link', {});
+    if (!r || !r.ok) { toast('Could not get the link.'); return; }
+    try { await navigator.clipboard.writeText(r.url); toast('Share link copied. Anyone with it can view and update progress.'); }
+    catch (e) { window.prompt('Share link', r.url); }
+  });
+  window.addEventListener('hashchange', goHash);
+  load().then(goHash);
+})();
+</script>
+</body>
+</html>

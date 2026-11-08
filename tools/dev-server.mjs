@@ -20,6 +20,23 @@ const RPC = {
   os_reset_person: (a) => { const x = people.find((q) => q.id === a.p_id); if (!x) return { ok: false, error: 'not_found' }; x.pass = 'wxyz-2345-6789-abcd'; x.must_change = true; for (const [t, id] of sessions) if (id === x.id) sessions.delete(t); return { ok: true, email: x.email, temp_password: x.pass }; },
   os_remove_person: (a) => { const i = people.findIndex((q) => q.id === a.p_id); if (i < 0) return { ok: false, error: 'not_found' }; const [x] = people.splice(i, 1); for (const [t, id] of sessions) if (id === x.id) sessions.delete(t); return { ok: true, email: x.email }; },
 };
+// Company Initiatives stand-in: share key is 64 'a's (open /share/initiatives?k=aaaa...); tasks seeded from the imported calls
+const SHARE = 'a'.repeat(64);
+const tasks = []; try { for (const c of JSON.parse(fs.readFileSync(path.join(ROOT, 's/initiatives/data/calls.json'), 'utf8')))
+  for (const t of c.tasksImported) tasks.push({ id: crypto.randomUUID(), call_id: c.id, kind: c.kind, title: t.title, owner: t.owner, due: t.due, progress: 'Not started', note: '', created_at: c.at, updated_at: c.at, updated_by: 'Call import' }); } catch (e) { /* no calls yet */ }
+const iwho = (a) => { const p = a.p_token && who(a.p_token); if (p && !p.must_change) return p.name; return a.p_share === SHARE ? 'share' : null; };
+Object.assign(RPC, {
+  os_share_ok: (a) => ({ ok: a.p_share === SHARE }),
+  os_init_list: (a) => { const w = iwho(a); return w ? { ok: true, mode: w === 'share' ? 'share' : 'member', tasks } : { ok: false, error: 'signed_out' }; },
+  os_init_progress: (a) => { const w = iwho(a); if (!w) return { ok: false, error: 'signed_out' }; const t = tasks.find((x) => x.id === a.p_id); if (!t) return { ok: false, error: 'not_found' };
+    t.progress = a.p_progress; t.updated_at = new Date().toISOString(); t.updated_by = w === 'share' ? 'Share link' : w; return { ok: true }; },
+  os_init_save: (a) => { const w = iwho(a); if (!w || w === 'share') return { ok: false, error: 'signed_out' }; const x = a.p_task;
+    if (x.id) { const t = tasks.find((q) => q.id === x.id); Object.assign(t, { title: x.title, owner: x.owner, due: x.due || null, note: x.note, updated_by: w }); return { ok: true, id: t.id }; }
+    const t = { id: crypto.randomUUID(), call_id: x.call_id || null, kind: x.kind || 'other', title: x.title, owner: x.owner, due: x.due || null, progress: 'Not started', note: x.note || '', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), updated_by: w };
+    tasks.push(t); return { ok: true, id: t.id }; },
+  os_init_delete: (a) => { const w = iwho(a); if (!w || w === 'share') return { ok: false, error: 'signed_out' }; const i = tasks.findIndex((q) => q.id === a.p_id); if (i >= 0) tasks.splice(i, 1); return { ok: i >= 0 }; },
+  os_init_share_link: (a) => { const w = iwho(a); return w && w !== 'share' ? { ok: true, token: SHARE } : { ok: false, error: 'signed_out' }; },
+});
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url, init) => { const m = String(url).match(/supabase\.co\/rest\/v1\/rpc\/(\w+)$/); if (!m) return realFetch(url, init);
   if (!init.headers.apikey) return new Response('{}', { status: 401 }); return new Response(JSON.stringify(RPC[m[1]](JSON.parse(init.body))), { status: 200, headers: { 'content-type': 'application/json' } }); };
