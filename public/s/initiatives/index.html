@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" href="/brand/favicon-64.png">
-<title>Company Initiatives</title>
+<title>Initiatives</title>
 <link rel="stylesheet" href="/assets/os.css">
 <style>
 /* Layout: header with counts and actions; filter bar; the task list (the working surface);
@@ -101,7 +101,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 <div class="wrap">
   <div class="top">
     <div>
-      <h1>Company Initiatives</h1>
+      <h1 id="h1">Initiatives</h1>
       <p id="sub">Loading.</p>
     </div>
     <div class="acts" id="memberActs" hidden>
@@ -117,11 +117,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     <h2 id="hTasks">Tasks</h2>
     <p class="hint" id="hint">Change a task's progress from the dropdown; it saves straight away.</p>
     <div class="bar" style="margin-bottom:12px">
-      <div class="seg" role="group" aria-label="Call" id="kindSeg">
-        <button type="button" data-k="" aria-pressed="true">All</button>
-        <button type="button" data-k="performance" aria-pressed="false">Performance Call</button>
-        <button type="button" data-k="creative" aria-pressed="false">Creative Call</button>
-      </div>
+      <div class="seg" role="group" aria-label="Call" id="kindSeg"></div>
       <select id="owner" aria-label="Owner"><option value="">Everyone</option></select>
       <label class="chk"><input type="checkbox" id="showDone"> Show done</label>
     </div>
@@ -135,7 +131,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 
   <section class="sect" aria-labelledby="hCalls">
     <h2 id="hCalls">Calls</h2>
-    <p class="hint">Recaps of the Performance Call and the Creative Call, newest first, with the full transcript from Fireflies.</p>
+    <p class="hint" id="callsHint"></p>
     <div class="calls" id="calls"></div>
   </section>
 </div>
@@ -146,17 +142,29 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
   const $ = (id) => document.getElementById(id);
   const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
   const PROG = ['Not started', 'In progress', 'Blocked', 'Done'];
-  const KIND = {performance: 'Performance Call', creative: 'Creative Call', other: 'Other'};
+  const KIND = {performance: 'Performance Call', creative: 'Creative Call', morning: 'Morning Brief', other: 'Other'};
+  // one page, two boards: /s/initiatives/ (Company) and /s/executive/ (Executive); the same file is served at both
+  const SLUG = location.pathname.split('/')[2] === 'executive' ? 'executive' : 'initiatives';
+  const CONF = {
+    initiatives: {title: 'Company Initiatives', from: 'Tasks from the Performance Call and the Creative Call.', kinds: ['performance', 'creative'],
+      calls: 'Recaps of the Performance Call and the Creative Call, newest first, with the full transcript from Fireflies.'},
+    executive: {title: 'Executive Initiatives', from: 'Tasks from the founders\u2019 Morning Brief.', kinds: ['morning'],
+      calls: 'Recaps of the Morning Brief, newest first, with the full transcript from Fireflies.'},
+  }[SLUG];
+  document.title = CONF.title; document.getElementById('h1').textContent = CONF.title;
+  document.getElementById('callsHint').textContent = CONF.calls;
+  (function(){ const seg = document.getElementById('kindSeg'); if (CONF.kinds.length < 2) { seg.hidden = true; return; }
+    [['', 'All']].concat(CONF.kinds.map((k) => [k, KIND[k]])).forEach(([k, l]) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.k = k; b.textContent = l; b.setAttribute('aria-pressed', String(k === '')); seg.append(b); }); })();
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const pd = (s) => { if (!s) return null; const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
   const fd = (s, wd) => { const d = pd(s); return d ? d.toLocaleDateString('en-US', wd ? {weekday: 'short', month: 'short', day: 'numeric'} : {month: 'short', day: 'numeric'}) : ''; };
-  const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem('init-' + k); localStorage.setItem('init-' + k, v); } catch (e) { return null; } };
-  let mode = 'share', tasks = [], calls = [], kind = pref('kind') || '', editing = null;
+  const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem(SLUG + '-' + k); localStorage.setItem(SLUG + '-' + k, v); } catch (e) { return null; } };
+  let mode = 'share', tasks = [], calls = [], kind = CONF.kinds.length > 1 ? (pref('kind') || '') : '', editing = null;
   const fail = (m) => { $('err').textContent = m; $('err').hidden = false; };
   function toast(m){ const t = el('div', m, 'toast'); t.setAttribute('role', 'status'); document.body.append(t); setTimeout(() => t.remove(), 2200); }
   async function api(path, body){
     try {
-      const r = await fetch('/__api/initiatives/' + path, body ? {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)} : {credentials: 'same-origin'});
+      const r = await fetch('/__api/' + SLUG + '/' + path, body ? {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)} : {credentials: 'same-origin'});
       return await r.json();
     } catch (e) { return {ok: false, error: 'down'}; }
   }
@@ -173,7 +181,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
       const d = el('div', null, c || ''); d.append(el('span', l), el('b', String(n))); box.append(d);
     });
     const last = calls[0];
-    $('sub').textContent = 'Tasks from the Performance Call and the Creative Call. ' + (last ? 'Latest call: ' + last.kindLabel + ', ' + fd(last.date, true) + '.' : 'No calls imported yet.');
+    $('sub').textContent = CONF.from + ' ' + (last ? 'Latest call: ' + last.kindLabel + ', ' + fd(last.date, true) + '.' : 'No calls imported yet.');
   }
 
   function owners(){
@@ -206,8 +214,8 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     const ti = f('Task', Object.assign(document.createElement('input'), {value: t.title || '', maxLength: 300}));
     const ow = f('Owner', Object.assign(document.createElement('input'), {value: t.owner || '', maxLength: 120})); ow.setAttribute('list', 'people');
     const du = f('Due', Object.assign(document.createElement('input'), {type: 'date', value: t.due || ''}));
-    const kd = document.createElement('select'); ['performance', 'creative', 'other'].forEach((k) => { const o = el('option', KIND[k]); o.value = k; kd.append(o); }); kd.value = t.kind || (kind || 'other');
-    if (!t.id) f('Call', kd);
+    const kd = document.createElement('select'); CONF.kinds.concat(['other']).forEach((k) => { const o = el('option', KIND[k]); o.value = k; kd.append(o); }); kd.value = t.kind || kind || CONF.kinds[0];
+    if (!t.id && CONF.kinds.length > 1) f('Call', kd);
     const nt = f('Note', Object.assign(document.createElement('textarea'), {value: t.note || '', maxLength: 1000}), 'wide');
     const acts = el('div', null, 'editacts');
     const save = el('button', t.id ? 'Save' : 'Add task', 'btn primary'), cancel = el('button', 'Cancel', 'btn quiet');
@@ -242,7 +250,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     const rows = tasks.filter((t) => (!kind || t.kind === kind) && (!who || t.owner === who) && (done || t.progress !== 'Done' || editing === t.id));
     rows.sort((a, b) => (a.progress === 'Done') - (b.progress === 'Done') || (a.due || '9999') .localeCompare(b.due || '9999'));
     const tb = $('tbl').tBodies[0]; tb.replaceChildren();
-    if (editing === 'new') tb.append(editRow({kind: kind || 'other'}));
+    if (editing === 'new') tb.append(editRow({kind: kind || CONF.kinds[0]}));
     rows.forEach((t) => {
       if (editing === t.id) { tb.append(editRow(t)); return; }
       const tr = el('tr', null, t.progress === 'Done' ? 'done' : '');
@@ -324,7 +332,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
 
   async function load(){
     const [r, idx] = await Promise.all([api('list'), fetch('data/calls.json', {credentials: 'same-origin'}).then((x) => x.ok ? x.json() : []).catch(() => [])]);
-    if (!r || !r.ok) { fail(r && r.error === 'signed_out' ? 'This link has expired. Ask a founder for the current Company Initiatives link.' : 'Tasks could not be loaded. Try again in a minute.'); return; }
+    if (!r || !r.ok) { fail(r && r.error === 'signed_out' ? 'This link has expired. Ask a founder for the current ' + CONF.title + ' link.' : r && r.error === 'not_admin' ? 'This page is for the founders only.' : 'Tasks could not be loaded. Try again in a minute.'); return; }
     $('err').hidden = true;
     mode = r.mode; tasks = r.tasks; calls = idx;
     $('memberActs').hidden = mode !== 'member';

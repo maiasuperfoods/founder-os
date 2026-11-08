@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Add one recurring call (Performance Call or Creative Call) to the Company Initiatives page.
+"""Add one recurring call to an initiatives board:
+  Company Initiatives  (--board company, the default): Performance Call, Creative Call -> #growth-performance
+  Executive Initiatives (--board executive): the founders' Morning Brief -> #maia-ambitions
 
 usage:
-  python3 -I tools/initiatives_add.py --id <Fireflies meeting id> --kind performance|creative \
+  python3 -I tools/initiatives_add.py --id <Fireflies meeting id> --kind performance|creative|morning [--board company|executive] \
       --recap recap.json --tasks tasks.json [--share-url URL] [--transcript FILE] [--no-slack]
 
   recap.json  {"summary": "two or three sentences", "points": ["what was discussed", ...], "decisions": ["...", ...]}
@@ -12,8 +14,8 @@ usage:
                 helper scripts do, so the transcript never has to be retyped.
 
 Writes (and nothing else):
-  public/s/initiatives/data/calls/<id>.json   the call: recap, tasks as imported, and the full transcript
-  public/s/initiatives/data/calls.json        the list of calls the page shows
+  public/s/<initiatives|executive>/data/calls/<id>.json   the call: recap, tasks as imported, and the full transcript
+  public/s/<initiatives|executive>/data/calls.json        the list of calls the page shows
   sources/initiatives/outbox/<id>.json        the Slack recap; the GitHub workflow posts it when it is pushed
   sources/state.json                          freshness of the section
 Attendee email addresses in the Fireflies result are never copied.
@@ -22,13 +24,15 @@ import argparse, datetime, glob, json, os, re, sys
 from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, 'public', 's', 'initiatives', 'data')
 OUTBOX = os.path.join(ROOT, 'sources', 'initiatives', 'outbox')
 STATE = os.path.join(ROOT, 'sources', 'state.json')
-CHANNEL = 'C09KUNCFP16'   # #growth-performance (the creative dashboard bot is already a member)
+BOARDS = {  # board -> (page folder, Slack channel, state key, kinds)
+    'company': ('initiatives', 'C09KUNCFP16', 'initiatives', ('performance', 'creative')),    # #growth-performance
+    'executive': ('executive', 'C092A5TJY6Q', 'executive', ('morning',)),                     # #maia-ambitions (private: invite the bot)
+}
 NAMES = {'Admin Account': 'Brandon', 'Damian Media Buyer': 'Damian', 'Youssef B': 'Youssef', 'Youssef Bouzaien': 'Youssef',
          'Chitrakar Sujal': 'Sujal Chitrakar', 'Sujal': 'Sujal Chitrakar'}   # Fireflies speaker labels shown under the person's name
-KINDS = {'performance': 'Performance Call', 'creative': 'Creative Call'}
+KINDS = {'performance': 'Performance Call', 'creative': 'Creative Call', 'morning': 'Morning Brief'}
 ID = re.compile(r'^[0-9A-Z]{20,40}$')
 LINE = re.compile(r'^\[(\d+(?::\d+){1,2}) - [\d:]+\] ([^:]{1,80}): (.*)$')
 
@@ -112,7 +116,12 @@ def main():
     ap.add_argument('--id', required=True); ap.add_argument('--kind', required=True, choices=sorted(KINDS))
     ap.add_argument('--recap', required=True); ap.add_argument('--tasks', required=True)
     ap.add_argument('--share-url'); ap.add_argument('--transcript'); ap.add_argument('--no-slack', action='store_true')
+    ap.add_argument('--board', default='company', choices=sorted(BOARDS))
     a = ap.parse_args()
+    folder, channel, state_key, kinds = BOARDS[a.board]
+    if a.kind not in kinds:
+        sys.exit('kind %s does not belong on the %s board' % (a.kind, a.board))
+    DATA = os.path.join(ROOT, 'public', 's', folder, 'data')
     if not ID.match(a.id):
         sys.exit('not a Fireflies meeting id: ' + a.id)
     text = open(a.transcript, encoding='utf8').read() if a.transcript else find_transcript(a.id)
@@ -152,7 +161,7 @@ def main():
     json.dump(idx, open(idx_path, 'w', encoding='utf8'), ensure_ascii=False, indent=1)
 
     st = json.load(open(STATE)) if os.path.exists(STATE) else {}
-    st['initiatives'] = {'asOf': idx[0].get('date'), 'calls': len(idx)}
+    st[state_key] = {'asOf': idx[0].get('date'), 'calls': len(idx)}
     json.dump(st, open(STATE, 'w'), indent=1)
 
     if not a.no_slack:
@@ -168,7 +177,7 @@ def main():
         if a.share_url:
             lines += ['', '[Open the tasks and the full transcript](%s#call-%s)' % (a.share_url, a.id)]
         os.makedirs(OUTBOX, exist_ok=True)
-        json.dump({'channel': CHANNEL, 'text': '\n'.join(lines)}, open(os.path.join(OUTBOX, a.id + '.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=1)
+        json.dump({'channel': channel, 'text': '\n'.join(lines)}, open(os.path.join(OUTBOX, a.id + '.json'), 'w', encoding='utf8'), ensure_ascii=False, indent=1)
     print('imported %s: %s %s, %d min, %d transcript lines, %d speakers, %d tasks%s' % (
         a.id, KINDS[a.kind], call['date'], call['minutes'], len(sent), len(speakers), len(tasks), '' if a.no_slack else ', Slack recap queued'))
 

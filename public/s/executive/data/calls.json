@@ -1,0 +1,257 @@
+[
+ {
+  "id": "01M6KQ4G205W8TDT5J6ZWFTR5B",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-06T16:30:00.000Z",
+  "date": "2026-11-06",
+  "minutes": 19,
+  "speakers": [
+   "Youssef",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6KQ4G205W8TDT5J6ZWFTR5B",
+  "summary": "The client onboarding backend and form are done; password access and the Supabase link-up are still open, and onboarding questions should trigger automatic referrals as the client count grows. For Black Friday the MAIA offer becomes buy two, get three gifts (Nattokinase, K2D3 and tart cherry, adding magnesium on three), using the 75,000 K2D3 units in stock, then reverts afterwards.",
+  "points": [
+   "Onboarding answers (US LLC, payment processing, margins) should route clients to the right referral automatically",
+   "Video editors are found through Instagram outreach; a style document and template message will speed testing",
+   "Black Friday needs a new hero image and banner so the offer looks new on the product page",
+   "AVIA: two strong creative strategists (Aaron Tan, Thomas) under test; Luis and Denis Kim considered for Haskap",
+   "Cash pressure is returning, so hiring decisions need to move quickly",
+   "Long-form content and Reels should run on a set weekly slot and calendar, quality first"
+  ],
+  "decisions": [
+   "Black Friday: buy two, get three gifts; return to the original offer right after",
+   "Add K2D3 to the gift mix",
+   "Keep content quality-first, not volume"
+  ],
+  "tasksImported": [
+   {
+    "title": "Fix password access on the client backend and connect it to Supabase",
+    "owner": "Brandon",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Set up automatic referrals from onboarding answers",
+    "owner": "Brandon",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Configure the Black Friday gifts and banner",
+    "owner": "Brandon",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Share the creative strategist test results with Youssef",
+    "owner": "Brandon",
+    "due": "2026-11-07"
+   },
+   {
+    "title": "Add qualifying questions to the onboarding form",
+    "owner": "Youssef",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Make the video editor inspiration document and send the template outreach",
+    "owner": "Youssef",
+    "due": "2026-11-13"
+   },
+   {
+    "title": "Send the Black Friday SKUs",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Share the live Haskap link",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   }
+  ]
+ },
+ {
+  "id": "01M6KNQXJWTFEK0MMRXZYKCPKZ",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-05T16:30:00.000Z",
+  "date": "2026-11-05",
+  "minutes": 82,
+  "speakers": [
+   "Brandon",
+   "Youssef"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6KNQXJWTFEK0MMRXZYKCPKZ",
+  "summary": "Haskap's general product page could launch this weekend with angle presales early next week; kidney health and joint pain are still being weighed. Retention work centres on better cancellation saves while keeping payment and post-purchase features. Growth planning targets a December and January acceleration toward a long-term $10 million a month.",
+  "points": [
+   "AVIA priorities: the masterclass, a new offer and Haskap pages",
+   "Packaging, seasonal gifts, separate SKUs, FAQs and QR-linked welcome guides for customer education",
+   "Strategy: recognisable brands, substantiated claims, distinct formats and multi-channel distribution",
+   "The coaching platform still needs integrations, security, reliable data and course hosting",
+   "Hiring: creative leadership, operations delegation, backup media buying and creative strategists",
+   "MAIA's Amazon listing has conflicting claims that need an urgent review"
+  ],
+  "decisions": [
+   "Launch the Haskap general page first, presales after",
+   "Add a Black Friday banner on the store",
+   "Hire a backup media buyer and a landing page specialist"
+  ],
+  "tasksImported": [
+   {
+    "title": "Finish the AVIA masterclass",
+    "owner": "Youssef",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Revise the Haskap product page copy and write its FAQ",
+    "owner": "Youssef",
+    "due": "2026-11-08"
+   },
+   {
+    "title": "Set up the Haskap business manager and pixel and prepare the launch",
+    "owner": "Youssef",
+    "due": "2026-11-08"
+   },
+   {
+    "title": "Add the Black Friday top banner and send Elissa the banner request",
+    "owner": "Youssef",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Give Marco dashboard access",
+    "owner": "Youssef",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Create the Renaissance Commerce course and communication spaces and link onboarding",
+    "owner": "Youssef",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Review the MAIA Amazon listing claims",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Plan the Black Friday email campaigns",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Coordinate packaging and Haskap welcome packaging with suppliers",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Fix the weekly cash flow forecast update",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Hire a landing page specialist",
+    "owner": "Brandon",
+    "due": "2026-11-19"
+   },
+   {
+    "title": "Hire a backup media buyer",
+    "owner": "Brandon",
+    "due": "2026-11-19"
+   },
+   {
+    "title": "Talk to Sarvin about packaging and ERP",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Add the FAQ to the home page and emails",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   }
+  ]
+ },
+ {
+  "id": "01M5WX6FCFG56G6J8A22NZS104",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-10-30T15:30:00.000Z",
+  "date": "2026-10-30",
+  "minutes": 59,
+  "speakers": [
+   "Youssef",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M5WX6FCFG56G6J8A22NZS104",
+  "summary": "Legal work was time-sensitive, with the law-firm agreement, payment and materials due before the Monday response, and the landing page still carried Cosmos references to remove. Performance improved over two to three days while the product-page versus presales test was inconclusive, so the split moves from 20% to 50/50. Cash pressure, weak agency communication and unclear accounting follow-up remained concerns.",
+  "points": [
+   "Logan is onboarding as a creative strategist; AVIA and Haskap still need dedicated strategists, plus a copywriter, designer, creative lead and senior editor",
+   "AVIA's masterclass form and links block the email programme",
+   "Haskap's welcome, cancellation and abandoned-cart flows need its product page first",
+   "Internal tools will be centralised; student-facing tools wait",
+   "The school needs a structured retention model; Private Circle materials are progressing",
+   "Unauthorised use of company assets was found, and access needs a review"
+  ],
+  "decisions": [
+   "Move the product page versus presales split to 50/50",
+   "Remove Cosmos references before any external use",
+   "End the contracts of the editors who misused assets"
+  ],
+  "tasksImported": [
+   {
+    "title": "Sign the law-firm agreement, make the payment and send the response",
+    "owner": "Brandon",
+    "due": "2026-11-02"
+   },
+   {
+    "title": "Onboard Logan and review creative strategist coverage",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Find a replacement video editor",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Make sure Haskap's subscription retention flows are ready",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Review asset access and remove anyone misusing it",
+    "owner": "Brandon",
+    "due": "2026-11-03"
+   },
+   {
+    "title": "Run the product page versus presales test at 50/50",
+    "owner": "Youssef",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Build the AVIA masterclass email sequence",
+    "owner": "Youssef",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Follow up with Elisa and Rana",
+    "owner": "Youssef",
+    "due": "2026-11-03"
+   },
+   {
+    "title": "Send the Private Circle materials",
+    "owner": "Youssef",
+    "due": "2026-11-03"
+   },
+   {
+    "title": "Talk to the email marketing provider",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Centralise performance resources and review developer applicants",
+    "owner": "Brandon",
+    "due": "2026-11-06"
+   }
+  ]
+ }
+]

@@ -138,7 +138,58 @@
    "Build backup creative before scaling winners",
    "Test AVIA video ads on the PDP"
   ],
-  "tasksImported": []
+  "tasksImported": [
+   {
+    "title": "Confirm who attends the Monday business review",
+    "owner": "Youssef",
+    "due": "2026-11-09"
+   },
+   {
+    "title": "Start the unrestriction process for the backup ad profile",
+    "owner": "Youssef",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Hire an owner for the Blood Sugar landing page",
+    "owner": "Brandon",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Remind Elissa about the Blood Sugar landing page",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Find one more video editor for the pod",
+    "owner": "Brandon",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Launch the Blood Sugar campaign",
+    "owner": "Damian",
+    "due": "2026-11-06"
+   },
+   {
+    "title": "Test AVIA video ads sent straight to the product page",
+    "owner": "Damian",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Build backup creative for fatiguing winners before scaling",
+    "owner": "Damian",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Revise the Neuro ad iterations",
+    "owner": "Adarsha Shrestha",
+    "due": "2026-11-11"
+   },
+   {
+    "title": "Raise AVIA video output from six to ten a week",
+    "owner": "Adarsha Shrestha, Sujal Chitrakar",
+    "due": "2026-11-11"
+   }
+  ]
  },
  {
   "id": "01M6E2QMT59JB4FFDEMSMCKC8N",
@@ -237,6 +288,97 @@
   ]
  },
  {
+  "id": "01M5F573XS1KE986243VKKCNZM",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-10-29T17:30:00.000Z",
+  "date": "2026-10-29",
+  "minutes": 37,
+  "speakers": [
+   "Brandon",
+   "Damian",
+   "Dusan Zvekic",
+   "Elissa Jabbour"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M5F573XS1KE986243VKKCNZM",
+  "summary": "The week of Oct 19 was far behind plan: 1,200 new customers against 4,600, $124,000 new-customer revenue against $504,000, and 0.65 first-order ROAS against 0.90, with a $157 cost per new customer against $122. Repeat orders ran about 1,000 above plan and softened the miss. Creative output reached only about 60% of the concepts needed.",
+  "points": [
+   "MAIA's main campaign improved toward 0.9 ROAS after prioritising video and launching an unaware ad",
+   "AVIA stayed below target and needs a dedicated strategist, stronger cortisol angles and more videos",
+   "Brain, Prostate, Neuropathy and Cholesterol are the priority angles; the brain page's mechanism must be fixed",
+   "Ad rejection waves disrupted delivery",
+   "AppLovin will send Cholesterol ads straight to the product page before trying a matching quiz funnel"
+  ],
+  "decisions": [
+   "Track net-new concepts in ClickUp with a creative-status field",
+   "Keep Wednesday calls and add Monday business review sessions",
+   "Add Damian to the business reviews"
+  ],
+  "tasksImported": [
+   {
+    "title": "Add a creative-status field in ClickUp and require it on every creative",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Schedule the Monday business review sessions and add Damian",
+    "owner": "Brandon",
+    "due": "2026-11-02"
+   },
+   {
+    "title": "Set up backup ad accounts, profiles and machines and start warming them",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Fix the brain landing page mechanism",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Onboard the AVIA creative strategist and pick the cortisol angles to prioritise",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Get an AppLovin account manager and test the product page route",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Write creative scripts",
+    "owner": "Peter Nguyen",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Create the shared Notion resource",
+    "owner": "Dusan Zvekic",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Classify creatives in ClickUp",
+    "owner": "Damian",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Raise the MAIA budget while performance holds",
+    "owner": "Damian",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Launch brain, neuropathy and prostate creatives",
+    "owner": "Damian",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Add AVIA video creatives and test new angles",
+    "owner": "Damian",
+    "due": "2026-11-05"
+   }
+  ]
+ },
+ {
   "id": "01M5F573XTA6XE74YTRMAGY1F6",
   "kind": "creative",
   "kindLabel": "Creative Call",
@@ -263,6 +405,52 @@
    "Lucas pauses AppLovin and focuses on Meta",
    "No Cosmos study references; no exact flavanol amounts in future creative (existing 500 mg videos may still launch)"
   ],
-  "tasksImported": []
+  "tasksImported": [
+   {
+    "title": "Produce unaware concepts for brain, prostate and neuro angles",
+    "owner": "Adarsha Shrestha, Sujal Chitrakar",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Write singing-ad concepts",
+    "owner": "Lucas Rocha Alves",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Fix the AppLovin rejections on the blood-pressure ads",
+    "owner": "Lucas Rocha Alves",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Pause AppLovin production and focus on Meta",
+    "owner": "Lucas Rocha Alves",
+    "due": "2026-10-29"
+   },
+   {
+    "title": "Assign briefs to Jennifer Casper Caras",
+    "owner": "Elissa Jabbour",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Publish the revised brain landing page",
+    "owner": "Elissa Jabbour",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Speak with an AppLovin representative",
+    "owner": "Brandon",
+    "due": "2026-11-05"
+   },
+   {
+    "title": "Build a quiz funnel",
+    "owner": "Brandon",
+    "due": "2026-11-12"
+   },
+   {
+    "title": "Remove Cosmos study references and exact flavanol amounts from new creative",
+    "owner": "Creative team",
+    "due": "2026-11-05"
+   }
+  ]
  }
 ]

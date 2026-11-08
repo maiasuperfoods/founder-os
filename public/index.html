@@ -188,7 +188,7 @@ function freshText(s, v){
   const asOf = (v && v.asOf) || s.asOf, through = s.through;
   if (!asOf) return {text: '', stale: false};
   const age = daysOld(through || asOf);
-  const base = s.id === 'initiatives' ? 'Tasks are live; latest call ' + day(asOf)
+  const base = s.id === 'initiatives' || s.id === 'executive' ? 'Tasks are live; latest call ' + day(asOf)
     : through ? 'Numbers through ' + day(through) + ', copied ' + day(asOf) : (s.kind || 'Copy') + ' from ' + day(asOf);
   const limit = s.kind === 'Daily build' ? 2 : s.kind === 'Snapshot' && s.id !== 'org' ? 8 : null;
   const stale = limit != null && age != null && age > limit;
@@ -292,6 +292,8 @@ function drawSystem(){
 getJSON('/assets/sections.json').then((meta) => { buildNav(meta); drawSystem(); route(); }).catch((e) => { $('#nav').append(el('div', 'The section list did not load.', 'grp')); });
 getJSON('/__api/me').then((me) => {
   $('#whoName').textContent = me.name || me.email; $('#whoMail').textContent = me.email; $('#peopleLink').hidden = me.role !== 'admin';
+  // founders-only sections (Executive Initiatives) are hidden from members who are not admins; the server also refuses them
+  if (me.role !== 'admin') document.querySelectorAll('#nav a.item').forEach((x) => { const sec = SECTIONS.find((q) => q.id === x.dataset.id); if (sec && sec.adminOnly) x.hidden = true; });
   const first = (me.name || '').trim().split(/\s+/)[0]; if (first) $('#hello').textContent = 'Founder OS, ' + first;
 }).catch(() => {});
 getJSON('/s/wbr/data/db.json').then(drawBrands).catch(() => { $('#brands').replaceChildren(el('div', 'Last week’s numbers did not load. Open the Weekly Business Review section.', 'brow muted')); });

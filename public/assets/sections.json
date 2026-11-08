@@ -12,6 +12,15 @@
      "asOf": "2026-11-06"
     },
     {
+     "id": "executive",
+     "title": "Executive Initiatives",
+     "blurb": "The founders' Morning Brief: tasks, owners and due dates, each brief's recap and transcript. Founders only.",
+     "src": "/s/executive/",
+     "kind": "Live tasks",
+     "adminOnly": true,
+     "asOf": "2026-11-06"
+    },
+    {
      "id": "wbr",
      "title": "Weekly Business Review",
      "blurb": "Scorecard, pacing against the plan, tasks, board, hires, inventory, run of show.",
@@ -122,5 +131,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-08T05:16Z"
+ "builtAt": "2026-11-08T05:32Z"
 }
