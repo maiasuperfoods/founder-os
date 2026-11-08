@@ -11,8 +11,8 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1",
      "liveLabel": "Edit on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-10-30",
-     "through": "2026-10-29"
+     "asOf": "2026-11-07",
+     "through": "2026-11-06"
     },
     {
      "id": "cash",
@@ -34,8 +34,8 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service",
      "liveLabel": "Open on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-10-30",
-     "through": "2026-10-29"
+     "asOf": "2026-11-07",
+     "through": "2026-11-06"
     }
    ]
   },
@@ -114,5 +114,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-06T11:38Z"
+ "builtAt": "2026-11-08T04:13Z"
 }
