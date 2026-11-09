@@ -102,7 +102,7 @@ function loginPage(error, back, email) {
 <link rel="icon" type="image/png" href="/brand/favicon-64.png"><link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
 <style>
 @font-face{font-family:'Satoshi';src:url('/brand/fonts/Satoshi-Variable.woff2') format('woff2');font-style:normal;font-weight:300 900;font-display:swap}
-@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2');font-style:italic;font-weight:300;font-display:swap}
+@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2'),url('/brand/fonts/canela/Canela-LightItalic.otf') format('opentype');font-style:italic;font-weight:300;font-display:swap}
 @font-face{font-family:'RC Canela Glyphs';src:url('/brand/fonts/Fraunces-Italic-latin.woff2') format('woff2');font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0023-0026,U+0028-002B,U+002F,U+003A-003E,U+0040,U+005B-0060,U+007B-007E,U+00A1-00FF,U+0131,U+0152-0153,U+2010-2015,U+201A,U+201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+20AC,U+2122,U+2212,U+2215}
 :root{--bg:#1e1b17;--card:#26221c;--ink:#ede7dc;--ink2:#b3aa98;--line:#3d372e;--stone:#d4ccbe;--gold:#c6b048;--bad:#f08a7e}
 *{box-sizing:border-box}
@@ -141,7 +141,7 @@ export default async function middleware(req) {
 
   // the logo, icons and brand fonts are the only files served before sign-in (the sign-in page shows them)
   if (/^\/brand\/[a-z0-9-]+\.png$/.test(path)) return next();
-  if (/^\/brand\/fonts\/(canela\/)?[A-Za-z0-9-]+\.woff2$/.test(path)) return next();
+  if (/^\/brand\/fonts\/(canela\/)?[A-Za-z0-9-]+\.(woff2|otf)$/.test(path)) return next();
 
   // sign in
   if (path === '/__login') {

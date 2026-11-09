@@ -6,7 +6,7 @@
    Gold marks "you are here"; the darker bronze carries links and the data line, where gold would be too faint. */
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&display=swap');
 @font-face{font-family:'Satoshi';src:url('/brand/fonts/Satoshi-Variable.woff2') format('woff2');font-style:normal;font-weight:300 900;font-display:swap}
-@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2');font-style:italic;font-weight:300;font-display:swap}
+@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2'),url('/brand/fonts/canela/Canela-LightItalic.otf') format('opentype');font-style:italic;font-weight:300;font-display:swap}
 @font-face{font-family:'RC Canela Glyphs';src:url('/brand/fonts/Fraunces-Italic-latin.woff2') format('woff2');font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0023-0026,U+0028-002B,U+002F,U+003A-003E,U+0040,U+005B-0060,U+007B-007E,U+00A1-00FF,U+0131,U+0152-0153,U+2010-2015,U+201A,U+201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+20AC,U+2122,U+2212,U+2215}
 :root{
   --bg:#f4f1eb; --surface:#ffffff; --sunken:#ebe6dc; --ink:#1e1b17; --ink-2:#4d463c; --ink-3:#71695c; --line:#ddd6ca; --line-2:#c6bdae;
