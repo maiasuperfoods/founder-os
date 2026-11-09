@@ -100,14 +100,16 @@ function loginPage(error, back, email) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>Sign in · ${SITE} · Renaissance Commerce</title>
 <link rel="icon" type="image/png" href="/brand/favicon-64.png"><link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Schibsted+Grotesk:wght@400;600;700&display=swap">
 <style>
+@font-face{font-family:'Satoshi';src:url('/brand/fonts/Satoshi-Variable.woff2') format('woff2');font-style:normal;font-weight:300 900;font-display:swap}
+@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),local('CanelaTrial-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2');font-style:italic;font-weight:300;font-display:swap}
+@font-face{font-family:'RC Canela Glyphs';src:url('/brand/fonts/Fraunces-Italic-latin.woff2') format('woff2');font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0023-0026,U+0028-002B,U+002F,U+003A-003E,U+0040,U+005B-0060,U+007B-007E,U+00A1-00FF,U+0131,U+0152-0153,U+2010-2015,U+201A,U+201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+20AC,U+2122,U+2212,U+2215}
 :root{--bg:#1e1b17;--card:#26221c;--ink:#ede7dc;--ink2:#b3aa98;--line:#3d372e;--stone:#d4ccbe;--gold:#c6b048;--bad:#f08a7e}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:var(--bg);color:var(--ink);font:15px/1.5 'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:var(--bg);color:var(--ink);font:15px/1.5 'Satoshi',ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px}
 .logo{display:block;width:min(300px,78vw);height:auto}
 form{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 26px 24px}
-h1{font-family:'EB Garamond',Garamond,Georgia,serif;font-size:30px;font-weight:600;line-height:1.1;margin:0 0 4px;color:var(--stone)}
+h1{font-family:'RC Canela','RC Canela Glyphs',Georgia,serif;font-size:30px;font-weight:300;font-style:italic;font-synthesis:none;letter-spacing:-.025em;line-height:36px;margin:0 0 4px;color:var(--stone)}
 p{margin:0 0 16px;color:var(--ink2);font-size:14px}
 label{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin:14px 0 6px}
 input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#1b1814;color:var(--ink)}
@@ -137,8 +139,9 @@ export default async function middleware(req) {
   const path = url.pathname;
   const token = cookieOf(req, COOKIE);
 
-  // the logo and icons are the only files served before sign-in (the sign-in page shows them)
+  // the logo, icons and brand fonts are the only files served before sign-in (the sign-in page shows them)
   if (/^\/brand\/[a-z0-9-]+\.png$/.test(path)) return next();
+  if (/^\/brand\/fonts\/(canela\/)?[A-Za-z0-9-]+\.woff2$/.test(path)) return next();
 
   // sign in
   if (path === '/__login') {

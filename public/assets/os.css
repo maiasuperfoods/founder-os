@@ -1,8 +1,13 @@
 /* Founder OS: shared tokens and base styles for the shell, the account pages and the cash flow page.
    Renaissance Commerce brand: stone #D4CCBE, taupe #988F7D, gold #C6B048 on a deep warm ink.
-   Headings in EB Garamond (the wordmark's family), interface text in Schibsted Grotesk.
+   Type: Canela Light Italic for display headlines, Satoshi for body and interface (Renaissance Commerce font system).
+   Canela's files are not in the repo (public/brand/fonts/canela/README.md). 'RC Canela Glyphs' only fills characters Canela lacks:
+   its unicode-range leaves out letters and digits, so it can never set a whole headline. EB Garamond stays for the typed wordmark only.
    Gold marks "you are here"; the darker bronze carries links and the data line, where gold would be too faint. */
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&display=swap');
+@font-face{font-family:'Satoshi';src:url('/brand/fonts/Satoshi-Variable.woff2') format('woff2');font-style:normal;font-weight:300 900;font-display:swap}
+@font-face{font-family:'RC Canela';src:local('Canela Light Italic'),local('Canela-LightItalic'),local('CanelaTrial-LightItalic'),url('/brand/fonts/canela/Canela-LightItalic.woff2') format('woff2');font-style:italic;font-weight:300;font-display:swap}
+@font-face{font-family:'RC Canela Glyphs';src:url('/brand/fonts/Fraunces-Italic-latin.woff2') format('woff2');font-style:italic;font-weight:100 900;font-display:swap;unicode-range:U+0023-0026,U+0028-002B,U+002F,U+003A-003E,U+0040,U+005B-0060,U+007B-007E,U+00A1-00FF,U+0131,U+0152-0153,U+2010-2015,U+201A,U+201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+20AC,U+2122,U+2212,U+2215}
 :root{
   --bg:#f4f1eb; --surface:#ffffff; --sunken:#ebe6dc; --ink:#1e1b17; --ink-2:#4d463c; --ink-3:#71695c; --line:#ddd6ca; --line-2:#c6bdae;
   --rail:#1e1b17; --rail-ink:#ede7dc; --rail-mute:#a59c8b; --rail-line:#36312a; --rail-hover:#2b2721; --mark:#c6b048;
@@ -10,8 +15,9 @@
   --btn:#1e1b17; --btn-ink:#f4f1eb; --link:#76631a;
   --good:#1d7a4f; --good-wash:#e2f3ea; --warn:#8f5b00; --warn-wash:#fbefd3; --bad:#b3362a; --bad-wash:#fae6e3;
   --series-1:#7d6a1e; --series-2:#988f7d;
-  --font:'Schibsted Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
-  --serif:'EB Garamond',Garamond,'Iowan Old Style',Georgia,serif;
+  --font:'Satoshi',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:'RC Canela','RC Canela Glyphs',Georgia,'Times New Roman',serif;
+  --wordmark:'EB Garamond',Garamond,'Iowan Old Style',Georgia,serif;
   --r:10px; --r-sm:7px;
   color-scheme:light;
 }
@@ -35,9 +41,11 @@
 [hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased}
-h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.015em;text-wrap:balance}
-h1{font-family:var(--serif);font-size:36px;line-height:1.1;font-weight:600;letter-spacing:-.01em}
-h2{font-family:var(--serif);font-size:23px;line-height:1.2;font-weight:600;letter-spacing:0}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+h1,h2{font-family:var(--serif);font-weight:300;font-style:italic;font-synthesis:none;font-variation-settings:'SOFT' 100,'WONK' 0;letter-spacing:-.025em}
+h1{font-size:36px;line-height:40px}
+h2{font-size:30px;line-height:36px}
+@media (min-width:768px){h1{font-size:44px;line-height:48px}}
 h3{font-size:15px}
 p{margin:0}
 a{color:var(--link)}
