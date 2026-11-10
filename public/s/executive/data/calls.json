@@ -1,5 +1,90 @@
 [
  {
+  "id": "01M6KQJCKFPBT81QCAD9SCG8TJ",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-10T16:30:00.000Z",
+  "date": "2026-11-10",
+  "minutes": 57,
+  "speakers": [
+   "Youssef",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6KQJCKFPBT81QCAD9SCG8TJ",
+  "summary": "The founders agreed to keep the course focused on operator decision-making, with detailed prompt and creative-strategy material added over time from student feedback, and to build competitive research into the company SaaS as its retention engine. For Black Friday they will keep one-time purchase optional and test a lower $29 entry price, judged on conversion and revenue per visitor. Brand pages are nearly ready once the cacao product reference is fixed, and video-editor hiring is the main bottleneck, with Avia possibly needing about 10 more editors.",
+  "points": [
+   "Course scope: marketing basics, infrastructure, AI tools, tracking and one-on-one decision support",
+   "Competitive-discovery tool as the base of the SaaS: repeat runs, ad-library data, creative dashboards, possible AI briefs",
+   "Adding 4Play and Get Hooked as data sources and reducing reliance on outside tools",
+   "Brand pages connected to the checkout channel; Clinician's Choice page shows Maya ceremonial cacao by mistake",
+   "Subscription data: about 80% subscribe and 20% one-time purchase",
+   "Pricing comparison: Hascap at 39/59/79 against Clarity MD at 29/59/89",
+   "Walmart and Target marketplace setup in progress",
+   "Senior video-editor role to train and quality-check other editors; developer to speed up SaaS, course and onboarding work"
+  ],
+  "decisions": [
+   "Keep the course operator-first; detailed creative strategy is bonus material that grows with members",
+   "Make the company SaaS the home for competitive research and recurring reports",
+   "Keep one-time purchase available alongside subscription",
+   "Test a $29 entry price for Black Friday, measured on conversion and revenue per visitor",
+   "Start ads once the cacao reference on the brand page is corrected",
+   "Youssef takes the senior video-editor candidate call today"
+  ],
+  "tasksImported": [
+   {
+    "title": "Finalise the course details, including the Ad Creators Lab section",
+    "owner": "Brandon",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Record the additional course videos over the weekend",
+    "owner": "Brandon",
+    "due": "2026-11-15"
+   },
+   {
+    "title": "Set up Walmart and Target marketplace presence",
+    "owner": "Brandon",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Correct the Maya ceremonial cacao reference on the Clinician's Choice page",
+    "owner": "Youssef",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Bring Cassandra in to source and train video editors",
+    "owner": "Brandon",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Send the developer call link to Youssef",
+    "owner": "Brandon",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Build the competitive-discovery tool for repeatable research reports",
+    "owner": "Youssef",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Add 4Play and Get Hooked as data sources to the competitive-research tool",
+    "owner": "Youssef",
+    "due": "2026-11-17"
+   },
+   {
+    "title": "Run the senior video editor candidate call",
+    "owner": "Youssef",
+    "due": "2026-11-10"
+   },
+   {
+    "title": "Test a $29 entry price for Black Friday and track conversion and revenue per visitor",
+    "owner": "Brandon",
+    "due": "2026-11-17"
+   }
+  ]
+ },
+ {
   "id": "01M6KQ4G205W8TDT5J6ZWFTR5B",
   "kind": "morning",
   "kindLabel": "Morning Brief",
