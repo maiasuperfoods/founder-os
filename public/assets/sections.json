@@ -18,7 +18,7 @@
      "src": "/s/executive/",
      "kind": "Live tasks",
      "adminOnly": true,
-     "asOf": "2026-11-06"
+     "asOf": "2026-11-10"
     },
     {
      "id": "wbr",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-10T11:39Z"
+ "builtAt": "2026-11-10T21:40Z"
 }

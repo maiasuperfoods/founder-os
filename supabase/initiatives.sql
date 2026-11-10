@@ -8,3 +8,8 @@
 -- os_init_ingest(call_id, kind, tasks jsonb), which adds a call's tasks once.
 -- The full definitions live in the migrations; read them with:
 --   select pg_get_functiondef(p.oid) from pg_proc p where p.proname like 'os_init%' or p.proname like 'os%share%';
+
+-- founder_os_initiatives_priority_and_remove: priority ('High','Medium','Low') and priority_why on every task (set by the
+-- call import's reasoning across all calls; a person's choice is marked 'Set by <name>' and the import leaves it alone),
+-- dismissed_at for removing items that are not real to-dos (os_init_dismiss, members and share-link holders, undoable),
+-- and os_init_prioritise(board, [{id, priority, why}]) for the import to re-rank a board's open tasks after each call.

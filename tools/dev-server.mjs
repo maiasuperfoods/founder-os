@@ -25,19 +25,20 @@ const RPC = {
 const SHARES = { initiatives: 'a'.repeat(64), executive: 'e'.repeat(64) }, SHARE_OF = { company: 'initiatives', executive: 'executive' };
 const tasks = [];
 for (const [board, dir] of [['company', 'initiatives'], ['executive', 'executive']]) { try { for (const c of JSON.parse(fs.readFileSync(path.join(ROOT, 's', dir, 'data/calls.json'), 'utf8')))
-  for (const t of c.tasksImported) tasks.push({ id: crypto.randomUUID(), board, call_id: c.id, kind: c.kind, title: t.title, owner: t.owner, due: t.due, progress: 'Not started', note: '', created_at: c.at, updated_at: c.at, updated_by: 'Call import' }); } catch (e) { /* no calls yet */ } }
+  for (const t of c.tasksImported) tasks.push({ id: crypto.randomUUID(), board, call_id: c.id, kind: c.kind, title: t.title, owner: t.owner, due: t.due, progress: 'Not started', note: '', priority: ['High', 'Medium', 'Low'][tasks.length % 3], priority_why: 'Preview priority (the real one comes from the call import).', dismissed: false, created_at: c.at, updated_at: c.at, updated_by: 'Call import' }); } catch (e) { /* no calls yet */ } }
 const iwho = (a) => { const p = a.p_token && who(a.p_token); if (p && !p.must_change && (a.p_board === 'company' || p.role === 'admin')) return p.name; return a.p_share === SHARES[SHARE_OF[a.p_board]] ? 'share' : null; };
-const strip = ({ board, ...t }) => t;
+const strip = ({ board, dismissed, ...t }) => t;
 Object.assign(RPC, {
   os_share_ok: (a) => ({ ok: SHARES[a.p_name] === a.p_share }),
-  os_init_list: (a) => { const w = iwho(a); return w ? { ok: true, mode: w === 'share' ? 'share' : 'member', tasks: tasks.filter((t) => t.board === a.p_board).map(strip) } : { ok: false, error: 'signed_out' }; },
+  os_init_list: (a) => { const w = iwho(a); return w ? { ok: true, mode: w === 'share' ? 'share' : 'member', tasks: tasks.filter((t) => t.board === a.p_board && !t.dismissed).map(strip) } : { ok: false, error: 'signed_out' }; },
   os_init_progress: (a) => { const w = iwho(a); if (!w) return { ok: false, error: 'signed_out' }; const t = tasks.find((x) => x.id === a.p_id && x.board === a.p_board); if (!t) return { ok: false, error: 'not_found' };
     t.progress = a.p_progress; t.updated_at = new Date().toISOString(); t.updated_by = w === 'share' ? 'Share link' : w; return { ok: true }; },
   os_init_save: (a) => { const w = iwho(a); if (!w || w === 'share') return { ok: false, error: 'signed_out' }; const x = a.p_task;
-    if (x.id) { const t = tasks.find((q) => q.id === x.id && q.board === a.p_board); Object.assign(t, { title: x.title, owner: x.owner, due: x.due || null, note: x.note, updated_by: w }); return { ok: true, id: t.id }; }
+    if (x.id) { const t = tasks.find((q) => q.id === x.id && q.board === a.p_board); Object.assign(t, { title: x.title, owner: x.owner, due: x.due || null, note: x.note, priority: x.priority || null, updated_by: w }); return { ok: true, id: t.id }; }
     const t = { id: crypto.randomUUID(), board: a.p_board, call_id: x.call_id || null, kind: x.kind || 'other', title: x.title, owner: x.owner, due: x.due || null, progress: 'Not started', note: x.note || '', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), updated_by: w };
     tasks.push(t); return { ok: true, id: t.id }; },
   os_init_delete: (a) => { const w = iwho(a); if (!w || w === 'share') return { ok: false, error: 'signed_out' }; const i = tasks.findIndex((q) => q.id === a.p_id && q.board === a.p_board); if (i >= 0) tasks.splice(i, 1); return { ok: i >= 0 }; },
+  os_init_dismiss: (a) => { const w = iwho(a); if (!w) return { ok: false, error: 'signed_out' }; const t = tasks.find((q) => q.id === a.p_id && q.board === a.p_board); if (!t) return { ok: false, error: 'not_found' }; t.dismissed = !a.p_undo; return { ok: true }; },
   os_init_share_link: (a) => { const w = iwho(a); return w && w !== 'share' ? { ok: true, token: SHARES[SHARE_OF[a.p_board]] } : { ok: false, error: 'signed_out' }; },
 });
 const realFetch = globalThis.fetch;

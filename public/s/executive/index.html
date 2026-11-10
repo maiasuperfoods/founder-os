@@ -43,6 +43,21 @@ table.tasks td.due.late{color:var(--bad);font-weight:600}
 table.tasks tr.done td.t b{text-decoration:line-through;color:var(--ink-3);font-weight:500}
 table.tasks td.from a{white-space:nowrap;font-size:13px}
 table.tasks td.ed{text-align:right;white-space:nowrap}
+td.pr{white-space:nowrap}
+.pri{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink-2)}
+.pri::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pri.High{background:var(--bad-wash);color:var(--bad);border-color:transparent}
+.pri.Medium{background:var(--warn-wash);color:var(--warn);border-color:transparent}
+.pri.Low{color:var(--ink-3)}
+table.tasks td.t small.why{color:var(--ink-3)}
+table.tasks td.t small.why b{font-weight:600;color:var(--ink-2)}
+.xbtn{border:0;background:transparent;color:var(--ink-3);padding:4px 8px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+.xbtn:hover{color:var(--bad);background:var(--bad-wash)}
+.xbtn:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.bar .srt{display:inline-flex;gap:7px;align-items:center;font-size:14px;color:var(--ink-2)}
+.bar .grow{flex:1}
+.toast{display:flex;gap:14px;align-items:center}
+.toast button{border:0;background:transparent;color:var(--gold);font-weight:700;cursor:pointer;padding:0;font-size:14px}
 select.prog{border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600;background:var(--surface);cursor:pointer}
 select.prog[data-v="In progress"]{background:var(--warn-wash);color:var(--warn);border-color:transparent}
 select.prog[data-v="Blocked"]{background:var(--bad-wash);color:var(--bad);border-color:transparent}
@@ -118,12 +133,14 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     <p class="hint" id="hint">Change a task's progress from the dropdown; it saves straight away.</p>
     <div class="bar" style="margin-bottom:12px">
       <div class="seg" role="group" aria-label="Call" id="kindSeg"></div>
+      <div class="seg" role="group" aria-label="Owner" id="ownerSeg" hidden></div>
       <select id="owner" aria-label="Owner"><option value="">Everyone</option></select>
+      <label class="srt">Sort <select id="sort" aria-label="Sort tasks"><option value="priority">Priority</option><option value="due">Due date</option><option value="newest">Newest first</option></select></label>
       <label class="chk"><input type="checkbox" id="showDone"> Show done</label>
     </div>
     <div class="panel scroll-x">
       <table class="tasks" id="tbl">
-        <thead><tr><th>Task</th><th>Owner</th><th>Due</th><th>Progress</th><th>From</th><th class="ed"><span class="sr" hidden>Edit</span></th></tr></thead>
+        <thead><tr><th>Task</th><th>Priority</th><th>Owner</th><th>Due</th><th>Progress</th><th>From</th><th class="ed"><span class="sr" hidden>Actions</span></th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -161,7 +178,12 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
   const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem(SLUG + '-' + k); localStorage.setItem(SLUG + '-' + k, v); } catch (e) { return null; } };
   let mode = 'share', tasks = [], calls = [], kind = CONF.kinds.length > 1 ? (pref('kind') || '') : '', editing = null;
   const fail = (m) => { $('err').textContent = m; $('err').hidden = false; };
-  function toast(m){ const t = el('div', m, 'toast'); t.setAttribute('role', 'status'); document.body.append(t); setTimeout(() => t.remove(), 2200); }
+  function toast(m, action, fn){
+    document.querySelectorAll('.toast').forEach((x) => x.remove());
+    const t = el('div', null, 'toast'); t.setAttribute('role', 'status'); t.append(el('span', m));
+    if (action) { const b = el('button', action); b.type = 'button'; b.addEventListener('click', () => { t.remove(); fn(); }); t.append(b); }
+    document.body.append(t); setTimeout(() => t.remove(), action ? 7000 : 2200);
+  }
   async function api(path, body){
     try {
       const r = await fetch('/__api/' + SLUG + '/' + path, body ? {method: 'POST', credentials: 'same-origin', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)} : {credentials: 'same-origin'});
@@ -190,6 +212,12 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     s.replaceChildren(el('option', 'Everyone')); s.firstChild.value = '';
     names.forEach((n) => { const o = el('option', n); o.value = n; s.append(o); });
     s.value = names.includes(cur) ? cur : '';
+    // a handful of people (the founders' board): one-tap toggle instead of the dropdown
+    const seg = $('ownerSeg'), few = names.length > 1 && names.length <= 3;
+    seg.hidden = !few; s.hidden = few;
+    if (few) { seg.replaceChildren(); [['', 'Everyone']].concat(names.map((n) => [n, n])).forEach(([v, l]) => {
+      const b = el('button', l); b.type = 'button'; b.setAttribute('aria-pressed', String(s.value === v));
+      b.addEventListener('click', () => { s.value = v; pref('owner', v); render(); }); seg.append(b); }); }
     const dl = $('people'); dl.replaceChildren(); names.forEach((n) => { const o = document.createElement('option'); o.value = n; dl.append(o); });
   }
 
@@ -208,7 +236,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
   }
 
   function editRow(t){
-    const tr = el('tr', null, 'editing'), td = el('td'); td.colSpan = 6;
+    const tr = el('tr', null, 'editing'), td = el('td'); td.colSpan = 7;
     const g = el('div', null, 'editgrid');
     const f = (label, input, cls) => { const w = el('div', null, 'field' + (cls ? ' ' + cls : '')); const l = el('label', label); const id = 'e' + Math.random().toString(36).slice(2); l.htmlFor = id; input.id = id; w.append(l, input); g.append(w); return input; };
     const ti = f('Task', Object.assign(document.createElement('input'), {value: t.title || '', maxLength: 300}));
@@ -216,6 +244,8 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     const du = f('Due', Object.assign(document.createElement('input'), {type: 'date', value: t.due || ''}));
     const kd = document.createElement('select'); CONF.kinds.concat(['other']).forEach((k) => { const o = el('option', KIND[k]); o.value = k; kd.append(o); }); kd.value = t.kind || kind || CONF.kinds[0];
     if (!t.id && CONF.kinds.length > 1) f('Call', kd);
+    const pr = document.createElement('select'); [['', 'Not set'], ['High', 'High'], ['Medium', 'Medium'], ['Low', 'Low']].forEach(([v, l]) => { const o = el('option', l); o.value = v; pr.append(o); }); pr.value = t.priority || '';
+    f('Priority', pr);
     const nt = f('Note', Object.assign(document.createElement('textarea'), {value: t.note || '', maxLength: 1000}), 'wide');
     const acts = el('div', null, 'editacts');
     const save = el('button', t.id ? 'Save' : 'Add task', 'btn primary'), cancel = el('button', 'Cancel', 'btn quiet');
@@ -233,7 +263,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     save.addEventListener('click', async () => {
       if (!ti.value.trim()) { ti.focus(); return; }
       save.disabled = true;
-      const task = {id: t.id || '', title: ti.value, owner: ow.value, due: du.value, note: nt.value, progress: t.progress || 'Not started', kind: t.id ? t.kind : kd.value, call_id: t.call_id || ''};
+      const task = {id: t.id || '', title: ti.value, owner: ow.value, due: du.value, note: nt.value, progress: t.progress || 'Not started', priority: pr.value, kind: t.id ? t.kind : kd.value, call_id: t.call_id || ''};
       const r = await api('save', {task});
       save.disabled = false;
       if (r && r.ok) { editing = null; toast(t.id ? 'Saved' : 'Task added'); await load(); } else toast(r && r.error === 'bad_date' ? 'That due date is not valid.' : 'Not saved. Try again.');
@@ -243,28 +273,47 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     return tr;
   }
 
+  async function removeTask(t){
+    const r = await api('dismiss', {id: t.id});
+    if (!r || !r.ok) { toast('Not removed. Try again.'); return; }
+    const i = tasks.indexOf(t); tasks.splice(i, 1); render();
+    toast('Removed \u201c' + (t.title.length > 48 ? t.title.slice(0, 47) + '\u2026' : t.title) + '\u201d', 'Undo', async () => {
+      const u = await api('dismiss', {id: t.id, undo: true});
+      if (u && u.ok) { tasks.splice(Math.min(i, tasks.length), 0, t); render(); toast('Restored'); } else toast('Could not restore it. Try again.');
+    });
+  }
+
   function render(){
     tiles(); owners();
     document.querySelectorAll('#kindSeg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.k === kind)));
     const who = $('owner').value, done = $('showDone').checked;
     const rows = tasks.filter((t) => (!kind || t.kind === kind) && (!who || t.owner === who) && (done || t.progress !== 'Done' || editing === t.id));
-    rows.sort((a, b) => (a.progress === 'Done') - (b.progress === 'Done') || (a.due || '9999') .localeCompare(b.due || '9999'));
+    const RANK = {High: 0, Medium: 1, Low: 2}, by = $('sort').value;
+    const dueCmp = (a, b) => (a.due || '9999').localeCompare(b.due || '9999');
+    rows.sort((a, b) => (a.progress === 'Done') - (b.progress === 'Done') || (
+      by === 'due' ? dueCmp(a, b) || (RANK[a.priority] ?? 3) - (RANK[b.priority] ?? 3)
+      : by === 'newest' ? (b.created_at || '').localeCompare(a.created_at || '') || dueCmp(a, b)
+      : (RANK[a.priority] ?? 3) - (RANK[b.priority] ?? 3) || dueCmp(a, b)));
     const tb = $('tbl').tBodies[0]; tb.replaceChildren();
     if (editing === 'new') tb.append(editRow({kind: kind || CONF.kinds[0]}));
     rows.forEach((t) => {
       if (editing === t.id) { tb.append(editRow(t)); return; }
       const tr = el('tr', null, t.progress === 'Done' ? 'done' : '');
       const a = el('td', null, 't'); a.append(el('b', t.title)); if (t.note) a.append(el('small', t.note));
+      if (t.priority_why) { const w = el('small', null, 'why'); w.append(el('b', 'Why: '), document.createTextNode(t.priority_why)); a.append(w); }
+      const pri = el('td', null, 'pr'); if (t.priority) pri.append(el('span', t.priority, 'pri ' + t.priority)); else pri.append(el('span', 'Not set', 'muted small'));
       const late = t.progress !== 'Done' && t.due && pd(t.due) < today;
       const due = el('td', t.due ? fd(t.due) + (late ? ' · overdue' : '') : 'No date', 'due' + (late ? ' late' : '')); if (!t.due) due.classList.add('muted');
       const p = el('td'); p.append(progSelect(t));
       const fr = el('td', null, 'from'); const c = callOf(t.call_id);
       if (c) { const l = el('a', (KIND[c.kind] || c.kindLabel).replace(' Call', '') + ' · ' + fd(c.date)); l.href = '#call-' + c.id; fr.append(l); } else fr.append(el('span', KIND[t.kind] || '', 'muted small'));
       const ed = el('td', null, 'ed');
+      const x = el('button', 'Remove', 'xbtn'); x.type = 'button'; x.setAttribute('aria-label', 'Remove ' + t.title + ' (not a real to-do)'); x.title = 'Not a real to-do? Remove it.';
+      x.addEventListener('click', () => removeTask(t)); ed.append(x);
       if (mode === 'member') { const b = el('button', 'Edit', 'btn quiet'); b.type = 'button'; b.setAttribute('aria-label', 'Edit ' + t.title); b.addEventListener('click', () => { editing = t.id; render(); }); ed.append(b); }
-      tr.append(a, el('td', t.owner || 'No owner', t.owner ? '' : 'muted'), due, p, fr, ed); tb.append(tr);
+      tr.append(a, pri, el('td', t.owner || 'No owner', t.owner ? '' : 'muted'), due, p, fr, ed); tb.append(tr);
     });
-    if (!rows.length && editing !== 'new') { const tr = el('tr'), td = el('td', tasks.length ? 'No tasks match these filters.' : 'No tasks yet. They are added after each call.', 'empty'); td.colSpan = 6; tr.append(td); tb.append(tr); }
+    if (!rows.length && editing !== 'new') { const tr = el('tr'), td = el('td', tasks.length ? 'No tasks match these filters.' : 'No tasks yet. They are added after each call.', 'empty'); td.colSpan = 7; tr.append(td); tb.append(tr); }
     renderCalls();
   }
 
@@ -337,13 +386,15 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     mode = r.mode; tasks = r.tasks; calls = idx;
     $('memberActs').hidden = mode !== 'member';
     $('brandbar').hidden = !(mode === 'share' && window.top === window);
-    $('hint').textContent = mode === 'member' ? 'Change a task’s progress from the dropdown; it saves straight away. Edit a task to change its owner, due date or note.' : 'Change a task’s progress from the dropdown; it saves straight away.';
+    $('hint').textContent = mode === 'member' ? 'Priorities come from what each call stressed, weighed against earlier calls; the reason is under each task. Change progress from the dropdown, Remove anything that isn’t a real to-do, and Edit to change the owner, due date or priority.' : 'Priorities come from what each call stressed, weighed against earlier calls; the reason is under each task. Change progress from the dropdown and Remove anything that isn’t a real to-do.';
     render();
   }
 
   $('kindSeg').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; kind = b.dataset.k; pref('kind', kind); render(); });
   $('owner').addEventListener('change', () => { pref('owner', $('owner').value); render(); });
   $('showDone').addEventListener('change', render);
+  $('sort').value = pref('sort') || 'priority';
+  $('sort').addEventListener('change', () => { pref('sort', $('sort').value); render(); });
   $('add').addEventListener('click', () => { editing = 'new'; render(); });
   $('share').addEventListener('click', async () => {
     const r = await api('share-link', {});

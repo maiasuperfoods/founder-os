@@ -21,7 +21,7 @@ const BOARDS = {
 };
 const SHARE_DAYS = 365;
 const boardOf = (path) => { const m = path.match(/^\/(?:s|__api|share)\/(initiatives|executive)(?:\/|$)/); return m ? m[1] : null; };
-const sharePath = (slug, path) => new RegExp('^/(s/' + slug + '(/.*)?|__api/' + slug + '/(list|progress))$').test(path) || path === '/assets/os.css';
+const sharePath = (slug, path) => new RegExp('^/(s/' + slug + '(/.*)?|__api/' + slug + '/(list|progress|dismiss))$').test(path);
 
 export const config = { matcher: '/:path*' };
 
@@ -184,6 +184,10 @@ export default async function middleware(req) {
     const k = cookieOf(req, B.cookie);
     try { if (await shareOk(B.share, k)) share = k; } catch (e) { /* treated as signed out */ }
   }
+  // the shared pages' stylesheet: open to a holder of either board's link (boardOf() is null for /assets/)
+  if (!B && !who && path === '/assets/os.css') {
+    for (const X of Object.values(BOARDS)) { try { if (await shareOk(X.share, cookieOf(req, X.cookie))) return next(); } catch (e) { /* signed out */ } }
+  }
   if (B && who && !member && !share) {
     if (path.startsWith('/__api/')) return json({ ok: false, error: 'not_admin' }, 403);
     return html(deadLinkPage(B.title).replace(/This .* link is no longer valid\. Ask a founder for the current link\./, 'This page is for the founders only.'), 403);
@@ -206,6 +210,10 @@ export default async function middleware(req) {
       if (name === 'progress') {
         if (!uuid(b.id)) return json({ ok: false, error: 'not_found' }, 404);
         return json(await rpc('os_init_progress', { p_token: sess, p_share: share, p_board: board, p_id: String(b.id), p_progress: String(b.progress || '') }));
+      }
+      if (name === 'dismiss') {   // remove a task that is not a real to-do (reversible with undo)
+        if (!uuid(b.id)) return json({ ok: false, error: 'not_found' }, 404);
+        return json(await rpc('os_init_dismiss', { p_token: sess, p_share: share, p_board: board, p_id: String(b.id), p_undo: !!b.undo }));
       }
       if (!member) return json({ ok: false, error: 'signed_out' }, 401);
       if (name === 'save') return json(await rpc('os_init_save', { p_token: token, p_board: board, p_task: b.task || {} }));
