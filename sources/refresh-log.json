@@ -1,6 +1,6 @@
 {
- "at": "2026-11-09T10:57:31-05:00",
- "review": {"ok": true, "through": "2026-11-08", "note": "Re-exported the review page database after the Monday weekly and customer service updates finished; the W45 scorecard (Nov 2 to Nov 8) is now in the snapshot; actuals run through 2026-11-08, last scorecard week 2026-11-02. W45 phone numbers are blank and strategist figures cover Nov 2 and 3 only, as on the source page."},
- "creative": {"ok": true, "through": "2026-11-09", "note": "Copied maia-creative-dashboard public/ (data as of 2026-11-09), links rewritten in 19 pages."},
- "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet in Drive is the one already imported (edited 2026-11-04 Toronto); model rebuilt from the existing export: 40 weeks, lowest closing cash 81,279 in W52."}
+ "at": "2026-11-10T06:39:56-05:00",
+ "review": {"ok": true, "through": "2026-11-09", "note": "Exported 10 collections from the review page (comments was empty) and rebuilt the snapshot; actuals run through 2026-11-09, last scorecard week 2026-11-02."},
+ "creative": {"ok": true, "through": "2026-11-10", "note": "Copied the creative dashboard build (20 pages relinked), data as of 2026-11-10."},
+ "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet unchanged since 2026-11-04 (Toronto); previous import kept, 40 weeks, lowest closing cash 81,279 in W52."}
 }
