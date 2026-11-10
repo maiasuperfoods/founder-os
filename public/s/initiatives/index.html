@@ -142,12 +142,12 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
   const $ = (id) => document.getElementById(id);
   const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
   const PROG = ['Not started', 'In progress', 'Blocked', 'Done'];
-  const KIND = {performance: 'Performance Call', creative: 'Creative Call', morning: 'Morning Brief', other: 'Other'};
+  const KIND = {performance: 'Performance Call', creative: 'Creative Strategy', morning: 'Morning Brief', other: 'Other'};
   // one page, two boards: /s/initiatives/ (Company) and /s/executive/ (Executive); the same file is served at both
   const SLUG = location.pathname.split('/')[2] === 'executive' ? 'executive' : 'initiatives';
   const CONF = {
-    initiatives: {title: 'Company Initiatives', from: 'Tasks from the Performance Call and the Creative Call.', kinds: ['performance', 'creative'],
-      calls: 'Recaps of the Performance Call and the Creative Call, newest first, with the full transcript from Fireflies.'},
+    initiatives: {title: 'Company Initiatives', from: 'Tasks from the Performance Call and Creative Strategy.', kinds: ['performance', 'creative'],
+      calls: 'Recaps of the Performance Call and Creative Strategy, newest first, with the full transcript from Fireflies.'},
     executive: {title: 'Executive Initiatives', from: 'Tasks from the founders\u2019 Morning Brief.', kinds: ['morning'],
       calls: 'Recaps of the Morning Brief, newest first, with the full transcript from Fireflies.'},
   }[SLUG];
@@ -181,7 +181,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
       const d = el('div', null, c || ''); d.append(el('span', l), el('b', String(n))); box.append(d);
     });
     const last = calls[0];
-    $('sub').textContent = CONF.from + ' ' + (last ? 'Latest call: ' + last.kindLabel + ', ' + fd(last.date, true) + '.' : 'No calls imported yet.');
+    $('sub').textContent = CONF.from + ' ' + (last ? 'Latest call: ' + (KIND[last.kind] || last.kindLabel) + ', ' + fd(last.date, true) + '.' : 'No calls imported yet.');
   }
 
   function owners(){
@@ -259,7 +259,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
       const due = el('td', t.due ? fd(t.due) + (late ? ' · overdue' : '') : 'No date', 'due' + (late ? ' late' : '')); if (!t.due) due.classList.add('muted');
       const p = el('td'); p.append(progSelect(t));
       const fr = el('td', null, 'from'); const c = callOf(t.call_id);
-      if (c) { const l = el('a', c.kindLabel.replace(' Call', '') + ' · ' + fd(c.date)); l.href = '#call-' + c.id; fr.append(l); } else fr.append(el('span', KIND[t.kind] || '', 'muted small'));
+      if (c) { const l = el('a', (KIND[c.kind] || c.kindLabel).replace(' Call', '') + ' · ' + fd(c.date)); l.href = '#call-' + c.id; fr.append(l); } else fr.append(el('span', KIND[t.kind] || '', 'muted small'));
       const ed = el('td', null, 'ed');
       if (mode === 'member') { const b = el('button', 'Edit', 'btn quiet'); b.type = 'button'; b.setAttribute('aria-label', 'Edit ' + t.title); b.addEventListener('click', () => { editing = t.id; render(); }); ed.append(b); }
       tr.append(a, el('td', t.owner || 'No owner', t.owner ? '' : 'muted'), due, p, fr, ed); tb.append(tr);
@@ -275,7 +275,7 @@ article.call.hit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
     if (!list.length) { box.append(el('div', 'No calls yet.', 'panel empty')); return; }
     list.forEach((c) => {
       const art = el('article', null, 'call'); art.id = 'call-' + c.id;
-      const meta = el('div', null, 'meta'); meta.append(el('span', c.kindLabel, 'chip plain'), el('span', fd(c.date, true)), el('span', c.minutes + ' min'), el('span', c.speakers.length + ' speakers'));
+      const meta = el('div', null, 'meta'); meta.append(el('span', KIND[c.kind] || c.kindLabel, 'chip plain'), el('span', fd(c.date, true)), el('span', c.minutes + ' min'), el('span', c.speakers.length + ' speakers'));
       art.append(meta, el('h3', c.title), el('p', c.summary, 'sum'));
       const cols = el('div', null, 'cols');
       [['Discussed', c.points], ['Decided', c.decisions]].forEach(([h, items]) => { if (!items || !items.length) return; const d = el('div'); d.append(el('h4', h)); const ul = el('ul'); items.forEach((x) => ul.append(el('li', x))); d.append(ul); cols.append(d); });
