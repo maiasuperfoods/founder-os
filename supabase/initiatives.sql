@@ -1,4 +1,7 @@
--- Company Initiatives (applied as migrations founder_os_initiatives and founder_os_initiatives_share_link).
+-- Company Initiatives (applied as migrations founder_os_initiatives, founder_os_initiatives_share_link,
+-- founder_os_initiatives_boards and founder_os_initiatives_list_volatile: os_init_list and os__init_who must stay
+-- VOLATILE, because they call os__member, which writes last_seen; as STABLE, PostgREST ran them read-only and
+-- answered 405, which the boards showed as "Tasks could not be loaded").
 -- Tables os_init_tasks (live tasks) and os_shares (the share link's key); RLS on, no policies; reached only
 -- through these functions. Granted to anon: os_share_ok, os_init_list, os_init_progress, os_init_save,
 -- os_init_delete, os_init_share_link. Not granted (run by the scheduled call import with the owner's rights):
