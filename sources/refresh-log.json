@@ -1,6 +1,6 @@
 {
- "at": "2026-11-10T06:39:56-05:00",
- "review": {"ok": true, "through": "2026-11-09", "note": "Exported 10 collections from the review page (comments was empty) and rebuilt the snapshot; actuals run through 2026-11-09, last scorecard week 2026-11-02."},
- "creative": {"ok": true, "through": "2026-11-10", "note": "Copied the creative dashboard build (20 pages relinked), data as of 2026-11-10."},
- "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet unchanged since 2026-11-04 (Toronto); previous import kept, 40 weeks, lowest closing cash 81,279 in W52."}
+  "at": "2026-11-11T06:40:05-05:00",
+  "review": {"ok": true, "through": "2026-11-10", "note": "Export of 10 collections (64 documents) succeeded; sync snapshot 2026-11-11, actuals through 2026-11-10, last scorecard week 2026-11-02."},
+  "creative": {"ok": true, "through": "2026-11-10", "note": "Creative dashboard copied, links rewritten in 20 pages, data as of 2026-11-10."},
+  "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Drive sheet matches source.json (same id, last edited 2026-11-04 Toronto); import skipped, previous model kept (40 weeks, lowest closing cash 81,279 in W52)."}
 }
