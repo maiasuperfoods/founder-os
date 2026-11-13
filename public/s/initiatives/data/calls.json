@@ -1,5 +1,87 @@
 [
  {
+  "id": "01M6S6HMNRWXPRRA96R2DGMCSY",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-13T18:30:00.000Z",
+  "date": "2026-11-13",
+  "minutes": 30,
+  "speakers": [
+   "Damian",
+   "Adarsha Shrestha",
+   "Brandon",
+   "Youssef",
+   "Elissa Jabbour"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M6S6HMNRWXPRRA96R2DGMCSY",
+  "summary": "Meta spend rose about 25% over four days while CAC and new-customer results held steady, though demand is slowing ahead of Black Friday and the Champion and Zombie campaigns are barely spending at current bids. The early Black Friday offer won its A/B test and is now the only offer: buy two, get three free gifts; buy three, get four free gifts. AppLovin will start with 30 to 40 one-minute videos on blood pressure and cholesterol, using presells kept separate from Meta pages.",
+  "points": [
+   "Main campaign and Brain One are driving the scaling; cholesterol budget was cut again on weak results",
+   "Neuropathy is improving but stays at 2K a day until there are more videos",
+   "New blood sugar statics launched for the weekend; two or three videos in the pipeline are not enough",
+   "AVIA held at 5K a day with results down about 8%; Zombie still not spending at a 139 bid cap",
+   "New AVIA videos go to the PDP and statics to the presell; too little volume for a post-click A/B test",
+   "Thyroid keeps declining and will likely be scaled down as the general AVIA PDP arrives",
+   "AppLovin now accepts supplement presells; the account was reinstated after compliance fixes"
+  ],
+  "decisions": [
+   "The early Black Friday offer is the official offer and all traffic goes to it",
+   "Duplicate top-spend winners with a Black Friday banner and push more bottom- and middle-funnel promo ads for two weeks",
+   "Promotional videos made from scratch are the priority and must be live two to three days before Black Friday",
+   "Keep PDP for AVIA videos and presell for statics",
+   "Start AppLovin with 30 to 40 videos on blood pressure and cholesterol, with softer pages separate from Meta",
+   "A dedicated Black Friday campaign for recent site visitors is pending Youssef's decision"
+  ],
+  "tasksImported": [
+   {
+    "title": "Decide on a dedicated Black Friday campaign for 180-day site visitors so Damian can launch it early next week",
+    "owner": "Youssef",
+    "due": "2026-11-16"
+   },
+   {
+    "title": "Produce promotional Black Friday videos from scratch, live by Nov 24",
+    "owner": "Creative team",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Align Black Friday statics and copy to the official offer and tell Damian so he refreshes ad copy",
+    "owner": "Elissa Jabbour",
+    "due": "2026-11-16"
+   },
+   {
+    "title": "Add more blood sugar videos to the pipeline",
+    "owner": "Creative team",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Make 30 to 40 one-minute AppLovin videos from AI authority and body-animation winners",
+    "owner": "Brandon",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Send the presell pages to the AppLovin contact for a compliance review before launch",
+    "owner": "Brandon",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Build softer AppLovin landing pages for blood pressure and cholesterol, separate from Meta",
+    "owner": "Brandon",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Send Damian the plan for scaling down AVIA Thyroid and the general PDP campaign",
+    "owner": "Brandon",
+    "due": "2026-11-16"
+   },
+   {
+    "title": "Walk Damian through the AppLovin setup on a call",
+    "owner": "Brandon",
+    "due": "2026-11-20"
+   }
+  ]
+ },
+ {
   "id": "01M6S6HMNXY45X8Q26TG8VBPCE",
   "kind": "creative",
   "kindLabel": "Creative Call",
