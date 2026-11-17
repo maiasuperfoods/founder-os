@@ -1,5 +1,90 @@
 [
  {
+  "id": "01M72XR5P9H2SFMHFJW9EVKV4J",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-17T16:30:00.000Z",
+  "date": "2026-11-17",
+  "minutes": 59,
+  "speakers": [
+   "Brandon",
+   "Youssef"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M72XR5P9H2SFMHFJW9EVKV4J",
+  "summary": "The founders agreed to start three AI creative strategy hubs (CS1, CS2, CS3) on separate team-plan accounts sharing one GitHub repository of skills and memory, with senior editors each leading one or two juniors for a possible 80 to 100 creatives a week. Taboola remains weak at a CPA around 250 and NewsBreak spends about 1k a day at roughly 0.6 to 0.7, with Black Friday timing a likely drag. Operations leadership and recruiting are still the main bottleneck.",
+  "points": [
+   "Creative hubs on separate accounts sharing one GitHub repo of skills, memory and connectors",
+   "Senior editor model: one or two juniors each, AI generating clips, revisions and assemblies",
+   "Automated revision loop validated when Claude fixed every wrong AVIA bottle from one screenshot",
+   "Content batch tool and talking-head workflow produce briefs and rough cuts for editors",
+   "Taboola CPA around 250 with slow approvals; NewsBreak about 1k a day, CPA near 105",
+   "A student brand reached 92k AUD mid-month against about 80k AUD the month before",
+   "Account migration: export data, move skills to GitHub, recreate connectors and scheduled tasks",
+   "Operations manager search: current recruiting is not working; candidates weighed on direct-response fit"
+  ],
+  "decisions": [
+   "Start with three creative hubs, CS1 to CS3, and expand if usage justifies it",
+   "Centralise skills and workflows in one shared GitHub repository",
+   "Write a general migration prompt to move data and workflows to the hubs",
+   "Test Grok for scripts alongside Claude",
+   "Stop or change the current recruiting approach",
+   "Keep Taboola running for now despite weak efficiency"
+  ],
+  "tasksImported": [
+   {
+    "title": "Create the CS1, CS2 and CS3 creative strategy hub accounts",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Choose the video-editor team from the three candidates",
+    "owner": "Youssef",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Decide on the senior video editor candidate after reviewing his Loom revisions",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Decide on the operations manager hire after the candidate calls",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Stop or change the current recruiter's approach",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Write the general workflow migration prompt for the new hubs",
+    "owner": "Youssef",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Move the custom skills into the shared GitHub repository",
+    "owner": "Youssef",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Export Claude data, import it into the hubs, and recreate connectors and scheduled tasks",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Finish relinking the missing Fireflies calls into the desk",
+    "owner": "Youssef",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Test Grok for script generation and compare it with Claude",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   }
+  ]
+ },
+ {
   "id": "01M6KQJCKFPBT81QCAD9SCG8TJ",
   "kind": "morning",
   "kindLabel": "Morning Brief",
