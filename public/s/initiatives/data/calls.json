@@ -1,5 +1,107 @@
 [
  {
+  "id": "01M75Z32EV50PDK2EVASGRSSFW",
+  "kind": "creative",
+  "kindLabel": "Creative Call",
+  "title": "Creative Strategy",
+  "at": "2026-11-18T15:00:00.000Z",
+  "date": "2026-11-18",
+  "minutes": 43,
+  "speakers": [
+   "Brandon",
+   "Dusan Zvekic",
+   "Adarsha Shrestha",
+   "Sujal Chitrakar",
+   "Elissa Jabbour",
+   "Logan Lapierre"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M75Z32EV50PDK2EVASGRSSFW",
+  "summary": "Creative performance fell over the last seven days: 480k spend at 0.68 NC ROAS, higher NCCPA and a hit rate down to about 19%, so the team must diversify formats and speed up editors without losing quality. AVIA spent 29k at 0.46 NC ROAS and moves from the thyroid page to a general PDP and general CBO with broader angles, while Hashimoto's ads are tested carefully within compliance.",
+  "points": [
+   "AVIA ad account verification is still pending, so Damian cannot launch there yet",
+   "Some editors take five to six days per video; the expectation is three to five a day with agentic editing",
+   "A senior video editor was hired to audit editors and roll out agentic workflows, aiming for 300+ concepts a week from 185",
+   "Creative relies too much on AI authority, AI UGC, Pixar and animated songs; interview-style, AI drama and ingredient stories are the next tests",
+   "Unassigned dashboard entries come from the Black Friday tag sitting after the AS code in ad names",
+   "Hashimoto's ads showed a low early CPA, but claims of replacing levothyroxine get disapproved",
+   "Low-quality AI voice and lip-sync videos are still being approved for launch"
+  ],
+  "decisions": [
+   "AVIA shifts to the general PDP and general CBO, with angles kept congruent with the page",
+   "Thyroid videos already started get finished; unstarted ones are stopped",
+   "Thyroid and Hashimoto's ads may cite cortisol and T4-to-T3 conversion but never claim to replace medication",
+   "Strategists reject poor-quality videos and escalate repeat offenders; editors who repeat mistakes are replaced",
+   "Tristan joins as a creative strategist with AVIA focus"
+  ],
+  "tasksImported": [
+   {
+    "title": "Finish the AVIA ad account verification so Damian can launch campaigns",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Agree the Black Friday tag position in ad names with Damian so ads stop showing unassigned",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Message Joshua about last week's missed video deliveries",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Share the new concept examples (interview format, sea buckthorn story) in the group chat",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Add Paul Ramos to Adarsha's Slack channel and hub",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Test interview-style, AI drama and ingredient-story ads instead of more AI authority and AI UGC",
+    "owner": "Creative team",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Review the general AVIA PDP and flag gaps before briefing new AVIA angles",
+    "owner": "Creative team",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Hold follow-up calls with the slow video editors and report what is blocking them",
+    "owner": "Logan Lapierre",
+    "due": "2026-11-18"
+   },
+   {
+    "title": "Get the creatives waiting for launch live",
+    "owner": "Logan Lapierre",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Check with editors which thyroid videos have started; finish those and stop the rest",
+    "owner": "Adarsha Shrestha",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Remove any claim of replacing levothyroxine from Hashimoto's and thyroid creative",
+    "owner": "Adarsha Shrestha",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Produce high-confidence AVIA AI animation ads with the agentic workflow within 24 hours",
+    "owner": "Dusan Zvekic",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Check whether the endocrinologist thyroid video was rejected and fix it if so",
+    "owner": "Elissa Jabbour",
+    "due": "2026-11-25"
+   }
+  ]
+ },
+ {
   "id": "01M6S6HMNRWXPRRA96R2DGMCSY",
   "kind": "performance",
   "kindLabel": "Performance Call",
