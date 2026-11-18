@@ -18,7 +18,7 @@
      "src": "/s/executive/",
      "kind": "Live tasks",
      "adminOnly": true,
-     "asOf": "2026-11-10"
+     "asOf": "2026-11-17"
     },
     {
      "id": "wbr",
@@ -28,7 +28,7 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1",
      "liveLabel": "Edit on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-17",
+     "asOf": "2026-11-18",
      "through": "2026-11-16"
     },
     {
@@ -51,7 +51,7 @@
      "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service",
      "liveLabel": "Open on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-17",
+     "asOf": "2026-11-18",
      "through": "2026-11-16"
     }
    ]
@@ -84,7 +84,7 @@
        "src": "/s/creative/recaps/"
       }
      ],
-     "asOf": "2026-11-16"
+     "asOf": "2026-11-17"
     },
     {
      "id": "competitors",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-17T11:39Z"
+ "builtAt": "2026-11-18T11:40Z"
 }

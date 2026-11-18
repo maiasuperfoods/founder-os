@@ -10,9 +10,9 @@
   "asOf": "2026-10-12"
  },
  "creative": {
-  "asOf": "2026-11-16",
-  "files": 24,
-  "relinked": 22
+  "asOf": "2026-11-17",
+  "files": 28,
+  "relinked": 26
  },
  "executive": {
   "asOf": "2026-11-17",
@@ -23,7 +23,7 @@
   "calls": 7
  },
  "wbr": {
-  "asOf": "2026-11-17",
+  "asOf": "2026-11-18",
   "lastWeek": "2026-11-09",
   "through": "2026-11-16"
  }
