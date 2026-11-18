@@ -23,7 +23,7 @@
      "title": "Weekly Business Review",
      "blurb": "Scorecard, pacing against the plan, tasks, board, hires, inventory, run of show.",
      "src": "/s/wbr/",
-     "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1",
+     "live": "https://claude.ai/artifact/W4fyM4atATdZcfgRNEV7C3",
      "liveLabel": "Edit on the Claude page",
      "kind": "Snapshot"
     },
@@ -43,7 +43,7 @@
      "title": "Customer Service Report",
      "blurb": "Email and phone: volume, response times, backlog, contact reasons, team table.",
      "src": "/s/wbr/?only=service#service",
-     "live": "https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1#service",
+     "live": "https://claude.ai/artifact/W4fyM4atATdZcfgRNEV7C3#service",
      "liveLabel": "Open on the Claude page",
      "kind": "Snapshot"
     }
@@ -57,7 +57,7 @@
      "title": "Creative Dashboard",
      "blurb": "Ad performance per strategist and creative output per editor.",
      "src": "/s/creative/",
-     "live": "https://claude.ai/artifact/GxDnCj5BGznkeVwRsZsd5B",
+     "live": "https://claude.ai/artifact/DoLPiCzfNBHHo4nXCj3MqQ",
      "liveLabel": "Open the Claude page",
      "kind": "Daily build",
      "views": [
@@ -90,7 +90,7 @@
        "state": "ci-avia",
        "label": "AVIA Cortisol Detox",
        "src": "/s/competitors/?study=avia-cortisol-detox",
-       "live": "https://claude.ai/artifact/CQeeKB3vnqb3utGxfpVTz8"
+       "live": "https://claude.ai/artifact/AfDqR1ejw1E25FcivfPEW4"
       },
       {
        "id": "haskap",

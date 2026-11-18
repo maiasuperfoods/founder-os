@@ -31,7 +31,7 @@ This repo holds revenue, the cash plan, supplier payments and per-person numbers
 
 | Section | Source | How it gets here |
 |---|---|---|
-| Weekly Business Review, Customer Service Report | Claude page `LcXDzCN1AfkGiLN4mmUvo1` (its database) | `tools/sync.py --wbr <clone> [--wbr-export <folder>]` |
+| Weekly Business Review, Customer Service Report | Claude page `W4fyM4atATdZcfgRNEV7C3` (its database) | `tools/sync.py --wbr <clone> [--wbr-export <folder>]` |
 | Cash Flow Forecast | the newest Google Sheet titled `Holdco_CashFlow_Model_*` (the holdco cash flow chat in Claude saves each update as one; see `sources/cashflow/source.json`) | download it as .xlsx, `tools/cashflow_import.py`, then `tools/sync.py` (the daily refresh does this) |
 | Creative Dashboard (MAIA, AVIA, weekly recaps) | repo `maiasuperfoods/maia-creative-dashboard`, rebuilt daily by its own GitHub Action | `tools/sync.py --creative <clone>` |
 | Competitor Intelligence, AVIA Cortisol Detox | repo `maiasuperfoods/competitor-intelligence`, run `avia-cortisol-detox-2026-10-24-v3` | `tools/sync.py --ci <clone>` |
