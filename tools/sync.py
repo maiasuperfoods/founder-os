@@ -125,7 +125,7 @@ def sync_ci(repo, st):
             datasets[m['id']] = 'data/' + m['file']
     study = json.load(open(os.path.join(run, 'study.json')))
     json.dump({'title': study.get('title', 'AVIA Cortisol Detox competitor ad intelligence'), 'asOf': git_date(repo),
-               'live': 'https://claude.ai/artifact/CQeeKB3vnqb3utGxfpVTz8', 'params': {}, 'datasets': datasets},
+               'live': 'https://claude.ai/artifact/AfDqR1ejw1E25FcivfPEW4', 'params': {}, 'datasets': datasets},
               open(os.path.join(dst, 'study.json'), 'w'), indent=1)
     st['ci-avia'] = {'asOf': git_date(repo), 'datasets': len(datasets)}
     print('competitors: Avia study copied with %d datasets' % len(datasets))

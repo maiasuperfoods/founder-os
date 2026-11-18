@@ -16,7 +16,7 @@ git add -A && git commit -m "Refresh the sections" && git push
 
 ## Weekly Business Review and Customer Service Report
 
-The numbers live in the database of the Claude page https://claude.ai/artifact/LcXDzCN1AfkGiLN4mmUvo1 .
+The numbers live in the database of the Claude page https://claude.ai/artifact/W4fyM4atATdZcfgRNEV7C3 .
 To bring a fresh copy here:
 
 1. Save these collections of that page's database to a new folder, one sub-folder per collection, one JSON file per
