@@ -1,5 +1,94 @@
 [
  {
+  "id": "01M75Z32F4YFACPWYVSSEC6GNB",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-18T17:30:00.000Z",
+  "date": "2026-11-18",
+  "minutes": 50,
+  "speakers": [
+   "Brandon",
+   "Elissa Jabbour",
+   "Damian",
+   "Sujal Chitrakar",
+   "Adarsha Shrestha",
+   "Youssef"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M75Z32F4YFACPWYVSSEC6GNB",
+  "summary": "Seven-day NC ROAS fell 11% as shoppers held off for Black Friday, so budgets were cut again, Brain down to about 6k to 7k and Thyroid at about 0.42 ROAS with production stopped. The team kept video-first launches, split Blood Pressure into its own campaign at up to 5k, renamed the main campaign Blood Flow and dropped plaque for compliance risk. About 37 Black Friday winner videos get a banner and end card and launch in batches of five to ten into one consolidated campaign.",
+  "points": [
+   "Account NC ROAS down 11% week on week; customers waiting for Black Friday",
+   "Videos take most spend over statics; video-first kept",
+   "About six ads take roughly 65% of CBO spend across about 200 ads",
+   "Neuro, prostate and blood sugar need more creative volume; about 28 neuro and prostate videos a week targeted",
+   "Thyroid fell to about 0.42 ROAS; remaining pipeline videos to be tested on the general PDP",
+   "One ad spends 22k to 24k a day at 0.45 to 0.48 ROAS",
+   "Plaque claims about removing or melting artery plaque seen as a compliance risk",
+   "General AVIA campaign launched and is being watched"
+  ],
+  "decisions": [
+   "Rename the combined campaign Blood Flow and launch a separate Blood Pressure campaign at up to 5k",
+   "Stop plaque production and new BP, plaque and blood flow briefs; prioritise neuro, prostate and blood sugar",
+   "Stop thyroid production after launching the remaining pipeline",
+   "Put all Black Friday winners from every angle in one campaign, launched in batches of five to ten",
+   "Test smaller CBOs with about 10 videos at about 2k",
+   "Judge the top-spending ad against campaign and account ROAS before cutting it"
+  ],
+  "tasksImported": [
+   {
+    "title": "Finalise the Black Friday banner and end-card format so editors can start on the winner videos",
+    "owner": "Sujal Chitrakar",
+    "due": "2026-11-18"
+   },
+   {
+    "title": "Add the Black Friday banner and end card to your 17 assigned winner videos and send them in batches",
+    "owner": "Nicole",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Add the Black Friday banner and end card to your 16 assigned winner videos and send them in batches",
+    "owner": "Paulo",
+    "due": "2026-11-20"
+   },
+   {
+    "title": "Consolidate Black Friday winners from all angles into one campaign and launch them in batches of five to ten",
+    "owner": "Damian",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Rename the combined campaign Blood Flow and launch a separate Blood Pressure campaign at up to $5k with proven post IDs",
+    "owner": "Damian",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Judge the 22k-a-day top-spending ad against campaign and account ROAS and cut or keep it",
+    "owner": "Damian",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Test a smaller CBO with about 10 videos at about $2,000 to surface overlooked ads",
+    "owner": "Damian",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Launch the remaining thyroid pipeline videos and cut spend where they stay weak",
+    "owner": "Damian",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Deliver about two neuro and two prostate videos a day (about 28 a week)",
+    "owner": "Creative team",
+    "due": "2026-11-25"
+   },
+   {
+    "title": "Add a compliance check that blocks claims of removing, melting or dissolving artery plaque",
+    "owner": "Brandon",
+    "due": "2026-11-25"
+   }
+  ]
+ },
+ {
   "id": "01M75Z32EV50PDK2EVASGRSSFW",
   "kind": "creative",
   "kindLabel": "Creative Call",
