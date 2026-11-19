@@ -36,7 +36,7 @@ This repo holds revenue, the cash plan, supplier payments and per-person numbers
 | Creative Dashboard (MAIA, AVIA, weekly recaps) | repo `maiasuperfoods/maia-creative-dashboard`, rebuilt daily by its own GitHub Action | `tools/sync.py --creative <clone>` |
 | Competitor Intelligence, AVIA Cortisol Detox | repo `maiasuperfoods/competitor-intelligence`, run `avia-cortisol-detox-2026-10-24-v3` | `tools/sync.py --ci <clone>` |
 | Competitor Intelligence, MAIA Haskap | Claude dashboard `S2omWQ5WZqom6xWvoyR5xu` (page and data files copied once into `public/s/competitors/studies/haskap/`) | fixed study; re-copy only if the study is redone |
-| Org Chart | Claude page `EZCd6yrm3abTw2Ep75v5Nc` | copy the page into `public/s/org/index.html` when the chart changes |
+| Org Chart | Claude page `VJen72AK2Hzcm4Q4ZP91Za` | copy the page into `public/s/org/index.html` when the chart changes |
 
 ## Sign-in
 

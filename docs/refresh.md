@@ -64,7 +64,7 @@ to `public/s/creative/` and rewrites the links between its pages so they stay in
 
 ## Org Chart
 
-Copy the current page from https://claude.ai/artifact/EZCd6yrm3abTw2Ep75v5Nc into `public/s/org/index.html`
+Copy the current page from https://claude.ai/artifact/VJen72AK2Hzcm4Q4ZP91Za into `public/s/org/index.html`
 (keep the `<!doctype html>`, `<head>` and `<body>` wrapper that file has), and set its `asOf` in
 `sources/sections.json`.
 
