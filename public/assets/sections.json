@@ -9,7 +9,7 @@
      "blurb": "Tasks, owners and due dates from the Performance Call and Creative Strategy, with each call's recap and transcript.",
      "src": "/s/initiatives/",
      "kind": "Live tasks",
-     "asOf": "2026-11-13"
+     "asOf": "2026-11-18"
     },
     {
      "id": "executive",
@@ -28,8 +28,8 @@
      "live": "https://claude.ai/artifact/W4fyM4atATdZcfgRNEV7C3",
      "liveLabel": "Edit on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-18",
-     "through": "2026-11-16"
+     "asOf": "2026-11-20",
+     "through": "2026-11-19"
     },
     {
      "id": "cash",
@@ -51,8 +51,8 @@
      "live": "https://claude.ai/artifact/W4fyM4atATdZcfgRNEV7C3#service",
      "liveLabel": "Open on the Claude page",
      "kind": "Snapshot",
-     "asOf": "2026-11-18",
-     "through": "2026-11-16"
+     "asOf": "2026-11-20",
+     "through": "2026-11-19"
     }
    ]
   },
@@ -84,7 +84,7 @@
        "src": "/s/creative/recaps/"
       }
      ],
-     "asOf": "2026-11-17"
+     "asOf": "2026-11-19"
     },
     {
      "id": "competitors",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "builtAt": "2026-11-18T11:40Z"
+ "builtAt": "2026-11-20T11:39Z"
 }

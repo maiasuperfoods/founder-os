@@ -1,6 +1,6 @@
 {
-  "at": "2026-11-18T06:40:26-05:00",
-  "review": {"ok": true, "through": "2026-11-16", "note": "Export of 10 collections succeeded (comments empty); snapshot 2026-11-18, actuals through 2026-11-16 (one day short of yesterday), last scorecard week 2026-11-09."},
-  "creative": {"ok": true, "through": "2026-11-17", "note": "Creative dashboard copied, links rewritten in 26 pages."},
+  "at": "2026-11-20T06:39:14-05:00",
+  "review": {"ok": true, "through": "2026-11-19", "note": "Export of 10 collections succeeded (comments empty); snapshot 2026-11-20, actuals through 2026-11-19 (yesterday), last scorecard week 2026-11-09."},
+  "creative": {"ok": true, "through": "2026-11-19", "note": "Creative dashboard copied, links rewritten in 26 pages."},
   "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Drive sheet matches sources/cashflow/source.json (same id, last edited 2026-11-04); import skipped. add_repo tool was unavailable this run; clones succeeded anyway."}
 }
