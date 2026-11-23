@@ -1,5 +1,88 @@
 [
  {
+  "id": "01M7B56C2ABNZ6XKP30MKT4FVA",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-20T16:30:00.000Z",
+  "date": "2026-11-20",
+  "minutes": 47,
+  "speakers": [
+   "Youssef",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M7B56C2ABNZ6XKP30MKT4FVA",
+  "summary": "The founders agreed to launch Haskap as soon as possible on a modest budget, with a new business manager, pixel and ad account bought during the call, and to move Avia to Shopify with Skio for retention. They want to judge pricing on LTV to CAC, preferring scale at 0.4 over 0.9, and test a lower front-end price with monthly rebilling. Late Avia Black Friday statics, a 58.99 price set instead of 59.99, and scheduled automations that stopped refreshing Founder OS and weekly pacing put creative throughput and quality control at the top of the list.",
+  "points": [
+   "Jelly sticks look like an early, durable format; a simple cortisol formula with ashwagandha, L-theanine, saffron, lemon balm and rhodiola was discussed",
+   "Lower front-end pricing with monthly rebilling could improve retention over upsell-heavy first orders",
+   "Avia move to Shopify, Skio and related retention tools, with upsells moved after the sale",
+   "Haskap could run on Shopify alongside MAIA; a broader super cacao formula is under consideration",
+   "The general Avia campaign spent about 500 without results and Black Friday and Cyber Monday statics were not added",
+   "Creative throughput, editor oversight and activity and credit reporting are the main operational priorities; two strategists start Monday",
+   "Scheduled automations, Founder OS call imports, weekly pacing and the cash flow sheet are not refreshing reliably"
+  ],
+  "decisions": [
+   "Launch Haskap as soon as possible with modest initial spend",
+   "Use a new business manager and ad account for Haskap, with the pixel under the current funnel",
+   "Move Avia to Shopify with Skio for retention",
+   "Judge pricing and scaling on LTV to CAC rather than front-end ROAS",
+   "Increase creative briefs and editor oversight and replace underperforming contributors"
+  ],
+  "tasksImported": [
+   {
+    "title": "Prepare Haskap scripts with the new creative strategists starting Monday",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Produce the first Haskap video ads",
+    "owner": "Brandon",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Launch the Haskap ad campaign on the new ad account at a modest budget",
+    "owner": "Brandon",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Get the Avia Black Friday and Cyber Monday statics and offer copy live",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   },
+   {
+    "title": "Build editor activity and credit-usage reporting",
+    "owner": "Brandon",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Replace the underperforming creative contributors",
+    "owner": "Brandon",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Move Avia to Shopify with Skio retention tools and post-sale upsells",
+    "owner": "Youssef",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Find and fix why scheduled automations stopped refreshing Founder OS and call imports",
+    "owner": "Youssef",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Restore the weekly business review pacing and initiatives refresh",
+    "owner": "Youssef",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Correct the 58.99 price to 59.99 and check every price change before it goes live",
+    "owner": "Youssef",
+    "due": "2026-11-20"
+   }
+  ]
+ },
+ {
   "id": "01M72XR5P9H2SFMHFJW9EVKV4J",
   "kind": "morning",
   "kindLabel": "Morning Brief",

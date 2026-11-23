@@ -1,5 +1,89 @@
 [
  {
+  "id": "01M7B56C2H96Z1J4DQA3G8FJFQ",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-20T17:30:00.000Z",
+  "date": "2026-11-20",
+  "minutes": 31,
+  "speakers": [
+   "Elissa Jabbour",
+   "Youssef",
+   "Brandon",
+   "Sujal Chitrakar",
+   "Damian",
+   "Dusan Zvekic"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M7B56C2H96Z1J4DQA3G8FJFQ",
+  "summary": "The new angle campaigns started well, spending about 5.7k on day one at 0.9 NC ROAS, while the main campaign was cut from 35k to 30k and brain from about 8k to 6k at 0.56. The team will scale hard for Black Friday from Monday with hourly surf scaling, keeping NCPA near 110 and at most 120, and reset budgets to actual spend before midnight. Avia is still weak, so every congruent unlaunched video goes into its campaign with Black Friday statics, and budget rises only on performance.",
+  "points": [
+   "Blood flow campaign split, a separate blood pressure campaign launched, and promising angles given their own campaigns",
+   "Black Friday and Cyber Monday campaign version two launched on a new structure; evergreen bottom-of-funnel campaign deferred until after Black Friday",
+   "Four to five new blood sugar videos added; prostate and neuropathy still have no new videos",
+   "Three AppLovin campaigns launched at 200 each with 16 videos and 10 end cards to the general PDP; quizzes and presales raised as possible better destinations",
+   "The partner tool that paused Avia ads was removed; rejected Meta ads must never be deleted",
+   "Avia top spenders performed poorly and the Avia campaign has no statics or bottom-of-funnel ads yet",
+   "Haskap Berry will launch on a new ad account with a 500 CBO, and Avia is moving to Shopify for retention",
+   "Ads without an explicit Black Friday offer in the call to action are not working this week"
+  ],
+  "decisions": [
+   "Scale aggressively Monday to Friday while NCPA stays near 110, with 120 as the maximum",
+   "Reactivate the cholesterol AppLovin campaign once its end cards are replaced",
+   "Put Black Friday assets in the existing Avia campaign and turn them off after Black Friday",
+   "Launch every Avia video that matches the general PDP; leave out mismatched angles such as testosterone",
+   "Raise budgets on performance, never on the number of videos",
+   "Give Haskap its own ClickUp folder and redirect old Checkout Champ links to Shopify after the Avia move"
+  ],
+  "tasksImported": [
+   {
+    "title": "Surf-scale Black Friday campaigns hourly Monday to Friday, keeping NCPA near 110 and at most 120",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Give Damian access to the Evolve surf-scaling docs and videos",
+    "owner": "Youssef",
+    "due": "2026-11-23"
+   },
+   {
+    "title": "Add the Black Friday copy and statics to the existing Avia campaign",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Launch every unlaunched Avia video that matches the general PDP and turn off ads taking no spend",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Replace the end cards on the cholesterol AppLovin campaign and turn it back on",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Launch the main-angle video backlog into the new per-angle campaigns",
+    "owner": "Damian",
+    "due": "2026-11-29"
+   },
+   {
+    "title": "Move Avia to Shopify and redirect the old Checkout Champ links to it",
+    "owner": "Youssef",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Request product-accurate AppLovin end cards for testing after Black Friday",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   },
+   {
+    "title": "Create a separate Haskap folder in ClickUp for its creatives",
+    "owner": "Damian",
+    "due": "2026-11-27"
+   }
+  ]
+ },
+ {
   "id": "01M75Z32F4YFACPWYVSSEC6GNB",
   "kind": "performance",
   "kindLabel": "Performance Call",
