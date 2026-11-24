@@ -1,6 +1,6 @@
 {
-  "at": "2026-11-21T06:39:11-05:00",
-  "review": {"ok": true, "through": "2026-11-20", "note": "Export of 10 collections succeeded (comments empty); snapshot 2026-11-21, actuals through 2026-11-20 (yesterday), last scorecard week 2026-11-09."},
-  "creative": {"ok": true, "through": "2026-11-20", "note": "Creative dashboard copied, links rewritten in 26 pages."},
-  "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Drive sheet matches sources/cashflow/source.json (same id, last edited 2026-11-04); import skipped. add_repo tool was unavailable this run; clones succeeded anyway."}
+  "at": "2026-11-24T06:39:25-05:00",
+  "review": {"ok": true, "through": "2026-11-23", "note": "Exported 10 collections (comments empty); snapshot 2026-11-24, actuals through 2026-11-23, last scorecard week 2026-11-16."},
+  "creative": {"ok": true, "through": "2026-11-23", "note": "Creative dashboard copied, links rewritten in 26 pages."},
+  "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet matches source.json (edited 2026-11-04); model unchanged, import skipped."}
 }
