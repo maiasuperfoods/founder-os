@@ -1,5 +1,95 @@
 [
  {
+  "id": "01M7MWQGGX89MF6PTTPMMP9SE6",
+  "kind": "morning",
+  "kindLabel": "Morning Brief",
+  "title": "Morning Brief",
+  "at": "2026-11-24T16:30:00.000Z",
+  "date": "2026-11-24",
+  "minutes": 82,
+  "speakers": [
+   "Youssef",
+   "Brandon"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M7MWQGGX89MF6PTTPMMP9SE6",
+  "summary": "Paid efficiency fell sharply: about 26,000 in spend returned about 13,000 in revenue at 0.49 NC ROAS, and November contribution margin was the lowest so far, so spend should be pulled back when efficiency does not justify it. Shopify was favoured for both Haskap and Avia, with the Haskap launch depending on the pixel, rebuilt pages, Skio subscriptions and the offer economics. Amazon insurance must be secured within 15 days, the Avia Amazon account stays suspended with lawyers engaged, and leadership hires are limited by cash flow.",
+  "points": [
+   "Call processing gaps were likely caused by credits; about 2,000 was spent in two days analysing 85,000 scripts",
+   "AI-made ads now look close to human work; captions and B-roll still need fixing by editors",
+   "Haskap launch depends on the pixel, page rebuild, Skio subscriptions and an unresolved offer price (about 79 now versus 29 or 39)",
+   "Avia is the stronger Shopify case because of its planned multi-product range",
+   "Forecast is 5.6M for November and 8M for December while efficiency weakens before Black Friday",
+   "Unaware ads were named the main lever for scaling past about 3M a month",
+   "A creative lead, growth lead, operations manager, retention support and copywriter were named as missing roles",
+   "School content is uploaded but needs curation, videos and a staged unlocking roadmap"
+  ],
+  "decisions": [
+   "Launch Haskap on Shopify if setup moves quickly, with Checkout Champ as the fallback",
+   "Move Avia to Shopify to centralise data, retention and future products",
+   "Mix unaware and problem-aware ads for Haskap rather than relying on one awareness level",
+   "Reduce spend when NC ROAS does not justify scaling",
+   "Keep the Haskap and glutathione formula unchanged in soft-gel or pill format",
+   "Connect the Haskap video drive to the research tool to avoid duplicate concepts"
+  ],
+  "tasksImported": [
+   {
+    "title": "Secure the Amazon insurance policy before the deadline",
+    "owner": "Brandon",
+    "due": "2026-12-09"
+   },
+   {
+    "title": "Pursue reinstatement of the suspended Avia Amazon account with the Amazon lawyers",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Get the developer to finish the Haskap Shopify pages in the new brand design",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Decide the Haskap offer price and subscription model for launch",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Write the Haskap creative plan mixing unaware and problem-aware concepts",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Connect the Haskap video drive to the competitor research tool",
+    "owner": "Youssef",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Cut the number of brands the research tool studies to lower AI credit spend",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Start the search for a creative lead to own strategist accountability",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Curate the school content and decide what to keep, remove and film",
+    "owner": "Brandon",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Send Brandon the additions you want in the school content",
+    "owner": "Youssef",
+    "due": "2026-12-01"
+   },
+   {
+    "title": "Send Youssef the realistic AI-generated video example",
+    "owner": "Brandon",
+    "due": "2026-11-24"
+   }
+  ]
+ },
+ {
   "id": "01M7B56C2ABNZ6XKP30MKT4FVA",
   "kind": "morning",
   "kindLabel": "Morning Brief",
