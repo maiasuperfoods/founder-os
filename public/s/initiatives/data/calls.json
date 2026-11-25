@@ -1,5 +1,76 @@
 [
  {
+  "id": "01M7QPEDCCND7GFN5V0AKJM49B",
+  "kind": "creative",
+  "kindLabel": "Creative Call",
+  "title": "Creative Strategy",
+  "at": "2026-11-25T16:00:00.000Z",
+  "date": "2026-11-25",
+  "minutes": 37,
+  "speakers": [
+   "Elissa Jabbour",
+   "Brandon",
+   "Adarsha Shrestha",
+   "Peter Nguyen"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M7QPEDCCND7GFN5V0AKJM49B",
+  "summary": "The team is leaning too hard on problem-aware ads: 250 of them against 33 unaware ads, while the unaware ads won 7 times and beat other stages on hit rate and spend. NC ROAS has slipped from 0.70 to around 0.59 to 0.65, so every strategist is asked to raise unaware output next week across new formats, with Q4 spend kept cautious ahead of a bigger Q1 scale-up.",
+  "points": [
+   "Naming clarified: H1 to H4 mark hooks, S-numbers mark the video, with editor, strategist, angle, concept and sub-angle still tracked",
+   "Unaware ads: 33 tested, 7 wins, higher hit rate and spend than other awareness stages; 250 other-stage ads dominate the mix",
+   "Competitors such as Resilia scale by reusing proven hooks across many stories and formats; smaller brands like OneA, Oravita and SP Nutrition worth studying",
+   "Formats to push: documentary, drama, songs, cartoons, AI drama, AI sitcoms and a return of UGC",
+   "Strategist NC ROAS: Adarsha 0.56, Elissa 0.64, Peter 0.48 on about 62k spend",
+   "Agentic editing workflows led by Harvin could triple editor output",
+   "AI drama quality from Peter's editors is blocking his tests",
+   "New strategist capacity: Thomas starting on MAIA, Logan adding briefs, Dusan returning to MAIA"
+  ],
+  "decisions": [
+   "Unaware production is the priority for next week across every strategist, not only Adarsha and Sujal",
+   "Brandon will check each strategist's unaware ad count and spend next week",
+   "Recombine competitor hooks with new stories, mechanisms and visuals rather than copy them, with compliance review",
+   "Editors who cannot produce AI drama ads with the provided tools may be replaced; issues go to Harvin",
+   "Keep Q4 spend cautious and prepare to scale hard in Q1"
+  ],
+  "tasksImported": [
+   {
+    "title": "Produce more unaware and solution-aware ads from your pod",
+    "owner": "Peter Nguyen",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Send Harvin the Frame.io link and AI drama examples, and ask for a replacement editor if quality stays low",
+    "owner": "Peter Nguyen",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Raise unaware video ad output from your pod",
+    "owner": "Elissa Jabbour",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Make more bottom-of-funnel static ads",
+    "owner": "Elissa Jabbour",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Review each strategist's unaware ad count, spend and results and share the numbers",
+    "owner": "Brandon",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Study smaller competitors' unaware ads and build concepts that recombine their hooks with new stories",
+    "owner": "Creative team",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Restart UGC production with Tribe",
+    "owner": "Brandon",
+    "due": "2026-12-02"
+   }
+  ]
+ },
+ {
   "id": "01M7B56C2H96Z1J4DQA3G8FJFQ",
   "kind": "performance",
   "kindLabel": "Performance Call",
