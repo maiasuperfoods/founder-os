@@ -1,5 +1,86 @@
 [
  {
+  "id": "01M7QPEDCFSSRQ91R4GRNX0QHQ",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-25T17:30:00.000Z",
+  "date": "2026-11-25",
+  "minutes": 37,
+  "speakers": [
+   "Elissa Jabbour",
+   "Brandon",
+   "Damian"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M7QPEDCFSSRQ91R4GRNX0QHQ",
+  "summary": "Performance fell across accounts: weekly spend was down 8%, the Blood Flow budget was cut 40% and cost per new visitor rose 35% as Black Friday competition grew. The Black Friday campaign has about 120 ad sets and stronger overall ROAS, so budgets rise at midnight into Friday and drop sharply Monday night. Hascap moves to Shopify but cannot launch until its product page, copy and angles are ready.",
+  "points": [
+   "About 90% of the creative mix is video, and Meta is serving top-of-funnel videos to warmer audiences, lowering the share of new visitors",
+   "Angle-level reads are unreliable while every campaign follows the same account-wide decline",
+   "Existing presales look dated and the move to product pages may have cut conversion",
+   "Black Friday campaigns show a 30 to 40% gap between new-customer and overall ROAS as old subscribers return",
+   "AppLovin looks promising with little competition; 60-second cuts of cholesterol, blood pressure, brain and neuro winners",
+   "Hascap ad account, pixel and payment are ready; product page, development and copy are not",
+   "Avia is weak, with thyroid videos taking most spend and three versions of a strong concept rejected",
+   "Cortisol seen as a broad source problem Avia can compete on"
+  ],
+  "decisions": [
+   "Focus creative on Black Friday offers through Friday, then scale budgets on ROAS and cut them Monday night",
+   "Keep unaware ads below half of new videos and lead with problem-aware concepts for Q1",
+   "Build new listicles, advertorials and presale formats for Q1",
+   "Test several angles on AppLovin through the general product page first, then give winners their own campaigns",
+   "Use gifting messaging until delivery before Christmas is no longer possible",
+   "Standardise ad naming with angle, product, awareness, concept, sub-angle, ICP, video, hook, format, strategist and editor"
+  ],
+  "tasksImported": [
+   {
+    "title": "Launch the Hascap campaigns on Shopify once the product page and creatives are ready",
+    "owner": "Damian",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Define the initial Hascap angles and write ad copy for each",
+    "owner": "Elissa Jabbour",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Send Damian and Elissa the Hascap creative-board structure and angle guidance",
+    "owner": "Brandon",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Add a selectable angle field to the creative board",
+    "owner": "Damian",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Update the naming convention doc with the full field order and fix the wrong examples",
+    "owner": "Brandon",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Cut Black Friday budgets sharply Monday night",
+    "owner": "Damian",
+    "due": "2026-11-30"
+   },
+   {
+    "title": "Test cholesterol, blood pressure, brain and neuro winners on AppLovin in one general product-page campaign",
+    "owner": "Damian",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Develop new listicle, advertorial and presale formats for Q1",
+    "owner": "Brandon",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Make gifting-angle ads that stress delivery before Christmas",
+    "owner": "Creative team",
+    "due": "2026-12-02"
+   }
+  ]
+ },
+ {
   "id": "01M7QPEDCCND7GFN5V0AKJM49B",
   "kind": "creative",
   "kindLabel": "Creative Call",
