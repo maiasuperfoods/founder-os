@@ -1,5 +1,73 @@
 [
  {
+  "id": "01M8A00CWMZP5GQFVSSS7HDZSW",
+  "kind": "performance",
+  "kindLabel": "Performance Call",
+  "title": "Peformance Team // Recap",
+  "at": "2026-11-27T17:30:00.000Z",
+  "date": "2026-11-27",
+  "minutes": 49,
+  "speakers": [
+   "Brandon",
+   "Adarsha Shrestha",
+   "Youssef",
+   "Damian",
+   "Dusan Zvekic"
+  ],
+  "fireflies": "https://app.fireflies.ai/view/01M8A00CWMZP5GQFVSSS7HDZSW",
+  "summary": "Black Friday opened slowly but hourly NC ROAS climbed from about 0.95 at 11 AM to about 1.17 at noon, so budgets stay steady or rise rather than being cut early. Scaling rule: raise budgets 20% when about 30% above KPI and up to double at 50 to 100% above KPI, resetting to actual spend before midnight Eastern. Campaign restructuring into a main CBO plus smaller blended-angle CBOs waits until after Cyber Monday, and the presale versus PDP test (PDP was 20 to 25% better) will be rerun once the new offer, now on 50% of traffic, has more data.",
+  "points": [
+   "AI drama outputs had many errors; editing is being fixed and Higgsfield's AI drama tool looks promising",
+   "Black Friday early softness: Meta paces spend over 24 hours, another peak expected around 5 to 6 PM Eastern",
+   "A lower-AOV offer converted materially better; pixel conditioning comes before aggressive scaling",
+   "PDP beat presale by 20 to 25%, but returning visitors may have skewed the result",
+   "Separate angle campaigns underperformed the main campaign; blood pressure fell to about $2,000 a day from over $10K",
+   "Large campaigns spend on only 5 to 10 videos, leaving many ads without delivery",
+   "Avia ran Black Friday statics; thyroid still takes spend by default",
+   "Hascap and Avia ad accounts need connecting after Triple O is disconnected from the main account"
+  ],
+  "decisions": [
+   "Do not cut Black Friday budgets on early-hour softness; monitor hourly",
+   "Raise budgets 20% at 30% above KPI and up to double at 50 to 100% above KPI; reset to actual spend before midnight",
+   "Keep the main campaign intact; test smaller blended-angle CBOs after Cyber Monday, details on Wednesday",
+   "Rerun presale versus PDP once the new offer has enough data",
+   "Avia: balance video and static, launch general-female angles, exclude testosterone and irritated-father ads, deprioritise thyroid",
+   "Redo AI drama scripts and add unaware-audience AI drama scripts"
+  ],
+  "tasksImported": [
+   {
+    "title": "Disconnect Triple O from the main ad account and connect the Hascap and Avia accounts",
+    "owner": "Damian",
+    "due": "2026-12-04"
+   },
+   {
+    "title": "Redo Adarsha's AI drama scripts and write new AI drama scripts for unaware audiences",
+    "owner": "Brandon",
+    "due": "2026-12-04"
+   },
+   {
+    "title": "Tell the creative strategists about the Higgsfield AI drama testing and how to use it",
+    "owner": "Brandon",
+    "due": "2026-12-04"
+   },
+   {
+    "title": "Review Jake's AI drama output, document remaining quality issues and send them to Harvin and the creative team",
+    "owner": "Adarsha Shrestha",
+    "due": "2026-12-04"
+   },
+   {
+    "title": "Finalise the main CBO plus small blended-angle CBO structure and start testing it",
+    "owner": "Youssef",
+    "due": "2026-12-02"
+   },
+   {
+    "title": "Rerun the presale versus PDP test once the new offer has enough data, with returning visitors routed to the PDP",
+    "owner": "Youssef",
+    "due": "2026-12-04"
+   }
+  ]
+ },
+ {
   "id": "01M7QPEDCFSSRQ91R4GRNX0QHQ",
   "kind": "performance",
   "kindLabel": "Performance Call",
