@@ -1,6 +1,6 @@
 {
-  "at": "2026-11-27T06:39:27-05:00",
-  "review": {"ok": true, "through": "2026-11-26", "note": "Exported 10 collections (comments empty); snapshot 2026-11-27, actuals through 2026-11-26, last scorecard week 2026-11-16."},
+  "at": "2026-11-28T06:39:45-05:00",
+  "review": {"ok": true, "through": "2026-11-27", "note": "Exported 10 collections (comments empty); snapshot 2026-11-28, actuals through 2026-11-27, last scorecard week 2026-11-16."},
   "creative": {"ok": true, "through": "2026-11-23", "note": "Creative dashboard copied, links rewritten in 26 pages."},
-  "cashflow": {"ok": true, "sheet": "1gAH5KpMn-Jx17_WpP5titVH22LliMMeT7CDweCxUEY4", "edited": "2026-11-04", "changed": false, "note": "Newest Holdco_CashFlow_Model sheet matches source.json (edited 2026-11-04); model unchanged, import skipped."}
+  "cashflow": {"ok": true, "sheet": "1nhh26rHhuckvfrJTr6W6gro-V-4PCf2fFfFhnQKH5Io", "edited": "2026-11-27", "changed": true, "note": "Imported newest Holdco_CashFlow_Model sheet (Oct 2026 Jun 2027, edited 2026-11-27, 11 tabs); 40 weeks, lowest closing cash 564,626 in W7'27."}
 }
